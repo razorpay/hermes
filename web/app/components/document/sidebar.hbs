@@ -187,25 +187,22 @@
           class="min-h-[44px] flex text-body-200 text-color-foreground-faint w-36 shrink-0"
         >Product/Area</small>
         {{#if this.allProductNames}}
-          <Hds::Form::Select::Field
-            @type="text"
-            @value={{@document.product}}
-            class="w-full -mt-2"
-            as |F|
-          >
-            <F.Options>
-              <option value=""></option>
+          <div class="flex items-center">
 
-              {{#each this.allProductNames as |name|}}
-                <option
-                  value="{{name}}"
-                  {{! This allows us to recover from errors: }}
-                  selected={{eq name @document.product}}
-                >{{name}}</option>
-              {{/each}}
-            </F.Options>
-          </Hds::Form::Select::Field>
+            {{! Replace with custom dropdown }}
+            <FlightIcon
+              @name={{or (get-product-id @document.product) "folder"}}
+              class="ml-1 mr-2.5"
+            />
+            {{@document.product}}
+            {{#if true}}
+              {{! Replace with real logic }}
+              <FlightIcon @name="chevron-down" class="ml-1" />
+            {{/if}}
+          </div>
         {{else}}
+          {{! should only do this if DRAFT }}
+          {{!-- only do this productName get on dropdownClick --}}
           <div {{did-insert (perform this.getAllProductNames)}}>
             <FlightIcon @name="loading" />
           </div>
