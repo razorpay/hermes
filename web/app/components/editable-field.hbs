@@ -1,18 +1,27 @@
-<div class="editable-field" ...attributes {{did-insert this.captureElement}}>
+<div
+  class="editable-field group"
+  ...attributes
+  {{did-insert this.captureElement}}
+>
   {{#if (and this.editing (not @loading))}}
     <div {{on "keydown" this.preventNewlines}} {{on "keyup" this.cancel}}>
       {{yield (hash value=@value update=this.update) to="editing"}}
     </div>
   {{else}}
-    {{#if @loading}}
-      <FlightIcon @name="loading" class="loading-indicator" />
-    {{/if}}
-    <button
-      class="field-toggle {{if @loading 'loading'}}"
-      disabled={{or @disabled @loading}}
-      {{on "click" this.edit}}
-    >
-      {{yield}}
-    </button>
+    <div class="relative w-full">
+      <button
+        class="field-toggle {{if @loading 'loading'}}"
+        disabled={{or @disabled @loading}}
+        {{on "click" this.edit}}
+      >
+        {{yield}}
+      </button>
+      <div class="hidden group-hover:block absolute right-0.5 top-px">
+        <FlightIcon
+          @name="edit"
+          class="text-color-foreground-faint pointer-events-none"
+        />
+      </div>
+    </div>
   {{/if}}
 </div>

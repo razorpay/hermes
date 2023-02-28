@@ -29,17 +29,20 @@ document_types {
     }
 
     custom_field {
+      name = "Stakeholders"
+      type = "people"
+    }
+
+    custom_field {
       name = "Current Version"
       type = "string"
     }
+
     custom_field {
       name = "PRD"
       type = "string"
     }
-    custom_field {
-      name = "Stakeholders"
-      type = "people"
-    }
+
     custom_field {
       name = "Target Version"
       type = "string"
@@ -57,12 +60,13 @@ document_types {
     }
 
     custom_field {
-      name = "RFC"
-      type = "string"
-    }
-    custom_field {
       name = "Stakeholders"
       type = "people"
+    }
+
+    custom_field {
+      name = "RFC"
+      type = "string"
     }
   }
 }

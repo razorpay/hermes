@@ -137,6 +137,26 @@ export default class DocumentSidebar extends Component {
     }
   }
 
+  @task *getAllProductNames() {
+    try {
+      const allProducts = yield this.fetchSvc
+        .fetch("/api/v1/products")
+        .then((resp) => {
+          return resp.json();
+        });
+
+      this.allProductNames = Object.keys(allProducts).sort();
+    } catch (error) {
+      console.error(`Error requesting products: ${error}`);
+    }
+  }
+
+  @tracked allProductNames = null;
+
+  get productArea() {
+    return this.args.document.productArea;
+  }
+
   get moveToStatusButtonText() {
     if (this.changeDocumentStatus.isRunning) {
       return "Working...";
@@ -200,7 +220,6 @@ export default class DocumentSidebar extends Component {
       return true;
     }
   }
-
 
   @action refreshRoute() {
     // We force refresh due to a bug with `refreshModel: true`

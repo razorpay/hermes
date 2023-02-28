@@ -35,6 +35,7 @@ module.exports = {
         "var(--token-typography-body-100-font-size)",
         "var(--token-typography-body-100-line-height)",
       ],
+      "body-50": "12px",
     },
     fontWeight: {
       regular: "var(--token-typography-font-weight-regular)",
@@ -57,6 +58,7 @@ module.exports = {
         "color-surface-interactive-hover":
           "var(--token-color-surface-interactive-hover)",
         "color-surface-primary": "var(--token-color-surface-primary)",
+        "color-surface-strong": "var(--token-color-surface-strong)",
 
         // Border
         "color-border-faint": "var(--token-color-border-faint)",

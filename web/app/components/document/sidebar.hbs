@@ -1,4 +1,4 @@
-<aside class="sidebar {{if this.isCollapsed 'w-8' 'w-64'}}">
+<aside class="sidebar {{if this.isCollapsed 'w-8' 'w-96'}}">
   {{#if this.isCollapsed}}
     <nav class="relative flex flex-col space-y-2">
       <div class="flex flex-col items-center space-y-3">
@@ -67,18 +67,24 @@
 
     <div class="body {{if this.sidebarBodyIsShorter 'is-shorter'}}">
       <div class="flex flex-col items-start space-y-2 px-3">
+        <Doc::State
+          @state={{@document.status}}
+          @hideProgress={{true}}
+          class="whitespace-nowrap"
+        />
         {{#if (is-empty @document.docNumber)}}
-          <small class="hds-typography-body-100 hds-foreground-faint">{{#unless
+          <small class="text-body-200 text-color-foreground-faint">{{#unless
               (is-empty @document.docType)
             }}{{@document.docType}}{{/unless}}
           </small>
         {{else}}
-          <small class="hds-typography-body-100 hds-foreground-faint">{{#unless
+          <small class="text-body-200 text-color-foreground-faint">{{#unless
               (is-empty @document.docType)
             }}{{@document.docType}}{{/unless}}
             &bullet;
             {{@document.docNumber}}</small>
         {{/if}}
+
         {{#if this.editingIsDisabled}}
           <h1
             class="hds-typography-display-300 hds-font-weight-semibold hds-foreground-strong"
@@ -113,15 +119,10 @@
         {{/if}}
       </div>
 
-      <hr class="border-0 border-b hds-border-faint mx-3" />
-
-      <div class="flex flex-col items-start space-y-2 px-3">
-        <small
-          class="hds-typography-body-100 hds-foreground-faint"
-        >Summary</small>
+      <div class="flex flex-col items-start space-y-2 px-3 mt-2.5">
         {{#if this.editingIsDisabled}}
           <p
-            class="hds-typography-body-200 hds-font-weight-medium hds-foreground-primary"
+            class="text-display-300 hds-foreground-primary"
           >{{this.summary}}</p>
         {{else}}
           <EditableField
@@ -132,14 +133,10 @@
           >
             <:default>
               {{#unless (is-empty this.summary)}}
-                <p
-                  class="hds-typography-body-200 hds-font-weight-medium hds-foreground-primary"
-                >
+                <p class="hds-typography-display-200 hds-foreground-primary">
                   {{this.summary}}</p>
               {{else}}
-                <p
-                  class="hds-typography-body-200 hds-font-weight-medium hds-foreground-faint"
-                >
+                <p class="hds-typography-display-200 hds-foreground-faint">
                   Enter a summary here.</p>
               {{/unless}}
             </:default>
@@ -155,159 +152,220 @@
         {{/if}}
       </div>
 
-      <div class="flex flex-col items-start space-y-2 px-3">
-        <small
-          class="hds-typography-body-100 hds-foreground-faint"
-        >Status</small>
-        <Doc::State
-          @state={{@document.status}}
-          @hideProgress={{true}}
-          class="whitespace-nowrap"
-        />
+      <div class="px-3 mt-6">
+        <div class="flex items-center">
+          <span
+            class="mr-2 leading-none tracking-wide font-medium text-body-100 text-color-foreground-faint uppercase"
+          >By</span>
+          {{! todo: query by author }}
+          <LinkTo
+            @route="authenticated.all"
+            class="no-underline text-inherit hover:underline"
+          >
+            <Person
+              @imgURL={{get @document.ownerPhotos 0}}
+              @email={{get @document.owners 0}}
+            />
+          </LinkTo>
+        </div>
+        {{#if @document.createdDate}}
+          <p
+            class="text-body-50 text-body text-color-foreground-faint mt-7 mb-2"
+          >
+            Created
+            {{@document.createdDate}}
+          </p>
+        {{/if}}
       </div>
 
-      <div class="flex flex-col items-start space-y-2 px-3">
+      <div class="px-3 py-8">
+        <div class="w-full h-px bg-color-border-primary"></div>
+      </div>
+
+      <div class="flex items-start px-3">
         <small
-          class="hds-typography-body-100 hds-foreground-faint"
+          class="min-h-[44px] flex text-body-200 text-color-foreground-faint w-36 shrink-0"
         >Product/Area</small>
-        <Hds::Badge
-          @text={{@document.product}}
-          @icon={{get-product-id @document.product}}
-        />
-      </div>
-
-      <div class="flex flex-col items-start space-y-2 px-3">
-        <small
-          class="hds-typography-body-100 hds-foreground-faint"
-        >Owner</small>
-        <Person
-          @imgURL={{get @document.ownerPhotos 0}}
-          @email={{get @document.owners 0}}
-        />
-      </div>
-
-      <div class="flex flex-col items-start space-y-2 px-3">
-        <small
-          class="hds-typography-body-100 hds-foreground-faint"
-        >Contributors</small>
-        {{#if this.isOwner}}
-          <EditableField
-            @value={{this.contributors}}
-            @onChange={{perform this.save "contributors"}}
-            @loading={{this.save.isRunning}}
-            @disabled={{this.editingIsDisabled}}
+        {{#if this.allProductNames}}
+          <Hds::Form::Select::Field
+            @type="text"
+            @value={{@document.product}}
+            class="w-full -mt-2"
+            as |F|
           >
-            <:default>
-              {{#if this.contributors.length}}
-                <ol class="person-list">
-                  {{#each this.contributors as |contributor|}}
-                    <li>
-                      <Person
-                        @imgURL={{contributor.imgURL}}
-                        @email={{contributor.email}}
-                      />
-                    </li>
-                  {{/each}}
-                </ol>
-              {{else}}
-                <em>No contributors</em>
-              {{/if}}
-            </:default>
-            <:editing as |F|>
-              <Inputs::PeopleSelect
-                class="multiselect--narrow"
-                @selected={{this.contributors}}
-                @onChange={{this.updateContributors}}
-                {{click-outside (fn F.update this.contributors)}}
-              />
-            </:editing>
-          </EditableField>
-        {{else}}
-          {{#if this.contributors.length}}
-            <ol class="person-list">
-              {{#each this.contributors as |contributor|}}
-                <li>
-                  <Person
-                    @imgURL={{contributor.imgURL}}
-                    @email={{contributor.email}}
-                  />
-                </li>
+            <F.Options>
+              <option value=""></option>
+
+              {{#each this.allProductNames as |name|}}
+                <option
+                  value="{{name}}"
+                  {{! This allows us to recover from errors: }}
+                  selected={{eq name @document.product}}
+                >{{name}}</option>
               {{/each}}
-            </ol>
-          {{else}}
-            <em>No contributors</em>
-          {{/if}}
-        {{/if}}
-      </div>
-
-      <div class="flex flex-col items-start space-y-2 px-3">
-        <small
-          class="hds-typography-body-100 hds-foreground-faint"
-        >Approvers</small>
-        {{#if this.isOwner}}
-          <EditableField
-            @value={{this.approvers}}
-            @onChange={{perform this.save "approvers"}}
-            @loading={{this.save.isRunning}}
-            @disabled={{this.editingIsDisabled}}
-          >
-            <:default>
-              {{#if this.approvers.length}}
-                <ol class="person-list">
-                  {{#each this.approvers as |approver|}}
-                    <li>
-                      <Person
-                        @imgURL={{approver.imgURL}}
-                        @email={{approver.email}}
-                      />
-                    </li>
-                  {{/each}}
-                </ol>
-              {{else}}
-                <em>No approvers</em>
-              {{/if}}
-            </:default>
-            <:editing as |F|>
-              <Inputs::PeopleSelect
-                class="multiselect--narrow"
-                @selected={{this.approvers}}
-                @onChange={{this.updateApprovers}}
-                {{click-outside (fn F.update this.approvers)}}
-              />
-            </:editing>
-          </EditableField>
+            </F.Options>
+          </Hds::Form::Select::Field>
         {{else}}
-          {{#if this.approvers.length}}
-            <ol class="person-list">
-              {{#each this.approvers as |approver|}}
-                <li>
-                  <Person
-                    @imgURL={{approver.imgURL}}
-                    @email={{approver.email}}
-                  />
-                </li>
-              {{/each}}
-            </ol>
-          {{else}}
-            <em>No approvers</em>
-          {{/if}}
+          <div {{did-insert (perform this.getAllProductNames)}}>
+            <FlightIcon @name="loading" />
+          </div>
         {{/if}}
+
       </div>
 
-      <div class="flex flex-col items-start space-y-2 px-3">
-        <small class="hds-typography-body-100 hds-foreground-faint">
-          Created
-        </small>
-        <p>{{or @document.createdDate "Unknown"}}</p>
-      </div>
+      {{#if (or this.isOwner this.contributors.length)}}
 
-      <div class="flex flex-col items-start space-y-2 px-3">
-        <small class="hds-typography-body-100 hds-foreground-faint">
-          Last modified
-        </small>
-        <p>{{@document.lastModified}}</p>
-      </div>
+        <div class="flex items-start px-3">
 
+          <small
+            class="min-h-[44px] flex text-body-200 text-color-foreground-faint w-36 shrink-0"
+          >Contributors</small>
+          {{#if this.isOwner}}
+            <EditableField
+              @value={{this.contributors}}
+              @onChange={{perform this.save "contributors"}}
+              @loading={{this.save.isRunning}}
+              @disabled={{this.editingIsDisabled}}
+            >
+              <:default>
+                {{#if this.contributors.length}}
+                  <ol class="person-list">
+                    {{#each this.contributors as |contributor|}}
+                      <li>
+                        <Person
+                          @imgURL={{contributor.imgURL}}
+                          @email={{contributor.email}}
+                        />
+                      </li>
+                    {{/each}}
+                  </ol>
+                {{else}}
+                  <div class="flex space-x-2 w-full">
+                    <div class="w-5 h-5 grid place-items-center">
+                      <FlightIcon
+                        @name="plus"
+                        class="text-color-foreground-faint opacity-70"
+                      />
+                    </div>
+                    <span class="text-color-foreground-faint">
+                      Add contributors
+                    </span>
+                  </div>
+                {{/if}}
+              </:default>
+              <:editing as |F|>
+                <Inputs::PeopleSelect
+                  class="multiselect--narrow"
+                  @selected={{this.contributors}}
+                  @onChange={{this.updateContributors}}
+                  {{click-outside (fn F.update this.contributors)}}
+                />
+              </:editing>
+            </EditableField>
+          {{else}}
+            {{#if this.contributors.length}}
+              <ol class="person-list">
+                {{#each this.contributors as |contributor|}}
+                  <li>
+                    <Person
+                      @imgURL={{contributor.imgURL}}
+                      @email={{contributor.email}}
+                    />
+                  </li>
+                {{/each}}
+              </ol>
+            {{else}}
+              <div class="flex space-x-2 w-full">
+                <div class="w-5 h-5 grid place-items-center">
+                  <FlightIcon
+                    @name="plus"
+                    class="text-color-foreground-faint opacity-70"
+                  />
+                </div>
+                <span class="text-color-foreground-faint">
+                  Add contributors
+                </span>
+              </div>
+            {{/if}}
+          {{/if}}
+        </div>
+      {{/if}}
+
+      {{#if (or this.isOwner this.approvers.length)}}
+        <div class="flex items-start px-3">
+          <small
+            class="min-h-[44px] flex text-body-200 text-color-foreground-faint w-36 shrink-0"
+          >Approvers</small>
+          {{#if this.isOwner}}
+            <EditableField
+              @value={{this.approvers}}
+              @onChange={{perform this.save "approvers"}}
+              @loading={{this.save.isRunning}}
+              @disabled={{this.editingIsDisabled}}
+            >
+              <:default>
+                {{#if this.approvers.length}}
+                  <ol class="person-list">
+                    {{#each this.approvers as |approver|}}
+                      <li>
+                        <Person
+                          @imgURL={{approver.imgURL}}
+                          @email={{approver.email}}
+                        />
+                      </li>
+                    {{/each}}
+                  </ol>
+                {{else}}
+                  <div class="flex space-x-2 w-full">
+                    <div class="w-5 h-5 grid place-items-center">
+                      <FlightIcon
+                        @name="plus"
+                        class="text-color-foreground-faint opacity-70"
+                      />
+                    </div>
+                    <span class="text-color-foreground-faint">
+                      Add approvers
+                    </span>
+                  </div>
+                {{/if}}
+              </:default>
+              <:editing as |F|>
+                <Inputs::PeopleSelect
+                  class="multiselect--narrow"
+                  @selected={{this.approvers}}
+                  @onChange={{this.updateApprovers}}
+                  {{click-outside (fn F.update this.approvers)}}
+                />
+              </:editing>
+            </EditableField>
+          {{else}}
+            {{#if this.approvers.length}}
+              <ol class="person-list">
+                {{#each this.approvers as |approver|}}
+                  <li>
+                    <Person
+                      @imgURL={{approver.imgURL}}
+                      @email={{approver.email}}
+                    />
+                  </li>
+                {{/each}}
+              </ol>
+            {{else}}
+              <div class="flex space-x-2 w-full">
+                <div class="w-5 h-5 grid place-items-center">
+                  <FlightIcon
+                    @name="plus"
+                    class="text-color-foreground-faint opacity-70"
+                  />
+                </div>
+                <span class="text-color-foreground-faint">
+                  Add approvers
+                </span>
+              </div>
+            {{/if}}
+          {{/if}}
+        </div>
+      {{/if}}
       {{#each-in this.customEditableFields as |field attributes|}}
         {{#if
           (or
@@ -315,8 +373,10 @@
             attributes.value
           )
         }}
-          <div class="flex flex-col items-start space-y-2 px-3">
-            <small class="hds-typography-body-100 hds-foreground-faint">
+          <div class="flex items-start px-3">
+            <small
+              class="min-h-[44px] flex text-body-200 text-color-foreground-faint w-36 shrink-0"
+            >
               {{attributes.displayName}}
             </small>
             {{#if this.isOwner}}
@@ -329,6 +389,8 @@
                 @loading={{this.save.isRunning}}
                 @disabled={{this.editingIsDisabled}}
               />
+            {{else}}
+              {{get @document field}}
             {{/if}}
           </div>
         {{/if}}
@@ -336,7 +398,7 @@
     </div>
 
     {{!-- <div class="flex flex-col items-start space-y-2 px-3">
-      <small class="hds-typography-body-100 hds-foreground-faint">Tags</small>
+      <small class="text-body-200 text-color-foreground-faint">Tags</small>
       {{#if this.isOwner}}
         <EditableField
           @value={{this.tags}}
@@ -388,6 +450,13 @@
       {{/if}}
     </div> --}}
 
+    {{!-- <div class="px-3">
+      <p class="text-color-foreground-faint">
+        Last modified
+        {{@document.lastModified}}
+      </p>
+    </div> --}}
+
     {{#if this.userHasEditPrivileges}}
       <div class="sidebar-footer">
         {{#if (not @document.appCreated)}}
@@ -416,22 +485,20 @@
             {{#if this.isOwner}}
               <div class="flex items-start px-3 gap-2">
                 <Hds::Button
-                  @text="Request Review"
+                  @text="Request review..."
                   @size="medium"
+                  @icon="test"
                   @color="primary"
-                  class="w-full"
                   {{on
                     "click"
                     (fn (set this "requestReviewModalIsActive" true))
                   }}
                 />
                 <Hds::Button
-                  @text="Delete"
+                  @text="Delete..."
                   @size="medium"
-                  @color="critical"
                   @icon="trash"
-                  @isIconOnly={{true}}
-                  class="basis-0"
+                  @color="tertiary"
                   {{on "click" (fn (set this "deleteModalIsActive" true))}}
                 />
               </div>
@@ -458,10 +525,9 @@
                 <Hds::Button
                   @text="Archive"
                   @size="medium"
-                  @color="critical"
+                  @color="secondary"
                   @icon="archive"
-                  @isIconOnly={{true}}
-                  class="basis-0"
+                  class="shrink-0"
                   disabled={{(eq @document.status "Obsolete")}}
                   {{on "click" (fn (set this "archiveModalIsActive" true))}}
                 />
@@ -621,7 +687,6 @@
                 @onChange={{this.updateApprovers}}
                 @disabled={{this.requestReview.isRunning}}
                 class="mb-0"
-
               />
             </F.Control>
             <F.Label>Add approvers</F.Label>
