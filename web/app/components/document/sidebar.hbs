@@ -376,19 +376,15 @@
             >
               {{attributes.displayName}}
             </small>
-            {{#if this.isOwner}}
-              <CustomEditableField
-                @document={{@document}}
-                @field={{field}}
-                @attributes={{attributes}}
-                @onChange={{perform this.save field}}
-                @updateFieldValue={{this.updateCustomFieldValue}}
-                @loading={{this.save.isRunning}}
-                @disabled={{this.editingIsDisabled}}
-              />
-            {{else}}
-              {{get @document field}}
-            {{/if}}
+            <CustomEditableField
+              @document={{@document}}
+              @field={{field}}
+              @attributes={{attributes}}
+              @onChange={{perform this.save field}}
+              @updateFieldValue={{this.updateCustomFieldValue}}
+              @loading={{this.save.isRunning}}
+              @disabled={{or this.editingIsDisabled (not this.isOwner)}}
+            />
           </div>
         {{/if}}
       {{/each-in}}
