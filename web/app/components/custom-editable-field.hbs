@@ -14,7 +14,13 @@
           title={{or documentField "None"}}
         >
           {{#if documentField}}
+            <div class="flex items-center text-color-foreground-faint">
+              <FlightIcon
+                @name='type'
+                class="ml-0.5 mr-3 opacity-75 shrink-0"
+              />
             {{documentField}}
+            </div>
           {{else}}
             <CustomEditableFields::EmptyState />
           {{/if}}

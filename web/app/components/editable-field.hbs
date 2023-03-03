@@ -14,9 +14,12 @@
         disabled={{or @disabled @loading}}
         {{on "click" this.edit}}
       >
+        <div class="w-full grid overflow-hidden">
+
         {{yield}}
+        </div>
       </button>
-      <div class="hidden group-hover:block absolute right-0.5 top-px">
+      <div class="hidden XXXXXXX_group-hover:block absolute -right-1.5 top-px">
         <FlightIcon
           @name="edit"
           class="text-color-foreground-faint pointer-events-none"
