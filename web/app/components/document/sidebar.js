@@ -51,7 +51,55 @@ export default class DocumentSidebar extends Component {
     for (const field in customEditableFields) {
       customEditableFields[field]["value"] = this.args.document[field];
     }
-    return customEditableFields;
+
+    /**
+     * At this point, customEditableFields looks like:
+     * {
+     *    currentVersion: {
+     *      displayName: "Current Version",
+     *      value: "1.0",
+     *      type: "STRING"
+     * },
+     *    stakeholders: {
+     *      type: "PEOPLE"
+     *    }
+     * }
+     *
+     * we want to group all keys by type, so that we can render them in the
+     * sidebar in the correct order.
+     *
+     */
+
+    let groupedFields = {
+      PEOPLE: {},
+      STRING: {},
+    };
+
+    for (const field in customEditableFields) {
+      let type = customEditableFields[field].type;
+      groupedFields[type][field] = customEditableFields[field];
+    }
+    /**
+     * At this point, groupedFields looks like:
+     * {
+     *  PEOPLE: {
+     *    stakeholders: {}
+     * },
+     *  STRING: {...}
+     * }
+     *
+     * We want to return an array of objects without the "PEOPLE" and "STRING" grouping
+     */
+
+    let fields = [];
+
+    for (const type in groupedFields) {
+      for (const field in groupedFields[type]) {
+        fields.push(groupedFields[type][field]);
+      }
+    }
+
+    return fields;
   }
 
   @action
