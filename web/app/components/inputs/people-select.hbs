@@ -15,5 +15,16 @@
   ...attributes
   as |value|
 >
-  {{value.email}}
+  <div class="flex items-center text-body-200">
+    <div>
+      {{#if value.name}}
+        <div class="font-bold flex w-full">
+          {{value.name}}
+        </div>
+      {{/if}}
+      <div>
+        {{value.email}}
+      </div>
+    </div>
+  </div>
 </PowerSelectMultiple>

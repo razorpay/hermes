@@ -7,6 +7,7 @@ import FetchService from "hermes/services/fetch";
 import Ember from "ember";
 
 export interface GoogleUser {
+  names: { displayName: string }[];
   emailAddresses: { value: string }[];
   photos: { url: string }[];
 }
@@ -77,6 +78,7 @@ export default class PeopleSelectComponent extends Component<PeopleSelectCompone
         if (peopleJson) {
           this.people = peopleJson.map((p: GoogleUser) => {
             return {
+              name: p.names[0]?.displayName,
               email: p.emailAddresses[0]?.value,
               imgURL: p.photos?.[0]?.url,
             };

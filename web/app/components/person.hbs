@@ -7,9 +7,9 @@
         <img src={{@imgURL}} referrerpolicy="no-referrer" class="w-full" />
       {{else}}
         <div class="hds-foreground-high-contrast hds-typography-body-100 flex">
-          {{#if @email}}
+          {{#if (or @name @email)}}
             <span class="capitalize">
-              {{get-first-letter @email}}
+              {{get-first-letter (or @name @email)}}
             </span>
           {{else}}
             <FlightIcon @name="user" class="scale-90" />
@@ -19,9 +19,9 @@
     </div>
     <div
       class="person-email hds-typography-body-200 truncate hds-foreground-primary"
-      title={{@email}}
+      title={{or @name @email}}
     >
-      {{or @email "Unknown"}}
+      {{or (or @name @email) "Unknown"}}
     </div>
   </div>
 {{/unless}}
