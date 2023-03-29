@@ -152,7 +152,29 @@ export default class RecentlyViewedDocsService extends Service {
       /**
        * Update the tracked property to new array of documents.
        */
-      this.all = newAll;
+      this.all = await Promise.all(
+        newAll.map(async (recentDoc) => {
+          let response = await this.fetchSvc
+            .fetch("/api/v1/people", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                query: recentDoc.doc.owners[0],
+              }),
+            })
+            .then((response) => response?.json());
+
+          let name = response[0]?.names[0].displayName;
+
+          if (name) {
+            recentDoc.doc.owners[0] = name;
+          }
+
+          return recentDoc;
+        })
+      );
     } catch (e: unknown) {
       console.error("Error fetching recently viewed docs", e);
       throw e;

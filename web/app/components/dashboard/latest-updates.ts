@@ -10,6 +10,7 @@ import { SearchResponse } from "instantsearch.js";
 
 // @ts-ignore - not yet typed
 import timeAgo from "hermes/utils/time-ago";
+import FetchService from "hermes/services/fetch";
 
 interface DashboardLatestUpdatesComponentSignature {
   Args: {};
@@ -17,6 +18,7 @@ interface DashboardLatestUpdatesComponentSignature {
 
 export default class DashboardLatestUpdatesComponent extends Component<DashboardLatestUpdatesComponentSignature> {
   @service("config") declare configSvc: ConfigService;
+  @service("fetch") declare fetchSvc: FetchService;
 
   @service declare algolia: AlgoliaService;
 
@@ -93,10 +95,34 @@ export default class DashboardLatestUpdatesComponent extends Component<Dashboard
             hit.modifiedAgo = `Modified ${timeAgo(modifiedAgo)}`;
           }
         }
-        return result.hits;
+        return result.hits as HermesDocument[];
       });
 
-    // Update the docsToShow array with the new docs.
-    this.docsToShow = newDocsToShow as HermesDocument[];
+    // need to loop through each docsToShow and fetch the owner name from the email.
+    // the fetch requests must happen in parallel, so we use Promise.all
+    if (newDocsToShow) {
+      this.docsToShow = await Promise.all(
+        newDocsToShow.map(async (doc) => {
+          let response = await this.fetchSvc
+            .fetch("/api/v1/people", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                query: doc.owners[0],
+              }),
+            })
+            .then((response) => response?.json());
+
+          let name = response[0]?.names[0].displayName;
+          if (name) {
+            doc.owners[0] = name;
+          }
+
+          return doc;
+        })
+      );
+    }
   });
 }

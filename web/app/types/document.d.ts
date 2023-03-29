@@ -9,6 +9,7 @@ export interface HermesDocument {
   modifiedTime: number;
   docNumber: string;
   title: string;
+  owners: string[];
 
   thumbnail?: string;
   _snippetResult?: {
