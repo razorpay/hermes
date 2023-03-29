@@ -25,10 +25,12 @@
     @action={{fn this.setCurrentTab "approved"}}
   />
 </div>
-{{#if this.didInsert.isRunning}}
+{{#unless this.fetchDocs.isRunning}}
   {{! Approximate height of the tile list }}
-  <div class="h-[350px]">
-    <FlightIcon @name="loading" class="mt-8" />
+  <div class="tile-list mt-8">
+    {{#each (range 0 4) as |i|}}
+      <Doc::Tile::Skeleton />
+    {{/each}}
   </div>
 {{else}}
   {{#if this.docsToShow}}
@@ -52,4 +54,4 @@
       {{this.emptyStateMessage}}
     </div>
   {{/if}}
-{{/if}}
+{{/unless}}

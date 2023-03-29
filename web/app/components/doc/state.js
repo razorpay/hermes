@@ -17,6 +17,7 @@ export default class State extends Component {
       case "in-review":
       case "approved":
       case "obsolete":
+      case "loading":
         return name;
       default:
         return "wip";
@@ -47,7 +48,8 @@ export default class State extends Component {
 
       case "obsolete":
         return { label: "Obsolete", color: "neutral" };
-
+      case "loading":
+        return { label: "Loading", color: "neutral" };
       default:
         return {
           label: "WIP",

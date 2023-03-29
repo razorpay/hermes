@@ -1,0 +1,40 @@
+<!--
+  Used to render a document tile in a card format
+
+  <Doc::Tile /> properties:
+  @avatar (string): link to avatar image
+  @docID (string): document ID
+  @docNumber (string): document number
+  @isOwner eg. 'true' (false by default) - optional
+  @isResult eg. 'true' (false by default) - optional
+  @modifiedAgo (string): e.g. 'Modified 3 days ago'
+  @owner (string): owner of document
+  @productArea eg. 'Waypoint' or 'Design Systems' etc
+  @snippet: HTML string - optional
+  @status eg. 'approved', 'review', 'obsolete'
+  @thumbnail (string): link to thumbnail image
+  @title (string): title of document
+-->
+<div class="flex flex-col items-start space-y-2 p-4 -m-4 overflow-hidden">
+  <Doc::Thumbnail @isLarge={{true}} @isLoading={{true}} />
+
+  <Doc::State @state="loading" />
+
+  <div class="flex flex-col items-start space-y-1">
+    <h4 class="doc-tile-title">Fake title visualization</h4>
+    <small
+      class="hds-typography-body-100 hds-font-weight-medium hds-foreground-faint"
+    >
+      HC-000</small>
+  </div>
+
+  <div class="flex flex-col items-start space-y-1 pb-1 max-w-full">
+    <Person @isLoading={{true}} />
+    <p class="hds-typography-body-100 hds-foreground-faint">
+      Fake modified ago
+    </p>
+  </div>
+
+  <Hds::Badge @text="Fake badge"/>
+
+</div>

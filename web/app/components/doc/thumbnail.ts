@@ -8,6 +8,7 @@ import Component from "@glimmer/component";
      isLarge?: boolean;
      status?: string;
      product?: string;
+     isLoading?: boolean;
    };
  }
 

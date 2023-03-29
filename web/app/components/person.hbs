@@ -21,22 +21,26 @@
         {{/if}}
       </div>
       <div class="flex overflow-hidden">
-        <div
-          data-test-person-primary-text
-          class="shrink-0 mr-1"
-          title={{optional this.primaryText}}
-        >
-          {{or this.primaryText "Unknown"}}
-        </div>
-        {{#unless this.secondaryTextIsHidden}}
+        {{#if @isLoading}}
+          Loading name...
+        {{else}}
           <div
-            data-test-person-secondary-text
-            class="truncate opacity-70"
-            title={{@email}}
+            data-test-person-primary-text
+            class="shrink-0 mr-1"
+            title={{optional this.primaryText}}
           >
-            {{or @email}}
+            {{or this.primaryText "Unknown"}}
           </div>
-        {{/unless}}
+          {{#unless this.secondaryTextIsHidden}}
+            <div
+              data-test-person-secondary-text
+              class="truncate opacity-70"
+              title={{@email}}
+            >
+              {{or @email}}
+            </div>
+          {{/unless}}
+        {{/if}}
       </div>
     </div>
   {{/let}}
