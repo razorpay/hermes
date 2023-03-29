@@ -49,7 +49,13 @@ export default class State extends Component {
       case "obsolete":
         return { label: "Obsolete", color: "neutral" };
       case "loading":
-        return { label: "Loading", color: "neutral" };
+        return {
+          label: "Loading",
+          color: "neutral",
+          barOneClass: "bg-color-foreground-faint opacity-25",
+          barTwoClass: "bg-color-foreground-faint opacity-25",
+          barThreeClass: "bg-color-foreground-faint opacity-25",
+        };
       default:
         return {
           label: "WIP",

@@ -3,10 +3,13 @@
   class="doc-thumbnail
     {{if @isLarge 'large'}}
     {{if this.isObsolete 'obsolete'}}
-    bg-color-palette-neutral-100 rounded"
+    rounded"
   ...attributes
 >
-  <img src="/images/document.png" class="w-full h-auto" />
+  <img
+    src="/images/document.png"
+    class="w-full h-auto {{if @isLoading 'opacity-40 scale-y-[-1]'}}"
+  />
   {{#unless @isLoading}}
     <div class="w-full h-full absolute">
       {{#if this.isObsolete}}

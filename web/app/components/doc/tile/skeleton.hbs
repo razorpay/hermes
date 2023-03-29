@@ -15,26 +15,27 @@
   @thumbnail (string): link to thumbnail image
   @title (string): title of document
 -->
-<div class="flex flex-col items-start space-y-2 p-4 -m-4 overflow-hidden">
+<div class="flex flex-col items-start space-y-2 p-4 -m-4 doc-tile-skeleton">
   <Doc::Thumbnail @isLarge={{true}} @isLoading={{true}} />
 
   <Doc::State @state="loading" />
 
-  <div class="flex flex-col items-start space-y-1">
-    <h4 class="doc-tile-title">Fake title visualization</h4>
-    <small
-      class="hds-typography-body-100 hds-font-weight-medium hds-foreground-faint"
-    >
-      HC-000</small>
+  <div class="flex flex-col items-start">
+    <div
+      class="h-4 w-40 mb-2 bg-color-foreground-faint opacity-25 rounded-sm"
+    ></div>
+    <div
+      class="h-4 w-16 bg-color-foreground-faint opacity-25 rounded-sm mb-1.5"
+    ></div>
   </div>
 
-  <div class="flex flex-col items-start space-y-1 pb-1 max-w-full">
+  <div class="flex flex-col items-start">
     <Person @isLoading={{true}} />
-    <p class="hds-typography-body-100 hds-foreground-faint">
-      Fake modified ago
-    </p>
+    <div class="h-4 w-32 mt-3.5 bg-color-foreground-faint opacity-25 rounded-sm"></div>
   </div>
 
-  <Hds::Badge @text="Fake badge"/>
+  <div
+    class="h-4 mt-4 w-20 bg-color-foreground-faint opacity-25 rounded-sm"
+  ></div>
 
 </div>

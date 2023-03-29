@@ -2,7 +2,7 @@
   {{#let (or @name @email) as |name|}}
     <div class="flex space-x-2 w-full items-center" ...attributes>
       <div
-        class="w-5 h-5 shrink-0 overflow-hidden rounded-full flex justify-center items-center bg-[color:var(--token-color-palette-alpha-300)]"
+        class="w-5 h-5 shrink-0 overflow-hidden rounded-full flex justify-center items-center bg-color-foreground-faint {{if @isLoading "opacity-25"}}"
       >
         {{#if @imgURL}}
           <img src={{@imgURL}} referrerpolicy="no-referrer" class="w-full" />
@@ -22,7 +22,9 @@
       </div>
       <div class="flex overflow-hidden">
         {{#if @isLoading}}
-          Loading name...
+          <div
+            class="h-4 w-24 bg-color-foreground-faint opacity-25 rounded-sm"
+          ></div>
         {{else}}
           <div
             data-test-person-primary-text

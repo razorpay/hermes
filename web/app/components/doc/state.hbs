@@ -1,20 +1,23 @@
-{{#unless @hideProgress}}
-  <ol
-    class="state--{{this.dasherizedName}}
-      grid grid-cols-3 items-center list-none gap-0.5 w-28 whitespace-nowrap"
-  >
-    <Doc::StateProgressBar class={{this.state.barOneClass}} />
-    <Doc::StateProgressBar class={{this.state.barTwoClass}} />
-    <Doc::StateProgressBar class={{this.state.barThreeClass}} />
-  </ol>
-{{/unless}}
+<div>
 
-{{#if (eq this.dasherizedName "loading")}}
-  <Hds::Badge @text="Loading..." />
-{{else}}
-  <Hds::Badge
-    @text={{this.state.label}}
-    @color={{this.state.color}}
-    class="whitespace-nowrap"
-  />
-{{/if}}
+  {{#unless @hideProgress}}
+    <ol
+      class="state--{{this.dasherizedName}}
+        grid grid-cols-3 items-center list-none gap-0.5 h-1 w-28 whitespace-nowrap"
+    >
+      <Doc::StateProgressBar class={{this.state.barOneClass}} />
+      <Doc::StateProgressBar class={{this.state.barTwoClass}} />
+      <Doc::StateProgressBar class={{this.state.barThreeClass}} />
+    </ol>
+  {{/unless}}
+
+  {{#if (eq this.dasherizedName "loading")}}
+    <div class="h-4 mt-4 w-24 bg-color-foreground-faint opacity-25 rounded-sm"></div>
+  {{else}}
+    <Hds::Badge
+      @text={{this.state.label}}
+      @color={{this.state.color}}
+      class="whitespace-nowrap mt-2"
+    />
+  {{/if}}
+</div>
