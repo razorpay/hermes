@@ -23,7 +23,7 @@ module("Integration | Component | person", function (hooks) {
     assert.dom(".person img").exists();
 
     assert
-      .dom(".person .person-email")
+      .dom(".person [data-test-person-primary-text]")
       .hasText(this.email)
       .hasAttribute("title", this.email);
     assert.dom(".person span").doesNotExist();
@@ -32,18 +32,16 @@ module("Integration | Component | person", function (hooks) {
     this.set("imgURL", null);
 
     assert.dom(".person img").doesNotExist();
-    assert.dom(".person .person-email").hasText(this.email);
+    assert.dom(".person [data-test-person-primary-text]").hasText(this.email);
     assert.dom(".person span").hasText("e");
     assert.dom(".person svg").doesNotExist();
 
     this.set("email", null);
 
-
     assert.dom(".person img").doesNotExist();
-    assert.dom(".person .person-email").hasText("Unknown");
+    assert.dom(".person [data-test-person-primary-text]").hasText("Unknown");
     assert.dom(".person span").doesNotExist();
     assert.dom(".person svg").exists();
-
 
     this.set("ignoreUnknown", true);
 

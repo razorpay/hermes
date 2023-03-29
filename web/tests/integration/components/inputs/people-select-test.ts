@@ -51,14 +51,18 @@ module("Integration | Component | inputs/people-select", function (hooks) {
 
     await click(".ember-power-select-option");
     assert
-      .dom(".ember-power-select-multiple-option .person-email")
+      .dom(
+        ".ember-power-select-multiple-option [data-test-person-primary-text]"
+      )
       .hasText("user1@hashicorp.com", "User 1 was successfully selected");
 
     await fillIn(".ember-power-select-trigger-multiple-input", "2");
 
     await click(".ember-power-select-option");
     assert
-      .dom(".ember-power-select-multiple-option .person-email")
+      .dom(
+        ".ember-power-select-multiple-option [data-test-person-primary-text]"
+      )
       .exists({ count: 2 }, "User 2 was successfully selected");
 
     await fillIn(".ember-power-select-trigger-multiple-input", "2");
@@ -71,7 +75,9 @@ module("Integration | Component | inputs/people-select", function (hooks) {
     );
 
     assert
-      .dom(".ember-power-select-multiple-option .person-email")
+      .dom(
+        ".ember-power-select-multiple-option [data-test-person-primary-text]"
+      )
       .exists({ count: 1 }, "People are removed from the list when clicked");
   });
 

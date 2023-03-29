@@ -1,6 +1,6 @@
 {{#unless this.isHidden}}
   {{#let (or @name @email) as |name|}}
-    <div class="flex space-x-2 w-full" ...attributes>
+    <div class="flex space-x-2 w-full items-center" ...attributes>
       <div
         class="w-5 h-5 shrink-0 overflow-hidden rounded-full flex justify-center items-center bg-[color:var(--token-color-palette-alpha-300)]"
       >
@@ -20,13 +20,25 @@
           </div>
         {{/if}}
       </div>
-      <div
-        class="person-email hds-typography-body-200 truncate hds-foreground-primary"
-        title={{name}}
-      >
-        {{or name "Unknown"}}
+      <div class="flex overflow-hidden">
+        <div
+          data-test-person-primary-text
+          class="shrink-0 mr-1"
+          title={{optional this.primaryText}}
+        >
+          {{or this.primaryText "Unknown"}}
+        </div>
+        {{#unless this.secondaryTextIsHidden}}
+          <div
+            data-test-person-secondary-text
+            class="truncate opacity-70"
+            title={{@email}}
+          >
+            {{or @email}}
+          </div>
+        {{/unless}}
       </div>
     </div>
-
   {{/let}}
+
 {{/unless}}

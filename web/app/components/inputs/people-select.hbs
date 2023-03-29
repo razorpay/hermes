@@ -15,16 +15,11 @@
   ...attributes
   as |value|
 >
-  <div class="flex items-center text-body-200">
-    <div>
-      {{#if value.name}}
-        <div class="font-bold flex w-full">
-          {{value.name}}
-        </div>
-      {{/if}}
-      <div>
-        {{value.email}}
-      </div>
-    </div>
+  <div class="py-0.5">
+    <Person
+      @imgURL={{value.imgURL}}
+      @name={{value.name}}
+      @email={{value.email}}
+    />
   </div>
 </PowerSelectMultiple>
