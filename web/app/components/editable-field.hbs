@@ -13,6 +13,9 @@
       {{on "click" this.edit}}
     >
       {{yield}}
+      <div class="edit-button">
+        <FlightIcon @name="pencil-tool" />
+      </div>
     </button>
   {{/if}}
 </div>

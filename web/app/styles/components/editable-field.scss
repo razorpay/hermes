@@ -1,61 +1,54 @@
 .editable-field {
-  @apply w-full relative;
+  $hds-form-padding: 7px;
+
+  @apply relative;
+  margin-left: -$hds-form-padding;
+  width: calc(100% + #{$hds-form-padding} * 2);
+
+  textarea {
+    @apply w-full;
+  }
+
+  input[role="combobox"] {
+    @apply h-5;
+  }
+
+  .empty-state-text {
+    @apply text-color-foreground-primary opacity-50 h-5 flex items-center;
+  }
 
   & > .field-toggle {
-    all: unset;
-    width: 100%;
-    cursor: pointer;
-    position: relative;
+    @apply p-hds-form-padding text-left rounded-hds-form-border-radius w-full cursor-text relative  border border-transparent bg-transparent;
+
+    &:not([disabled]) {
+      @apply bg-color-page-primary shadow-surface-low;
+    }
 
     &[disabled] {
-      cursor: default;
+      @apply cursor-default;
     }
 
     &.loading {
-      opacity: 0.5;
+      @apply opacity-50;
     }
 
-    &::before {
-      pointer-events: none;
-      content: "";
-      padding: 3px 5px;
-      position: absolute;
-      top: -5px;
-      right: -5px;
-      bottom: -5px;
-      left: -5px;
-    }
-
-    &::after {
-      pointer-events: none;
-      content: "edit";
-      position: absolute;
-      right: -5px;
-      top: -5px;
-      padding: 3px 5px;
-      background: var(--token-form-control-base-border-color-default);
-      border-top-right-radius: var(--token-form-control-border-radius);
-      border-bottom-left-radius: var(--token-form-control-border-radius);
-      color: var(--token-color-foreground-high-contrast);
-      visibility: hidden;
+    .edit-button {
+      @apply pointer-events-none absolute top-[3px] right-[3px] h-7 w-7 grid place-items-center invisible rounded-[3px] bg-color-surface-faint text-color-foreground-faint shadow-surface-base;
     }
 
     &:not([disabled]):hover,
     &:not([disabled]):focus {
-      &::before {
-        border: 1px solid var(--token-form-control-base-border-color-default);
-        border-radius: var(--token-form-control-border-radius);
+      .edit-button {
+        @apply visible;
       }
+    }
 
-      &::after {
-        visibility: visible;
-      }
+    h1 {
+      @apply mb-0;
     }
   }
 
   .loading-indicator {
-    position: absolute;
-    top: 0;
-    right: 0;
+    @apply absolute top-2.5 right-2;
   }
 }

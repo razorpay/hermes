@@ -77,52 +77,39 @@
             &bullet;
             {{@document.docNumber}}</small>
         {{/if}}
-        {{#if this.editingIsDisabled}}
-          <h1
-            class="hds-typography-display-300 hds-font-weight-semibold hds-foreground-strong"
-          >{{this.title}}</h1>
-        {{else}}
-          <EditableField
-            @value={{this.title}}
-            @onChange={{perform this.save "title"}}
-            @loading={{this.save.isRunning}}
-            @disabled={{this.editingIsDisabled}}
-          >
-            <:default>
-              {{#unless (is-empty this.title)}}
-                <h1
-                  class="hds-typography-display-300 hds-font-weight-semibold hds-foreground-strong"
-                >{{this.title}}</h1>
-              {{else}}
-                <h1
-                  class="hds-typography-display-300 hds-font-weight-semibold hds-foreground-faint"
-                >Enter a title here.</h1>
-              {{/unless}}
-            </:default>
-            <:editing as |F|>
-              <Hds::Form::Textarea::Field
-                {{auto-height-textarea}}
-                @value={{F.value}}
-                class="primary-textarea"
-                name="title"
-                {{on "blur" F.update}}
-                as |F|
-              />
-            </:editing>
-          </EditableField>
-        {{/if}}
-      </div>
 
-      <hr class="border-0 border-b hds-border-faint" />
+        {{log this.editingIsDisabled}}
+
+        <EditableField
+          @value={{this.title}}
+          @onChange={{perform this.save "title"}}
+          @loading={{this.save.isRunning}}
+          @disabled={{this.editingIsDisabled}}
+        >
+          <:default>
+            <h1 class="text-display-300 font-semibold">
+              {{or this.title "Enter a title here."}}
+            </h1>
+          </:default>
+          <:editing as |F|>
+            <Hds::Form::Textarea::Field
+              {{auto-height-textarea}}
+              @value={{F.value}}
+              class="text-display-300 font-semibold"
+              name="title"
+              {{on "blur" F.update}}
+              as |F|
+            />
+          </:editing>
+        </EditableField>
+      </div>
 
       <div class="flex flex-col items-start space-y-2">
         <small
           class="hds-typography-body-100 hds-foreground-faint"
         >Summary</small>
         {{#if this.editingIsDisabled}}
-          <p
-            class="hds-typography-body-200 hds-font-weight-medium hds-foreground-primary"
-          >{{this.summary}}</p>
+          <p class="">{{this.summary}}</p>
         {{else}}
           <EditableField
             @value={{this.summary}}
@@ -131,23 +118,16 @@
             @disabled={{this.editingIsDisabled}}
           >
             <:default>
-              {{#unless (is-empty this.summary)}}
-                <p
-                  class="hds-typography-body-200 hds-font-weight-medium hds-foreground-primary"
-                >
-                  {{this.summary}}</p>
-              {{else}}
-                <p
-                  class="hds-typography-body-200 hds-font-weight-medium hds-foreground-faint"
-                >
-                  Enter a summary here.</p>
-              {{/unless}}
+              <p class="text-body-200">{{or
+                  this.summary
+                  "Enter a summary here."
+                }}</p>
             </:default>
             <:editing as |F|>
               <Hds::Form::Textarea::Field
                 {{auto-height-textarea}}
                 @value={{F.value}}
-                class="primary-textarea"
+                class="text-body-200"
                 name="summary"
                 {{on "blur" F.update}}
                 as |F|
@@ -208,7 +188,7 @@
                   {{/each}}
                 </ol>
               {{else}}
-                <em>No contributors</em>
+                <div class="empty-state-text">No contributors</div>
               {{/if}}
             </:default>
             <:editing as |F|>
@@ -262,7 +242,9 @@
                   {{/each}}
                 </ol>
               {{else}}
-                <em>No approvers</em>
+                <div class="empty-state-text">
+                  No approvers
+                </div>
               {{/if}}
             </:default>
             <:editing as |F|>
@@ -287,7 +269,9 @@
               {{/each}}
             </ol>
           {{else}}
-            <em>No approvers</em>
+            <div class="empty-state-text">
+              No approvers
+            </div>
           {{/if}}
         {{/if}}
       </div>

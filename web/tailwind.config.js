@@ -43,7 +43,14 @@ module.exports = {
       bold: "var(--token-typography-font-weight-bold)",
     },
     extend: {
+      borderRadius: {
+        'hds-form-border-radius': '5px',
+      },
+      spacing: {
+        'hds-form-padding': '7px',
+      },
       boxShadow: {
+        "surface-base": "var(--token-surface-base-box-shadow)",
         "surface-low": "var(--token-surface-low-box-shadow)",
         "surface-mid": "var(--token-surface-mid-box-shadow)",
       },

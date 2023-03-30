@@ -233,7 +233,7 @@ export default class DocumentSidebar extends Component {
   @task
   *patchDocument(fields) {
     const endpoint = this.isDraft ? "drafts" : "documents";
-
+    console.log('oh');
     try {
       yield this.fetchSvc.fetch(`/api/v1/${endpoint}/${this.docID}`, {
         method: "PATCH",
