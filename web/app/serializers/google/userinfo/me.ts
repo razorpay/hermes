@@ -2,11 +2,11 @@ import RESTSerializer from "@ember-data/serializer/rest";
 
 export default class GoogleDriveFileSerializer extends RESTSerializer {
   normalizeQueryRecordResponse(
-    store,
-    primaryModelClass,
-    payload,
-    id,
-    requestType
+    store: any,
+    primaryModelClass: any,
+    payload: any,
+    id: any,
+    requestType: any
   ) {
     return super.normalizeQueryResponse(
       store,
