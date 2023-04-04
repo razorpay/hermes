@@ -20,7 +20,7 @@ export interface Subscription {
   subscriptionType: SubscriptionType;
 }
 
-enum SubscriptionType {
+export enum SubscriptionType {
   Digest = "digest",
   Instant = "instant",
 }
@@ -74,16 +74,21 @@ export default class AuthenticatedUserService extends Service {
    * If the user has no subscriptions, returns an empty array.
    */
   fetchSubscriptions = task(async () => {
+    // debugger;
     try {
-      let subscriptions = await this.fetchSvc
-        .fetch("/api/v1/me/subscriptions", {
-          method: "GET",
-        })
-        .then((response) => response?.json());
+      let subscriptions = await this.store.findAll("me/subscription");
+      // let subscriptions = await this.fetchSvc
+      //   .fetch("/api/v1/me/subscriptions", {
+      //     method: "GET",
+      //   })
+      //   .then((response) => response?.json());
+      debugger;
 
       let newSubscriptions: Subscription[] = [];
 
+      // @ts-ignore
       if (subscriptions) {
+        // @ts-ignore
         newSubscriptions = subscriptions.map((subscription: string) => {
           return {
             productArea: subscription,
