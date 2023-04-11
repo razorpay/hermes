@@ -44,10 +44,11 @@ module.exports = {
     },
     extend: {
       borderRadius: {
-        'hds-form-border-radius': '5px',
+        "hds-form-border-radius": "5px",
+        "button-md": "5px",
       },
       spacing: {
-        'hds-form-padding': '7px',
+        "hds-form-padding": "7px",
       },
       boxShadow: {
         "surface-base": "var(--token-surface-base-box-shadow)",
