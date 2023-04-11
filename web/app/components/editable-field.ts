@@ -34,19 +34,21 @@ export default class EditableField extends Component {
   }
 
   @action
-  cancel(ev) {
-    if (ev.key === "Escape") {
-      scheduleOnce("actions", this, () => {
-        this.editing = false;
-      });
-      ev.preventDefault();
-    }
-  }
-
-  @action
-  preventNewlines(ev) {
+  onKeydown(ev) {
     if (ev.key === "Enter") {
       ev.preventDefault();
+      this.update(ev);
+      return;
+    }
+
+    if (ev.key === "Escape") {
+      ev.preventDefault();
+
+      scheduleOnce("actions", this, () => {
+        this.editing = false;
+        // TODO: need to revert to its original value
+      });
+
     }
   }
 

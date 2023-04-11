@@ -1,6 +1,6 @@
 <div class="editable-field" ...attributes {{did-insert this.captureElement}}>
   {{#if (and this.editing (not @loading))}}
-    <div {{on "keydown" this.preventNewlines}} {{on "keyup" this.cancel}}>
+    <div {{on "keydown" this.onKeydown}}>
       {{yield (hash value=@value update=this.update) to="editing"}}
     </div>
   {{else}}

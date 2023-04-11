@@ -33,7 +33,7 @@
     }
 
     .edit-button {
-      @apply pointer-events-none absolute top-[3px] right-[3px] h-7 w-7 grid place-items-center invisible rounded-[3px] bg-color-surface-faint text-color-foreground-faint shadow-surface-base;
+      @apply cursor-pointer absolute top-[3px] right-[3px] h-7 w-7 grid place-items-center invisible rounded-[3px] bg-color-surface-faint text-color-foreground-faint shadow-surface-base;
     }
 
     &:not([disabled]):hover,
