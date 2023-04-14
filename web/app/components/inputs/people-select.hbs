@@ -6,7 +6,7 @@
   @options={{this.people}}
   @selected={{@selected}}
   @renderInPlace={{@renderInPlace}}
-  @placeholder="Search for your peers..."
+  @placeholder={{or @placeholder "Search for your peers..."}}
   @onChange={{@onChange}}
   @onInput={{this.onInput}}
   @onClose={{this.onClose}}

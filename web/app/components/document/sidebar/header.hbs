@@ -10,21 +10,19 @@
       @size={{if @isCollapsed "24"}}
     />
     {{#unless @isCollapsed}}
-      <span>Dashboard</span>
+      {{! <span>Dashboard</span> }}
     {{/unless}}
   </LinkTo>
   <div class="sidebar-header-icon-controls">
-    {{#if this.shareButtonIsShown}}
-      <CopyURLButton
-        data-test-sidebar-copy-url-button
-        @url={{this.url}}
-        @tooltipPlacement={{if @isCollapsed "right" "bottom"}}
-        class="sidebar-header-button"
-      />
-    {{/if}}
+    <!--
+    -->
+    <Action class="sidebar-header-button" {{on "click" this.showShareModal}}>
+      <FlightIcon @name="share" class="" />
+      <span>Share...</span>
+    </Action>
     <ExternalLink
       data-test-sidebar-google-docs-link
-      class="sidebar-header-button"
+      class="sidebar-header-button _primary"
       href="https://docs.google.com/document/d/{{@document.objectID}}"
       {{tooltip "Open in Google" placement=(if @isCollapsed "right" "bottom")}}
     >
@@ -44,3 +42,57 @@
     </Action>
   </div>
 </div>
+
+{{#unless this.shareModalIsShown}}
+  {{#in-element this.modalContainer insertBefore=null}}
+    <Hds::Modal @onClose={{this.hideShareModal}} as |M|>
+      <M.Header>Share document</M.Header>
+      <M.Body>
+        <div class="pb-3">
+          <div class="flex">
+
+            <Hds::Form::TextInput::Field
+              readonly
+              {{on "focusin" this.selectText}}
+              {{on "click" this.selectText}}
+              class="mb-3"
+              @value={{this.url}}
+              as |F|
+            >
+              <F.Label>URL</F.Label>
+            </Hds::Form::TextInput::Field>
+            <Hds::Button @text="Copy" @icon="clipboard-copy" @color="secondary" />
+          </div>
+
+          <div class="flex justify-between mb-6">
+            <div class="flex items-center text-color-foreground-faint">
+              <FlightIcon @name="lock" class="mr-2" />
+              Only you have access
+            </div>
+            <Action class="text-color-foreground-action">
+              Create link
+            </Action>
+          </div>
+          <div class="flex flex-end">
+
+            <Inputs::PeopleSelect
+              @renderInPlace={{true}}
+              @selected={{array}}
+              @onChange={{this.noop}}
+              @disabled={{false}}
+              @placeholder="Search by name, email, or Google group..."
+              class="m-0"
+            />
+
+            <Hds::Button @text="Invite" />
+          </div>
+        </div>
+      </M.Body>
+      <M.Footer>
+        <Hds::Button @text="Done" />
+      </M.Footer>
+
+    </Hds::Modal>
+  {{/in-element}}
+
+{{/unless}}

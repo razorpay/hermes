@@ -18,7 +18,7 @@
   }
 
   .sidebar-header {
-    @apply sticky top-0 bg-color-page-faint flex justify-between px-3.5 py-4 z-10;
+    @apply sticky top-0 bg-color-page-faint flex items-center justify-between px-3.5 py-4 z-10;
 
     &.scrolled {
       box-shadow: 0 1px 0 0 rgba(0, 0, 0, 15%);
@@ -26,15 +26,20 @@
   }
 
   .sidebar-header-button {
-    @apply rounded-button-md py-2 px-3 space-x-2 flex items-center border border-transparent text-color-foreground-primary;
+    @apply rounded-button-md text-body-200 py-2 px-3 space-x-2 flex items-center border border-transparent text-color-foreground-primary;
 
     &:hover {
       @apply border-color-border-strong bg-color-foreground-high-contrast;
     }
+
+    &.primary {
+      // @apply border-color-border-strong bg-color-foreground-high-contrast;
+      @apply  text-white bg-color-foreground-action;
+    }
   }
 
   .sidebar-header-icon-controls {
-    @apply flex;
+    @apply flex ;
 
     .sidebar-header-button {
       &::hover {
