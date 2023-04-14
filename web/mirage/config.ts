@@ -12,6 +12,22 @@ export default function (mirageConfig) {
 
       /*************************************************************************
        *
+       * HEAD requests
+       *
+       *************************************************************************/
+
+      this.head("/me", (schema, _request) => {
+        let isLoggedIn = schema.db.mes[0].isLoggedIn;
+
+        if (isLoggedIn) {
+          return new Response(200, {});
+        } else {
+          return new Response(401, {});
+        }
+      });
+
+      /*************************************************************************
+       *
        * POST requests
        *
        *************************************************************************/
@@ -131,7 +147,9 @@ export default function (mirageConfig) {
           return schema.mes.first().attrs;
         } else {
           // Otherwise, create and return a new user.
-          return schema.mes.create().attrs;
+          return schema.mes.create({
+            isLoggedIn: true,
+          }).attrs;
         }
       });
 
