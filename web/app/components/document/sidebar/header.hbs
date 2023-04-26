@@ -9,17 +9,17 @@
       @name={{if @isCollapsed "hashicorp" "arrow-left"}}
       @size={{if @isCollapsed "24"}}
     />
-    {{#unless @isCollapsed}}
-      {{! <span>Dashboard</span> }}
-    {{/unless}}
   </LinkTo>
   <div class="sidebar-header-icon-controls">
-    <!--
-    -->
-    <Action class="sidebar-header-button" {{on "click" this.showShareModal}}>
+    <Action
+      class="sidebar-header-button mr-3"
+      {{on "click" this.showShareModal}}
+    >
       <FlightIcon @name="share" class="" />
       <span>Share...</span>
     </Action>
+    <!--
+    -->
     <ExternalLink
       data-test-sidebar-google-docs-link
       class="sidebar-header-button _primary"
@@ -61,7 +61,11 @@
             >
               <F.Label>URL</F.Label>
             </Hds::Form::TextInput::Field>
-            <Hds::Button @text="Copy" @icon="clipboard-copy" @color="secondary" />
+            <Hds::Button
+              @text="Copy"
+              @icon="clipboard-copy"
+              @color="secondary"
+            />
           </div>
 
           <div class="flex justify-between mb-6">
