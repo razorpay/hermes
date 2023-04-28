@@ -11,15 +11,94 @@
     />
   </LinkTo>
   <div class="sidebar-header-icon-controls">
-    <Action
-      class="sidebar-header-button mr-3"
-      {{on "click" this.showShareModal}}
-    >
-      <FlightIcon @name="share" class="" />
-      <span>Share...</span>
-    </Action>
+    <FloatingUI>
+      <:anchor as |dd|>
+        <Action
+          class="sidebar-header-button mr-2"
+          {{did-insert dd.registerAnchor}}
+          {{on "click" dd.toggleContent}}
+        >
+          <FlightIcon @name="share" />
+          <span>Share</span>
+          <FlightIcon @name="chevron-down" />
+        </Action>
+      </:anchor>
+      <:content as |dd|>
+        <div
+          class="hermes-popover w-[420px] pt-4 pb-6"
+          {{dismissible dismiss=dd.hideContent related=dd.anchor}}
+        >
+          <div class="px-5">
+
+            <div class="mb-1">
+              <h5
+                class="mr-4 tracking-wide font-medium text-body-100 text-color-foreground-faint uppercase"
+              >Draft permissions</h5>
+            </div>
+            <Action
+              class="p-3 bg-color-surface-action border border-color-focus-action-external rounded-button-md relative"
+            >
+              <div class="flex space-x-3">
+                <FlightIcon @name="lock" class="shrink-0 mt-0.5" />
+                <div class="pr-10">
+                  <h4 class="text-body-200">Restricted</h4>
+                  <p class="text-body-200 text-color-foreground-faint">
+                    You and the people you've added can view and edit this
+                    doc.
+                  </p>
+                </div>
+              </div>
+              <FlightIcon
+                @name="check"
+                class="absolute top-4 right-4 text-color-foreground-action"
+              />
+            </Action>
+            <Action class="p-3">
+              <div class="flex space-x-3">
+                <FlightIcon @name="enterprise" class="shrink-0 mt-0.5" />
+                <div class="pr-10">
+                  <h4 class="text-body-200">Public</h4>
+                  <p class="text-body-200 text-color-foreground-faint">
+                    Editing is restricted, but anyone in the organization with the
+                    link can view.
+                  </p>
+                </div>
+              </div>
+            </Action>
+          </div>
+          <div class="w-full h-px bg-color-border-primary mt-2 mb-2"></div>
+          <div class="px-5">
+
+            <div>
+              <div class="flex mt-3">
+                <Hds::Form::TextInput::Field
+                  readonly
+                  {{on "focusin" this.selectText}}
+                  {{on "click" this.selectText}}
+                  @value={{this.url}}
+                  as |F|
+                />
+                {{! TODO: make this work }}
+                <Action
+                  {{tooltip "Copy to clipboard" placement="top"}}
+                  class="flex justify-center items-center shrink-0 hds-button hds-button--color-secondary hds-button--size-medium ml-2"
+                >
+                  <div class="flex items-center space-x-2">
+                    <FlightIcon @name="clipboard-copy" />
+                    {{! <span class="leading-none">
+                      Copy to clipboard
+                    </span> }}
+                  </div>
+                </Action>
+              </div>
+            </div>
+          </div>
+        </div>
+      </:content>
+    </FloatingUI>
     <!--
     -->
+
     <ExternalLink
       data-test-sidebar-google-docs-link
       class="sidebar-header-button _primary"
@@ -43,7 +122,7 @@
   </div>
 </div>
 
-{{#unless this.shareModalIsShown}}
+{{#if this.shareModalIsShown}}
   {{#in-element this.modalContainer insertBefore=null}}
     <Hds::Modal @onClose={{this.hideShareModal}} as |M|>
       <M.Header>Share document</M.Header>
@@ -95,4 +174,4 @@
     </Hds::Modal>
   {{/in-element}}
 
-{{/unless}}
+{{/if}}
