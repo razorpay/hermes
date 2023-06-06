@@ -7,12 +7,28 @@ import { tracked } from "@glimmer/tracking";
 import { restartableTask } from "ember-concurrency";
 import FetchService from "hermes/services/fetch";
 
-interface XDropdownListComponentSignature<T> {
+interface XDropdownListComponentSignature {
+  Element: HTMLDivElement;
   Args: {
-    selected: any;
-    items?: any;
-    onChange: (value: any) => void;
+    selected?: any; // FIXME
+    items?: any; // FIXME
+    onItemClick?: (value: any) => void;
     listIsOrdered?: boolean;
+  };
+  Blocks: {
+    anchor: [
+      dd: {
+        ToggleButton: any; // FIXME
+      }
+    ];
+    item: [
+      dd: {
+        value: any; // FIXME
+        Action: any; // FIXME
+        LinkTo: any; // FIXME
+        attrs: any; // FIXME
+      }
+    ];
   };
 }
 
@@ -23,9 +39,7 @@ export enum FocusDirection {
   Last = "last",
 }
 
-export default class XDropdownListComponent extends Component<
-  XDropdownListComponentSignature<any>
-> {
+export default class XDropdownListComponent extends Component<XDropdownListComponentSignature> {
   @service("fetch") declare fetchSvc: FetchService;
 
   @tracked private _scrollContainer: HTMLElement | null = null;
@@ -289,4 +303,10 @@ export default class XDropdownListComponent extends Component<
       );
     });
   });
+}
+
+declare module "@glint/environment-ember-loose/registry" {
+  export default interface Registry {
+    "X::DropdownList": typeof XDropdownListComponent;
+  }
 }

@@ -18,8 +18,14 @@ interface XDropdownListItemsComponentSignature {
     onInput: () => void;
     onItemClick: () => void;
     registerScrollContainer?: (e: HTMLElement) => void;
-    setFocusedItemIndex: (direction: FocusDirection) => void;
+    setFocusedItemIndex: (
+      direction: FocusDirection | number,
+      maybeScrollIntoView?: boolean
+    ) => void;
     hideContent: () => void;
+  };
+  Blocks: {
+    item: [i: {}];
   };
 }
 
@@ -73,5 +79,11 @@ export default class XDropdownListItemsComponent extends Component<XDropdownList
         this.args.hideContent();
       }
     }
+  }
+}
+
+declare module "@glint/environment-ember-loose/registry" {
+  export default interface Registry {
+    "X:DropdownList::Items": typeof XDropdownListItemsComponent;
   }
 }

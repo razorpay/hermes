@@ -1,4 +1,5 @@
 import "@glint/environment-ember-loose";
+
 import PerformHelper from "ember-concurrency/helpers/perform";
 import OnDocumentHelper from "ember-on-helper/helpers/on-document";
 import DidInsertModifier from "ember-render-modifiers/modifiers/did-insert";
@@ -10,6 +11,8 @@ import LtHelper from "ember-truth-helpers/helpers/lt";
 import NotHelper from "ember-truth-helpers/helpers/not";
 import OrHelper from "ember-truth-helpers/helpers/or";
 import { FlightIconComponent } from "hds/flight-icon";
+import { HdsButtonComponent } from "hds/button";
+import { HdsBadgeCountComponent } from "hds/badge-count";
 
 declare module "@glint/environment-ember-loose/registry" {
   export default interface Registry {
@@ -21,8 +24,10 @@ declare module "@glint/environment-ember-loose/registry" {
     eq: typeof EqHelper;
     and: typeof AndHelper;
     not: typeof NotHelper;
-    lt: typeof LtHelper
+    lt: typeof LtHelper;
     "is-empty": IsEmptyHelper;
     FlightIcon: FlightIconComponent;
+    "Hds::Button": HdsButtonComponent;
+    "Hds::BadgeCount": HdsBadgeCountComponent;
   }
 }

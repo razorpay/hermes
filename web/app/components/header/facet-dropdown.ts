@@ -4,6 +4,7 @@ import { inject as service } from "@ember/service";
 import RouterService from "@ember/routing/router-service";
 
 interface FacetDropdownComponentSignature {
+  Element: HTMLDivElement;
   Args: {
     label: string;
     facets: FacetDropdownObjects;

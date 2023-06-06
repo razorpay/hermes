@@ -9,7 +9,7 @@ import Ember from "ember";
 interface XDropdownListItemComponentSignature {
   Args: {
     value: string;
-    attributes?: unknown;
+    attributes: unknown;
     selected: boolean;
     focusedItemIndex: number;
     listItemRole: string;
@@ -19,6 +19,17 @@ interface XDropdownListItemComponentSignature {
       focusDirection: FocusDirection | number,
       maybeScrollIntoView?: boolean
     ) => void;
+  };
+  Blocks: {
+    default: [
+      {
+        Action: any; // FIXME
+        LinkTo: any; // FIXME
+        value: string;
+        selected: boolean;
+        attrs: unknown;
+      }
+    ];
   };
 }
 
@@ -115,5 +126,11 @@ export default class XDropdownListItemComponent extends Component<XDropdownListI
     assert("target must be an element", target instanceof HTMLElement);
     this._domElement = target;
     this.args.setFocusedItemIndex(this.itemIndexNumber, false);
+  }
+}
+
+declare module "@glint/environment-ember-loose/registry" {
+  export default interface Registry {
+    "X::DropdownList::Item": typeof XDropdownListItemComponent;
   }
 }

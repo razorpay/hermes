@@ -6,6 +6,7 @@
     No matches
   </div>
 {{else}}
+  {{! @glint-ignore - element helper not yet typed }}
   {{#let (element (if @listIsOrdered "ol" "ul")) as |MaybeOrderedList|}}
     <MaybeOrderedList
       data-test-x-dropdown-list

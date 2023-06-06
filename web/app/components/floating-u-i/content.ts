@@ -14,6 +14,7 @@ import Component from "@glimmer/component";
 import { tracked } from "@glimmer/tracking";
 
 interface FloatingUIContentSignature {
+  Element: HTMLDivElement;
   Args: {
     anchor: HTMLElement;
     id: string;
@@ -21,11 +22,14 @@ interface FloatingUIContentSignature {
     renderOut?: boolean;
     offset?: OffsetOptions;
   };
+  Blocks: {
+    default: [];
+  };
 }
 
 export default class FloatingUIContent extends Component<FloatingUIContentSignature> {
   @tracked _content: HTMLElement | null = null;
-  @tracked cleanup: (() => void) | null = null;
+  @tracked cleanup = () => {};
 
   get content() {
     assert("_content must exist", this._content);
@@ -53,5 +57,11 @@ export default class FloatingUIContent extends Component<FloatingUIContentSignat
     };
 
     this.cleanup = autoUpdate(this.args.anchor, this.content, updatePosition);
+  }
+}
+
+declare module "@glint/environment-ember-loose/registry" {
+  export default interface Registry {
+    "FloatingUI::Content": typeof FloatingUIContent;
   }
 }

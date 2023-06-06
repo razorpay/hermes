@@ -3,11 +3,10 @@ import Component from "@glimmer/component";
 interface XDropdownListLinkToComponentSignature {
   Element: HTMLAnchorElement;
   Args: {
-    registerElement: () => void;
-    focusMouseTarget: () => void;
+    registerElement: (e: HTMLElement) => void;
+    focusMouseTarget: (e: MouseEvent) => void;
     onClick: () => void;
     disabled?: boolean;
-    ariaControls: string;
     role: string;
     isAriaSelected: boolean;
     isAriaChecked: boolean;
