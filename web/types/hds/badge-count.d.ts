@@ -3,9 +3,9 @@
 import { ComponentLike } from "@glint/template";
 import {
   HdsBadgeCountColor,
-  HdsBadgeCountSize,
   HdsBadgeCountType,
-} from "hermes/types/hds-components";
+} from "hermes/enums/hds-components";
+import { HdsBadgeCountSize } from "hermes/types/HdsBadgeCountSize";
 
 export type HdsBadgeCountComponent = ComponentLike<{
   Element: HTMLDivElement;

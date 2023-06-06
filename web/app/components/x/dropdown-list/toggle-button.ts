@@ -1,8 +1,5 @@
 import Component from "@glimmer/component";
-import {
-  HdsButtonColor,
-  HdsButtonIconPosition,
-} from "hermes/types/hds-components";
+import { HdsButtonColor, HdsIconPosition } from "hermes/enums/hds-components";
 
 interface XDropdownListToggleButtonComponentSignature {
   Element: HTMLButtonElement;
@@ -15,7 +12,7 @@ interface XDropdownListToggleButtonComponentSignature {
     ariaControls: string;
     icon?: string;
     color?: HdsButtonColor;
-    iconPosition?: HdsButtonIconPosition;
+    iconPosition?: HdsIconPosition;
     text: string;
   };
   Blocks: {
@@ -23,7 +20,9 @@ interface XDropdownListToggleButtonComponentSignature {
   };
 }
 
-export default class XDropdownListToggleButtonComponent extends Component<XDropdownListToggleButtonComponentSignature> {}
+export default class XDropdownListToggleButtonComponent extends Component<XDropdownListToggleButtonComponentSignature> {
+  HdsIconPosition = HdsIconPosition;
+}
 
 declare module "@glint/environment-ember-loose/registry" {
   export default interface Registry {

@@ -3,18 +3,18 @@
 import { ComponentLike } from "@glint/template";
 import {
   HdsButtonColor,
-  HdsButtonIconPosition,
-  HdsButtonSize,
-} from "hermes/types/hds-components";
+  HdsIconPosition,
+  HdsComponentSize,
+} from "hermes/enums/hds-components";
 
 export type HdsButtonComponent = ComponentLike<{
   Element: HTMLButtonElement;
   Args: {
     text: string;
-    size?: HdsButtonSize;
+    size?: HdsComponentSize;
     color?: HdsButtonColor;
     icon?: string;
-    iconPosition?: HdsButtonIconPosition;
+    iconPosition?: HdsIconPosition;
     isIconOnly?: boolean;
     isFullWidth?: boolean;
     href?: string;

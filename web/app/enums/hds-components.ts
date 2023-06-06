@@ -1,4 +1,4 @@
-export enum HdsBadgeCountSize {
+export enum HdsComponentSize {
   Small = "small",
   Medium = "medium",
   Large = "large",
@@ -15,12 +15,6 @@ export enum HdsBadgeCountColor {
   NeutralDarkMode = "neutral-dark-mode",
 }
 
-export enum HdsButtonSize {
-  Small = "small",
-  Medium = "medium",
-  Large = "large",
-}
-
 export enum HdsButtonColor {
   Primary = "primary",
   Secondary = "secondary",
@@ -28,7 +22,7 @@ export enum HdsButtonColor {
   Critical = "critical",
 }
 
-export enum HdsButtonIconPosition {
+export enum HdsIconPosition {
   Leading = "leading",
   Trailing = "trailing",
 }
