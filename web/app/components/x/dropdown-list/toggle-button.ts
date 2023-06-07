@@ -4,15 +4,13 @@ import { HdsButtonColor, HdsIconPosition } from "hermes/enums/hds-components";
 interface XDropdownListToggleButtonComponentSignature {
   Element: HTMLButtonElement;
   Args: {
-    registerAnchor: () => void;
-    onTriggerKeydown: () => void;
+    registerAnchor: (element: HTMLElement) => void;
+    onTriggerKeydown: (event: KeyboardEvent) => void;
     toggleContent: () => void;
     contentIsShown: boolean;
     disabled?: boolean;
     ariaControls: string;
-    icon?: string;
-    color?: HdsButtonColor;
-    iconPosition?: HdsIconPosition;
+    color: HdsButtonColor;
     text: string;
   };
   Blocks: {

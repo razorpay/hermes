@@ -14,6 +14,7 @@ interface DocTileComponentSignature {
     status?: string;
     thumbnail?: string;
     title?: string;
+    isDraft?: boolean;
   };
 }
 

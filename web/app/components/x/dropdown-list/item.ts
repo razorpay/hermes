@@ -9,7 +9,7 @@ import Ember from "ember";
 interface XDropdownListItemComponentSignature {
   Args: {
     value: string;
-    attributes: unknown;
+    attributes?: unknown;
     selected: boolean;
     focusedItemIndex: number;
     listItemRole: string;
@@ -27,7 +27,7 @@ interface XDropdownListItemComponentSignature {
         LinkTo: any; // FIXME
         value: string;
         selected: boolean;
-        attrs: unknown;
+        attrs?: unknown;
       }
     ];
   };

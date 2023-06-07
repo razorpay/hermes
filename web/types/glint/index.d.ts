@@ -13,6 +13,7 @@ import OrHelper from "ember-truth-helpers/helpers/or";
 import { FlightIconComponent } from "hds/flight-icon";
 import { HdsButtonComponent } from "hds/button";
 import { HdsBadgeCountComponent } from "hds/badge-count";
+import { HdsFormTextInputBase } from "hds/form/text-input/base";
 
 declare module "@glint/environment-ember-loose/registry" {
   export default interface Registry {
@@ -29,5 +30,6 @@ declare module "@glint/environment-ember-loose/registry" {
     FlightIcon: FlightIconComponent;
     "Hds::Button": HdsButtonComponent;
     "Hds::BadgeCount": HdsBadgeCountComponent;
+    "Hds::Form::TextInput::Base": HdsFormTextInputBase;
   }
 }

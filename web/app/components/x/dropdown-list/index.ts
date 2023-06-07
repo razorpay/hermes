@@ -4,8 +4,12 @@ import { schedule } from "@ember/runloop";
 import { inject as service } from "@ember/service";
 import Component from "@glimmer/component";
 import { tracked } from "@glimmer/tracking";
-import { restartableTask } from "ember-concurrency";
+import { WithBoundArgs } from "@glint/template";
 import FetchService from "hermes/services/fetch";
+import XDropdownListToggleActionComponent from "./toggle-action";
+import { HdsButtonColor } from "hermes/enums/hds-components";
+import { Placement } from "@floating-ui/dom";
+import XDropdownListToggleButtonComponent from "./toggle-button";
 
 interface XDropdownListComponentSignature {
   Element: HTMLDivElement;
@@ -14,11 +18,31 @@ interface XDropdownListComponentSignature {
     items?: any; // FIXME
     onItemClick?: (value: any) => void;
     listIsOrdered?: boolean;
+    color?: HdsButtonColor;
+    disabled?: boolean;
+    label?: string;
+    placement?: Placement;
   };
   Blocks: {
     anchor: [
       dd: {
-        ToggleButton: any; // FIXME
+        ToggleButton: WithBoundArgs<
+          typeof XDropdownListToggleButtonComponent,
+          | "contentIsShown"
+          | "registerAnchor"
+          | "toggleContent"
+          | "onTriggerKeydown"
+          | "ariaControls"
+        >;
+        ToggleAction: WithBoundArgs<
+          typeof XDropdownListToggleActionComponent,
+          | "contentIsShown"
+          | "registerAnchor"
+          | "onTriggerKeydown"
+          | "toggleContent"
+          | "ariaControls"
+        >;
+        contentIsShown: boolean;
       }
     ];
     item: [
@@ -26,7 +50,7 @@ interface XDropdownListComponentSignature {
         value: any; // FIXME
         Action: any; // FIXME
         LinkTo: any; // FIXME
-        attrs: any; // FIXME
+        attrs?: any; // FIXME
       }
     ];
   };
@@ -93,7 +117,7 @@ export default class XDropdownListComponent extends Component<XDropdownListCompo
    * The action run when the scrollContainer is inserted.
    * Registers the div for reference locally.
    */
-  @action protected registerScrollContainer(element: HTMLDivElement) {
+  @action protected registerScrollContainer(element: HTMLElement) {
     this._scrollContainer = element;
   }
 
@@ -281,7 +305,7 @@ export default class XDropdownListComponent extends Component<XDropdownListCompo
    * Filters the facets shown in the dropdown and schedules
    * the menu items to be assigned their new IDs.
    */
-  protected onInput = restartableTask(async (inputEvent: InputEvent) => {
+  @action protected onInput(inputEvent: Event) {
     this.focusedItemIndex = -1;
 
     let shownItems: any = {};
@@ -302,7 +326,7 @@ export default class XDropdownListComponent extends Component<XDropdownListCompo
         this._scrollContainer.querySelectorAll(`[role=${this.listItemRole}]`)
       );
     });
-  });
+  }
 }
 
 declare module "@glint/environment-ember-loose/registry" {

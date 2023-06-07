@@ -7,16 +7,16 @@ interface XDropdownListItemsComponentSignature {
   Args: {
     contentID: string;
     query?: string;
-    items?: any;
-    shownItems?: any;
-    selected?: any;
+    items?: any; // FIXME
+    shownItems?: any; // FIXME
+    selected?: any; // FIXME
     focusedItemIndex: number;
     inputIsShown?: boolean;
     listIsOrdered?: boolean;
     listItemRole: string;
     scrollContainer: HTMLElement;
-    onInput: () => void;
-    onItemClick: () => void;
+    onInput: (inputEvent: Event) => void;
+    onItemClick?: (value: any) => void; // FIXME
     registerScrollContainer?: (e: HTMLElement) => void;
     setFocusedItemIndex: (
       direction: FocusDirection | number,
@@ -25,7 +25,15 @@ interface XDropdownListItemsComponentSignature {
     hideContent: () => void;
   };
   Blocks: {
-    item: [i: {}];
+    item: [
+      api: {
+        Action: any; // FIXME
+        LinkTo: any; // FIXME
+        value: string;
+        selected: boolean;
+        attrs?: unknown;
+      }
+    ];
   };
 }
 
@@ -84,6 +92,6 @@ export default class XDropdownListItemsComponent extends Component<XDropdownList
 
 declare module "@glint/environment-ember-loose/registry" {
   export default interface Registry {
-    "X:DropdownList::Items": typeof XDropdownListItemsComponent;
+    "X::DropdownList::Items": typeof XDropdownListItemsComponent;
   }
 }
