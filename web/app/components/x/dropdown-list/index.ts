@@ -2,13 +2,13 @@ import { assert } from "@ember/debug";
 import { action } from "@ember/object";
 import { schedule } from "@ember/runloop";
 import { inject as service } from "@ember/service";
+import { Placement } from "@floating-ui/dom";
 import Component from "@glimmer/component";
 import { tracked } from "@glimmer/tracking";
 import { WithBoundArgs } from "@glint/template";
 import FetchService from "hermes/services/fetch";
 import XDropdownListToggleActionComponent from "./toggle-action";
 import { HdsButtonColor } from "hermes/enums/hds-components";
-import { Placement } from "@floating-ui/dom";
 import XDropdownListToggleButtonComponent from "./toggle-button";
 
 interface XDropdownListComponentSignature {
@@ -326,6 +326,12 @@ export default class XDropdownListComponent extends Component<XDropdownListCompo
         this._scrollContainer.querySelectorAll(`[role=${this.listItemRole}]`)
       );
     });
+  }
+}
+
+declare module "@glint/environment-ember-loose/registry" {
+  export default interface Registry {
+    "X::DropdownList": typeof XDropdownListComponent;
   }
 }
 
