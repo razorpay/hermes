@@ -1,8 +1,8 @@
 // https://helios.hashicorp.design/components/form/text-input?tab=code#formtextinputbase-1
 import { ComponentLike } from "@glint/template";
-import { HdsBadgeCountSize } from "hermes/types/HdsBadgeCountSize";
+import { HdsFormTextInputArgs } from ".";
 
-export type HdsFormTextInputBase = ComponentLike<{
+export interface HdsFormTextInputBaseComponentSignature {
   Element: HTMLInputElement;
   Args: {
     type: string;
@@ -10,4 +10,7 @@ export type HdsFormTextInputBase = ComponentLike<{
     isInvalid?: boolean;
     width?: string;
   };
-}>;
+}
+
+export type HdsFormTextInputBaseComponent =
+  ComponentLike<HdsFormTextInputBaseComponentSignature>;

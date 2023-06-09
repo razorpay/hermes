@@ -16,12 +16,13 @@ interface XDropdownListComponentSignature {
   Args: {
     selected?: any; // FIXME
     items?: any; // FIXME
-    onItemClick?: (value: any) => void;
     listIsOrdered?: boolean;
     color?: HdsButtonColor;
     disabled?: boolean;
     label?: string;
     placement?: Placement;
+    isSaving?: boolean;
+    onItemClick: (value: any, attributes: any) => void;
   };
   Blocks: {
     anchor: [
@@ -326,12 +327,6 @@ export default class XDropdownListComponent extends Component<XDropdownListCompo
         this._scrollContainer.querySelectorAll(`[role=${this.listItemRole}]`)
       );
     });
-  }
-}
-
-declare module "@glint/environment-ember-loose/registry" {
-  export default interface Registry {
-    "X::DropdownList": typeof XDropdownListComponent;
   }
 }
 

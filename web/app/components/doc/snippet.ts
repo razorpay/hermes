@@ -8,3 +8,9 @@ interface DocSnippetComponentSignature {
 }
 
 export default class DocSnippetComponent extends Component<DocSnippetComponentSignature> {}
+
+declare module "@glint/environment-ember-loose/registry" {
+  export default interface Registry {
+    "Doc::Snippet": typeof DocSnippetComponent;
+  }
+}

@@ -5,26 +5,19 @@ import {
   HdsButtonColor,
   HdsIconPosition,
   HdsComponentSize,
-} from "hermes/enums/hds-components";
+  HdsAnchorComponentArgs,
+} from "hds/_shared";
 
-export type HdsButtonComponent = ComponentLike<{
+interface HdsButtonComponentSignature {
   Element: HTMLButtonElement;
-  Args: {
+  Args: HdsAnchorComponentArgs & {
     text: string;
     size?: HdsComponentSize;
     color?: HdsButtonColor;
-    icon?: string;
-    iconPosition?: HdsIconPosition;
     isIconOnly?: boolean;
     isFullWidth?: boolean;
-    href?: string;
-    isHrefExternal?: boolean;
     isRouteExternal?: boolean;
-    route?: string;
-    models?: unknown[];
-    model?: unknown;
-    query?: Record<string, unknown>;
-    "current-when"?: string;
-    replace?: boolean;
   };
-}>;
+}
+
+export type HdsButtonComponent = ComponentLike<HdsButtonComponentSignature>;

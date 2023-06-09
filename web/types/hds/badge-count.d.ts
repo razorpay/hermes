@@ -1,18 +1,18 @@
 //helios.hashicorp.design/components/badge-count?tab=code#component-api
 
 import { ComponentLike } from "@glint/template";
-import {
-  HdsBadgeCountColor,
-  HdsBadgeCountType,
-} from "hermes/enums/hds-components";
+import { HdsBadgeCountColor, HdsBadgeType } from "hds/_shared";
 import { HdsBadgeCountSize } from "hermes/types/HdsBadgeCountSize";
 
-export type HdsBadgeCountComponent = ComponentLike<{
+interface HdsBadgeCountComponentSignature {
   Element: HTMLDivElement;
   Args: {
     text: string;
     size?: HdsBadgeCountSize;
-    type?: HdsBadgeCountType;
+    type?: HdsBadgeType;
     color?: HdsBadgeCountColor;
   };
-}>;
+}
+
+export type HdsBadgeCountComponent =
+  ComponentLike<HdsBadgeCountComponentSignature>;

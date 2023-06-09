@@ -23,6 +23,11 @@ module("Integration | Component | inputs/product-select", function (hooks) {
 
   hooks.beforeEach(async function (this: InputsProductSelectContext) {
     this.server.createList("product", 3);
+    this.server.create("product", {
+      name: "Vault",
+      abbreviation: "VLT",
+    });
+
     this.set("selected", "Vault");
     this.set("onChange", () => {});
   });
@@ -80,7 +85,9 @@ module("Integration | Component | inputs/product-select", function (hooks) {
         @onChange={{this.onChange}}
       />
     `);
-    assert.dom(".product-select-selected-value").hasText("--");
+    assert
+      .dom(".product-select-selected-value")
+      .hasText("Select a product/area");
   });
 
   test("it displays the products in a dropdown list with abbreviations", async function (this: InputsProductSelectContext, assert) {
@@ -94,7 +101,7 @@ module("Integration | Component | inputs/product-select", function (hooks) {
 
     await click(DEFAULT_DROPDOWN_SELECTOR);
 
-    assert.dom(LIST_ITEM_SELECTOR).exists({ count: 3 });
+    assert.dom(LIST_ITEM_SELECTOR).exists({ count: 4 });
 
     let firstListItem = this.element.querySelector(LIST_ITEM_SELECTOR);
     assert.dom(firstListItem).hasText("Test Product 0 TP0");
@@ -106,7 +113,6 @@ module("Integration | Component | inputs/product-select", function (hooks) {
     await render(hbs`
       {{! @glint-nocheck: not typesafe yet }}
       <Inputs::ProductSelect
-        @selected={{this.selected}}
         @onChange={{this.onChange}}
       />
     `);
