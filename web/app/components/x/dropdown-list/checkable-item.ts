@@ -1,5 +1,4 @@
 import Component from "@glimmer/component";
-import { HdsComponentSize } from "hermes/enums/hds-components";
 
 interface XDropdownListCheckableItemComponentSignature {
   Args: {
@@ -9,9 +8,7 @@ interface XDropdownListCheckableItemComponentSignature {
   };
 }
 
-export default class XDropdownListCheckableItemComponent extends Component<XDropdownListCheckableItemComponentSignature> {
-  HdsBadgeCountSize = HdsComponentSize;
-}
+export default class XDropdownListCheckableItemComponent extends Component<XDropdownListCheckableItemComponentSignature> {}
 
 declare module "@glint/environment-ember-loose/registry" {
   export default interface Registry {

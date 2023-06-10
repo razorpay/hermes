@@ -4,8 +4,8 @@
   {{on "keydown" @onTriggerKeydown}}
   {{on "click" @toggleContent}}
   @icon={{if @contentIsShown "chevron-up" "chevron-down"}}
-  @iconPosition={{this.HdsIconPosition.Trailing}}
-  @color={{or @color this.HdsButtonColor.Secondary}}
+  @iconPosition="trailing"
+  @color={{if @color @color "secondary"}}
   @text={{@text}}
   data-test-facet-dropdown-trigger={{@text}}
   disabled={{@disabled}}

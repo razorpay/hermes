@@ -8,8 +8,8 @@ import { tracked } from "@glimmer/tracking";
 import { WithBoundArgs } from "@glint/template";
 import FetchService from "hermes/services/fetch";
 import XDropdownListToggleActionComponent from "./toggle-action";
-import { HdsButtonColor } from "hermes/enums/hds-components";
 import XDropdownListToggleButtonComponent from "./toggle-button";
+import { HdsButtonColor } from "hds/_shared";
 
 interface XDropdownListComponentSignature {
   Element: HTMLDivElement;

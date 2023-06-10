@@ -1,5 +1,5 @@
 import Component from "@glimmer/component";
-import { HdsButtonColor, HdsIconPosition } from "hermes/enums/hds-components";
+import { HdsButtonColor } from "hds/_shared";
 
 interface XDropdownListToggleButtonComponentSignature {
   Element: HTMLButtonElement;
@@ -18,9 +18,7 @@ interface XDropdownListToggleButtonComponentSignature {
   };
 }
 
-export default class XDropdownListToggleButtonComponent extends Component<XDropdownListToggleButtonComponentSignature> {
-  HdsIconPosition = HdsIconPosition;
-}
+export default class XDropdownListToggleButtonComponent extends Component<XDropdownListToggleButtonComponentSignature> {}
 
 declare module "@glint/environment-ember-loose/registry" {
   export default interface Registry {

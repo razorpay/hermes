@@ -1,11 +1,7 @@
 // https://helios.hashicorp.design/components/toast?tab=code#component-api
 
 import { ComponentLike } from "@glint/template";
-import {
-  HdsBadgeColor,
-  HdsBadgeType,
-  HdsComponentSize,
-} from "hermes/enums/hds-components";
+import { HdsBadgeColor, HdsBadgeType, HdsComponentSize } from "./_shared";
 
 interface HdsBadgeComponentSignature {
   Element: HTMLDivElement;

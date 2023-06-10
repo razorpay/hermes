@@ -6,6 +6,7 @@ import {
   HdsIconPosition,
   HdsComponentSize,
   HdsAnchorComponentArgs,
+  HdsButtonColor,
 } from "hds/_shared";
 
 interface HdsButtonComponentSignature {
