@@ -4,7 +4,7 @@ interface ExternalLinkComponentSignature {
   Element: HTMLAnchorElement;
   Blocks: {
     default: [];
-  }
+  };
 }
 
 export default class ExternalLinkComponent extends Component<ExternalLinkComponentSignature> {}
