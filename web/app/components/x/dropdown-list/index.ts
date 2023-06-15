@@ -10,6 +10,7 @@ import FetchService from "hermes/services/fetch";
 import XDropdownListToggleActionComponent from "./toggle-action";
 import XDropdownListToggleButtonComponent from "./toggle-button";
 import { HdsButtonColor } from "hds/_shared";
+import { restartableTask } from "ember-concurrency";
 
 interface XDropdownListComponentSignature {
   Element: HTMLDivElement;
@@ -317,8 +318,8 @@ export default class XDropdownListComponent extends Component<XDropdownListCompo
    * Filters the facets shown in the dropdown and schedules
    * the menu items to be assigned their new IDs.
    */
-  @action protected onInput(inputEvent: Event) {
-    this.focusedItemIndex = -1;
+  protected onInput = restartableTask(async (inputEvent: InputEvent) => {
+    this.resetFocusedItemIndex();
 
     let shownItems: any = {};
     let { items } = this.args;
