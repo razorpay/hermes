@@ -5,32 +5,32 @@ import { OffsetOptions, Placement } from "@floating-ui/dom";
 import Component from "@glimmer/component";
 import { tracked } from "@glimmer/tracking";
 
+interface FloatingUIAnchorAPI {
+  contentIsShown: boolean;
+  registerAnchor: (element: HTMLElement) => void;
+  toggleContent: () => void;
+  showContent: () => void;
+  hideContent: () => void;
+  contentID: string;
+}
+
+interface FloatingUIContentAPI {
+  anchor: HTMLElement;
+  contentID: string;
+  hideContent: () => void;
+}
+
 interface FloatingUIComponentSignature {
   Element: HTMLDivElement;
   Args: {
     renderOut?: boolean;
     placement?: Placement;
-    disableClose?: boolean;
     offset?: OffsetOptions;
+    disableClose?: boolean;
   };
   Blocks: {
-    anchor: [
-      dd: {
-        contentIsShown: boolean;
-        registerAnchor: (element: HTMLElement) => void;
-        toggleContent: () => void;
-        showContent: () => void;
-        hideContent: () => void;
-        contentID: string;
-      }
-    ];
-    content: [
-      dd: {
-        contentID: string;
-        anchor: HTMLElement;
-        hideContent: () => void;
-      }
-    ];
+    anchor: [dd: FloatingUIAnchorAPI];
+    content: [dd: FloatingUIContentAPI];
   };
 }
 
