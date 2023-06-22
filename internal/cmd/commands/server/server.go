@@ -5,11 +5,6 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
-	"net/http"
-	"os"
-	"strings"
-	"time"
-
 	"github.com/hashicorp-forge/hermes/internal/api"
 	"github.com/hashicorp-forge/hermes/internal/auth"
 	"github.com/hashicorp-forge/hermes/internal/cmd/base"
@@ -24,7 +19,13 @@ import (
 	"github.com/hashicorp-forge/hermes/pkg/links"
 	"github.com/hashicorp-forge/hermes/pkg/models"
 	"github.com/hashicorp-forge/hermes/web"
+	"github.com/joho/godotenv"
 	"gorm.io/gorm"
+	"log"
+	"net/http"
+	"os"
+	"strings"
+	"time"
 )
 
 type Command struct {
@@ -102,6 +103,78 @@ func (c *Command) Run(args []string) int {
 			return 1
 		}
 	}
+
+	/* Remove this just for explicitly setting up the env variables*/
+	err1 := godotenv.Load()
+	if err1 != nil {
+		log.Fatal("Error loading .env file")
+	}
+
+	// Access and print the environment variables
+	//fmt.Println(os.LookupEnv("ALGOLIA_APPLICATION_ID"))
+	//panic("")
+	//fmt.Println(os.Getenv("ALGOLIA_SEARCH_API_KEY"))
+	//fmt.Println(os.Getenv("ALGOLIA_WRITE_API_KEY"))
+	//fmt.Println(os.Getenv("GOOGLE_WORKSPACE_OAUTH2_CLIENT_ID"))
+	//fmt.Println(os.Getenv("GOOGLE_WORKSPACE_OAUTH2_HD"))
+	//fmt.Println(os.Getenv("GOOGLE_WORKSPACE_OAUTH2_REDIRECT_URI"))
+	//fmt.Println(os.Getenv("POSTGRES_PASSWORD"))
+	//fmt.Println(os.Getenv("POSTGRES_USER"))
+
+	// Get the sensitive details if present in the environment
+	if val, ok := os.LookupEnv("ALGOLIA_APPLICATION_ID"); ok {
+		cfg.Algolia.ApplicationID = val
+	} else {
+		c.UI.Error("ALGOLIA_APPLICATION_ID must be provided as an env variable!")
+		return 1
+	}
+	if val, ok := os.LookupEnv("ALGOLIA_SEARCH_API_KEY"); ok {
+		cfg.Algolia.SearchAPIKey = val
+	} else {
+		c.UI.Error("ALGOLIA_SEARCH_API_KEY must be provided as an env variable!")
+		return 1
+	}
+
+	if val, ok := os.LookupEnv("ALGOLIA_WRITE_API_KEY"); ok {
+		cfg.Algolia.WriteAPIKey = val
+	} else {
+		c.UI.Error("ALGOLIA_SEARCH_API_KEY must be provided as an env variable!")
+		return 1
+	}
+	if val, ok := os.LookupEnv("GOOGLE_WORKSPACE_OAUTH2_CLIENT_ID"); ok {
+		cfg.GoogleWorkspace.OAuth2.ClientID = val
+	} else {
+		c.UI.Error("GOOGLE_WORKSPACE_OAUTH2_CLIENT_ID must be provided as an env variable!")
+		return 1
+	}
+
+	if val, ok := os.LookupEnv("GOOGLE_WORKSPACE_OAUTH2_HD"); ok {
+		cfg.GoogleWorkspace.OAuth2.HD = val
+	} else {
+		c.UI.Error("GOOGLE_WORKSPACE_OAUTH2_HD must be provided as an env variable!")
+		return 1
+	}
+	if val, ok := os.LookupEnv("GOOGLE_WORKSPACE_OAUTH2_REDIRECT_URI"); ok {
+		cfg.GoogleWorkspace.OAuth2.RedirectURI = val
+	} else {
+		c.UI.Error("GOOGLE_WORKSPACE_OAUTH2_REDIRECT_URI must be provided as an env variable!")
+		return 1
+	}
+	if val, ok := os.LookupEnv("POSTGRES_PASSWORD"); ok {
+		cfg.Postgres.Password = val
+	} else {
+		c.UI.Error("POSTGRES_PASSWORD must be provided as an env variable!")
+		return 1
+	}
+
+	if val, ok := os.LookupEnv("POSTGRES_USER"); ok {
+		cfg.Postgres.User = val
+	} else {
+		c.UI.Error("POSTGRES_USER_Name must be provided as an env variable!")
+		return 1
+	}
+
+	/* Scanned all env variables succesfully */
 
 	// Get configuration from environment variables if not set on the command
 	// line.
