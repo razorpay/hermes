@@ -2,8 +2,26 @@ name: CI
 on: [push]
 
 jobs:
+
+  cancel:
+  runs-on: [ self-hosted ]
+  name: Cancel Previous Runs
+  if: always()
+  steps:
+    - uses: styfle/cancel-workflow-action@d57d93c3a8110b00c3a2c0b64b8516013c9fd4c9
+      if: github.ref != 'refs/heads/master'
+      name: cancel old workflows
+      id: cancel
+      with:
+        access_token: ${{ secrets.GITHUB_TOKEN }}
+    - if: github.ref == 'refs/heads/master'
+      name: Don't cancel old workflows
+      id: dont_cancel
+      run: |
+        echo "Don't cancel old workflow"
+
   build-and-test:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted]
     permissions:
       contents: "read"
     steps:
@@ -36,23 +54,6 @@ jobs:
       - name: Run Go test
         run: make go/test
 
-#   cancel:
-#     runs-on: [ self-hosted ]
-#     name: Cancel Previous Runs
-#     if: always()
-#     steps:
-#       - uses: styfle/cancel-workflow-action@d57d93c3a8110b00c3a2c0b64b8516013c9fd4c9
-#         if: github.ref != 'refs/heads/master'
-#         name: cancel old workflows
-#         id: cancel
-#         with:
-#           access_token: ${{ secrets.GITHUB_TOKEN }}
-#       - if: github.ref == 'refs/heads/master'
-#         name: Don't cancel old workflows
-#         id: dont_cancel
-#         run: |
-#           echo "Don't cancel old workflow"
-
   build-docker-server:
     runs-on: [self-hosted]
     name: Build docker image for the server
@@ -68,16 +69,11 @@ jobs:
       - name: Set up Docker Buildx
         id: buildx
         uses: docker/setup-buildx-action@v1
-      
-      - name: Set date and commit ID as tag
-        run: |
-          echo "CURRENT_DATE=$(date +"%Y%m%d")" >> $GITHUB_ENV
-          echo "COMMIT_ID=${GITHUB_SHA:0:7}" >> $GITHUB_ENV
 
       - name: Build and push
         uses: docker/build-push-action@v2
         with:
-          tags: c.rzp.io/razorpay/docvault:server-${{ env.CURRENT_DATE }}-${{ github.sha }}
+          tags: c.rzp.io/razorpay/docvault:server-${{ github.sha }}
           push: true
           file: Dockerfile.server
           target: prod-api
@@ -102,16 +98,11 @@ jobs:
       - name: Set up Docker Buildx
         id: buildx
         uses: docker/setup-buildx-action@v1
-      
-      - name: Set date and commit ID as tag
-        run: |
-          echo "CURRENT_DATE=$(date +"%Y%m%d")" >> $GITHUB_ENV
-          echo "COMMIT_ID=${GITHUB_SHA:0:7}" >> $GITHUB_ENV
 
       - name: Build and push
         uses: docker/build-push-action@v2
         with:
-          tags: c.rzp.io/razorpay/docvault:indexer-${{ env.CURRENT_DATE }}-${{ github.sha }}
+          tags: c.rzp.io/razorpay/docvault:indexer-${{ github.sha }}
           push: true
           file: Dockerfile.indexer
           target: prod-api
