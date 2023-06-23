@@ -3,7 +3,6 @@ package indexer
 import (
 	"flag"
 	"fmt"
-	"github.com/joho/godotenv"
 	"os"
 	"strings"
 
@@ -79,10 +78,10 @@ func (c *Command) Run(args []string) int {
 	}
 
 	/* Remove this just for explicitly setting up the env variables*/
-	err1 := godotenv.Load()
-	if err1 != nil {
-		panic("Error loading .env file")
-	}
+	// err1 := godotenv.Load()
+	// if err1 != nil {
+	// 	panic("Error loading .env file")
+	// }
 
 	// Access and print the environment variables
 	//fmt.Println(os.LookupEnv("ALGOLIA_APPLICATION_ID"))
@@ -145,6 +144,19 @@ func (c *Command) Run(args []string) int {
 		cfg.Postgres.User = val
 	} else {
 		c.UI.Error("POSTGRES_USER_Name must be provided as an env variable!")
+		return 1
+	}
+
+	if val, ok := os.LookupEnv("POSTGRES_dbname"); ok {
+		cfg.Postgres.DBName = val
+	} else {
+		c.UI.Error("POSTGRES_dbname must be provided as an env variable!")
+		return 1
+	}
+	if val, ok := os.LookupEnv("POSTGRES_host"); ok {
+		cfg.Postgres.Host = val
+	} else {
+		c.UI.Error("POSTGRES_host must be provided as an env variable!")
 		return 1
 	}
 
