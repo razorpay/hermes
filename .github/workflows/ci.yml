@@ -64,6 +64,7 @@ jobs:
         with:
           username: ${{ secrets.PUBLIC_DOCKER_USERNAME }}
           password: ${{ secrets.PUBLIC_DOCKER_PASSWORD }}
+          registry: docker.io
       - name: Set up Docker Buildx
         id: buildx
         uses: docker/setup-buildx-action@v1
@@ -93,6 +94,7 @@ jobs:
         with:
           username: ${{ secrets.PUBLIC_DOCKER_USERNAME }}
           password: ${{ secrets.PUBLIC_DOCKER_PASSWORD }}
+          registry: docker.io
       - name: Set up Docker Buildx
         id: buildx
         uses: docker/setup-buildx-action@v1
