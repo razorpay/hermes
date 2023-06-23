@@ -71,7 +71,7 @@ jobs:
       - name: Build and push to Dockerhub
         uses: docker/build-push-action@v2
         with:
-          tags: server-${{ github.sha }}
+          tags: razorpay/hermes:server-${{ github.sha }}
           push: true
           file: Dockerfile.server
           secrets: |
@@ -79,7 +79,7 @@ jobs:
           build-args: |
             GIT_COMMIT_HASH=${{ github.sha }}
             GIT_USERNAME=rzp
-          repository: razorpay/hermes
+          # repository: razorpay/hermes
           username: ${{ secrets.PUBLIC_DOCKER_USERNAME }}
           password: ${{ secrets.PUBLIC_DOCKER_PASSWORD }}
   
@@ -100,7 +100,7 @@ jobs:
       - name: Build and push to Dockerhub
         uses: docker/build-push-action@v2
         with:
-          tags: indexer-${{ github.sha }}
+          tags: razorpay/hermes:indexer-${{ github.sha }}
           push: true
           file: Dockerfile.server
           secrets: |
@@ -108,32 +108,32 @@ jobs:
           build-args: |
             GIT_COMMIT_HASH=${{ github.sha }}
             GIT_USERNAME=rzp
-          repository: razorpay/hermes
+          # repository: razorpay/hermes
           username: ${{ secrets.PUBLIC_DOCKER_USERNAME }}
           password: ${{ secrets.PUBLIC_DOCKER_PASSWORD }}
 
 
-  workflow_status:
-    runs-on: unbuntu-latest
-    continue-on-error: false
-    name: Update Status Check
-    needs: [ build-docker-indexer, build-docker-server ]
-    if: always()
-    steps:
-      - name: Failed
-        id: failed
-        if: contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled')
-        run: |
-          echo 'Failing the workflow for github status check.'
-          curl -X POST -H "Content-Type: application/json" -H "Authorization: token ${{ github.token }}" \
-          -d '{ "state" : "failure" , "context" : "github/combined-status-check" , "description" : "github/combined-status-check", "target_url" : "https://github.com/${{ github.repository }}" }' \
-          https://api.github.com/repos/${{ github.repository }}/statuses/${{ github.sha }}
-          exit 1
-      - name: Success
-        if: steps.failed.conclusion == 'skipped'
-        run: |
-          echo 'Status check has passed!'
-          curl -X POST -H "Content-Type: application/json" -H "Authorization: token ${{ github.token }}" \
-          -d '{ "state" : "success" , "context" : "github/combined-status-check" , "description" : "github/combined-status-check", "target_url" : "https://github.com/${{ github.repository }}" }' \
-          https://api.github.com/repos/${{ github.repository }}/statuses/${{ github.sha }}
-          exit 0
+  # workflow_status:
+  #   runs-on: unbuntu-latest
+  #   continue-on-error: false
+  #   name: Update Status Check
+  #   needs: [ build-docker-indexer, build-docker-server ]
+  #   if: always()
+  #   steps:
+  #     - name: Failed
+  #       id: failed
+  #       if: contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled')
+  #       run: |
+  #         echo 'Failing the workflow for github status check.'
+  #         curl -X POST -H "Content-Type: application/json" -H "Authorization: token ${{ github.token }}" \
+  #         -d '{ "state" : "failure" , "context" : "github/combined-status-check" , "description" : "github/combined-status-check", "target_url" : "https://github.com/${{ github.repository }}" }' \
+  #         https://api.github.com/repos/${{ github.repository }}/statuses/${{ github.sha }}
+  #         exit 1
+  #     - name: Success
+  #       if: steps.failed.conclusion == 'skipped'
+  #       run: |
+  #         echo 'Status check has passed!'
+  #         curl -X POST -H "Content-Type: application/json" -H "Authorization: token ${{ github.token }}" \
+  #         -d '{ "state" : "success" , "context" : "github/combined-status-check" , "description" : "github/combined-status-check", "target_url" : "https://github.com/${{ github.repository }}" }' \
+  #         https://api.github.com/repos/${{ github.repository }}/statuses/${{ github.sha }}
+  #         exit 0
