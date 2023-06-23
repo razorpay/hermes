@@ -1,19 +1,18 @@
 # Stage 1: Build the application for backend go
 FROM golang:1.18-alpine
 
+RUN apk update && apk add --no-cache make git
+
 # Set the work dir
 WORKDIR /app
 
 # Copy all project files
-COPY .. /app
+COPY . /app
 
 # Build the backend application
 # Change directory to 'web' and run commands sequentially
-RUN rm -f /app/hermes \
-    && CGO_ENABLED=0 go build -o /app/hermes ./cmd/hermes
-
 # # Expose the necessary port for the application
 # EXPOSE 8000 9999
 
 ## Run the script to start both server and indexer
-CMD ["./hermes","indexer","-config=config_indexer.hcl"]
+CMD ["sh"]
