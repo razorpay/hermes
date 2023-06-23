@@ -75,7 +75,7 @@ jobs:
       - name: Build and push to Dockerhub
         uses: docker/build-push-action@v2
         with:
-          tags: server-${{ github.sha }}
+          tags: razorpay/hermes:server-${{ github.sha }}
           push: true
           file: Dockerfile.server
           secrets: |
@@ -108,7 +108,7 @@ jobs:
       - name: Build and push to Dockerhub
         uses: docker/build-push-action@v2
         with:
-          tags: indexer-${{ github.sha }}
+          tags: razorpay/hermes:indexer-${{ github.sha }}
           push: true
           file: Dockerfile.server
           secrets: |
