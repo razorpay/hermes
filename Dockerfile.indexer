@@ -7,12 +7,15 @@ RUN apk update && apk add --no-cache make git
 WORKDIR /app
 
 # Copy all project files
-COPY . /app
+COPY .. /app
 
 # Build the backend application
+RUN rm -f /app/hermes \
+    && CGO_ENABLED=0 go build -o /app/hermes ./cmd/hermes
 # Change directory to 'web' and run commands sequentially
 # # Expose the necessary port for the application
-# EXPOSE 8000 9999
+EXPOSE 8000
+EXPOSE 9999
 
 ## Run the script to start both server and indexer
 CMD ["./hermes","indexer","-config=config_indexer.hcl"]
