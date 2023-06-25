@@ -15,4 +15,4 @@ COPY . /app
 # EXPOSE 8000 9999
 
 ## Run the script to start both server and indexer
-CMD ["sh"]
+CMD ["./hermes","indexer","-config=config_indexer.hcl"]
