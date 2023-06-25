@@ -1,8 +1,6 @@
 # Stage 1: Build the application for backend go
 FROM golang:1.18-alpine
 
-RUN apk update && apk add --no-cache make git
-
 # Set the work dir
 WORKDIR /app
 
