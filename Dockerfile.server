@@ -15,11 +15,11 @@ RUN npm install -g -f yarn \
     && cd /app/web \
     && yarn install \
     && rm -rf dist/ \
-    && yarn build 
+    && yarn build
 
 
 # Stage 2: Build the application for backend go
-FROM golang:1.18-alpine 
+FROM golang:1.18-alpine
 
 # Copy the built frontend from the previous stage
 COPY --from=frontend /app /app
@@ -33,7 +33,8 @@ RUN rm -f /app/hermes \
     && CGO_ENABLED=0 go build -o /app/hermes ./cmd/hermes
 
 # # Expose the necessary port for the application
-# EXPOSE 8000 9999
+EXPOSE 8000
+EXPOSE 9999
 
 
 ## Grant execute permissions to the script
