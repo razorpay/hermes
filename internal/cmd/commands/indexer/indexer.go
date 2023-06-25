@@ -3,7 +3,6 @@ package indexer
 import (
 	"flag"
 	"fmt"
-	"github.com/joho/godotenv"
 	"os"
 	"strings"
 
@@ -79,10 +78,10 @@ func (c *Command) Run(args []string) int {
 	}
 
 	/* Remove this just for explicitly setting up the env variables*/
-	err1 := godotenv.Load()
-	if err1 != nil {
-		panic("Error loading .env file")
-	}
+	// err1 := godotenv.Load()
+	// if err1 != nil {
+	// 	panic("Error loading .env file")
+	// }
 
 	// Access and print the environment variables
 	//fmt.Println(os.LookupEnv("ALGOLIA_APPLICATION_ID"))

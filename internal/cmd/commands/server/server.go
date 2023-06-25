@@ -5,6 +5,11 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
+	"net/http"
+	"os"
+	"strings"
+	"time"
+
 	"github.com/hashicorp-forge/hermes/internal/api"
 	"github.com/hashicorp-forge/hermes/internal/auth"
 	"github.com/hashicorp-forge/hermes/internal/cmd/base"
@@ -19,13 +24,7 @@ import (
 	"github.com/hashicorp-forge/hermes/pkg/links"
 	"github.com/hashicorp-forge/hermes/pkg/models"
 	"github.com/hashicorp-forge/hermes/web"
-	"github.com/joho/godotenv"
 	"gorm.io/gorm"
-	"log"
-	"net/http"
-	"os"
-	"strings"
-	"time"
 )
 
 type Command struct {
@@ -105,10 +104,10 @@ func (c *Command) Run(args []string) int {
 	}
 
 	/* Remove this just for explicitly setting up the env variables*/
-	err1 := godotenv.Load()
-	if err1 != nil {
-		log.Fatal("Error loading .env file")
-	}
+	// err1 := godotenv.Load()
+	// if err1 != nil {
+	// 	log.Fatal("Error loading .env file")
+	// }
 
 	// Access and print the environment variables
 	//fmt.Println(os.LookupEnv("ALGOLIA_APPLICATION_ID"))
