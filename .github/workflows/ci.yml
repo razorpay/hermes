@@ -69,7 +69,7 @@ jobs:
       - name: Build and push to Dockerhub
         uses: docker/build-push-action@v2
         with:
-          tags: anuragprafulla/hermes_server:${{ github.sha }}
+          tags: anuragprafulla/hermes_indexer:${{ github.sha }}
           push: true
           file: Dockerfile.indexer
           build-args: GIT_COMMIT_HASH=${{ github.sha }}
