@@ -147,6 +147,19 @@ func (c *Command) Run(args []string) int {
 		return 1
 	}
 
+	if val, ok := os.LookupEnv("POSTGRES_dbname"); ok {
+		cfg.Postgres.DBName = val
+	} else {
+		c.UI.Error("POSTGRES_dbname must be provided as an env variable!")
+		return 1
+	}
+	if val, ok := os.LookupEnv("POSTGRES_host"); ok {
+		cfg.Postgres.Host = val
+	} else {
+		c.UI.Error("POSTGRES_host must be provided as an env variable!")
+		return 1
+	}
+
 	if val, ok := os.LookupEnv("GOOGLE_WORKSPACE_AUTH_CLIENT_EMAIL"); ok {
 		cfg.GoogleWorkspace.Auth.ClientEmail = val
 	} else {
