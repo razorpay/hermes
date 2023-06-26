@@ -175,7 +175,7 @@ products {
 // server contains the configuration for the server.
 server {
   // addr is the address to bind to for listening.
-  addr = "127.0.0.1:8000"
+  // addr = "127.0.0.1:8000"
   // uncomment this if usign docker compose or deploying
-  // addr = "0.0.0.0:8000"
+  addr = "0.0.0.0:8000"
 }
