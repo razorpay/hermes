@@ -91,6 +91,9 @@ type BaseDoc struct {
 
 	// ThumbnailLink is a URL string for the document thumbnail image.
 	ThumbnailLink string `json:"thumbnailLink,omitempty"`
+
+	//ReviewDate is the deadline of a doc , by that date document must be reviewed by the reviewers
+	ReviewDate string `json:"reviewDate"`
 }
 
 func (d *BaseDoc) DeleteFileRevision(revisionID string) {
@@ -157,6 +160,10 @@ func (d BaseDoc) GetTitle() string {
 	return d.Title
 }
 
+func (d BaseDoc) GetReviewDate() string {
+	return d.ReviewDate
+}
+
 func (d *BaseDoc) SetApprovedBy(s []string) {
 	d.ApprovedBy = s
 }
@@ -193,4 +200,8 @@ func (d *BaseDoc) SetModifiedTime(i int64) {
 
 func (d *BaseDoc) SetStatus(s string) {
 	d.Status = s
+}
+
+func (d *BaseDoc) SetReviewDate(s string) {
+	d.ReviewDate = s
 }
