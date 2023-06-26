@@ -288,6 +288,59 @@
           <p>{{@document.lastModified}}</p>
         </div>
 
+        {{!--review-date --}}
+        <div class="flex flex-col items-start space-y-2">
+          <small
+            class="hds-typography-body-100 hds-foreground-faint"
+          >Review by</small>
+          {{#if this.editingIsDisabled}}
+            <p
+              class="hds-typography-body-200 hds-font-weight-medium hds-foreground-primary"
+            >{{@document.reviewDate}}</p>
+          {{else}}
+            <EditableField
+              @value={{@document.reviewDate}}
+              @onChange={{perform this.save "reviewDate"}}
+              @loading={{this.save.isRunning}}
+              @disabled={{this.editingIsDisabled}}
+            >
+              <:default>
+                {{#unless (is-empty @document.reviewDate)}}
+                  <p
+                    class="hds-typography-body-200 hds-font-weight-medium hds-foreground-primary"
+                  >
+                    {{@document.reviewDate}}</p>
+                {{else}}
+                  <p
+                    class="hds-typography-body-200 hds-font-weight-medium hds-foreground-faint"
+                  >
+                    Enter review date here</p>
+                {{/unless}}
+              </:default>
+              <:editing as |F|>
+              {{!-- my-add-4  calender input--}}
+              <Input
+                  id="user-question"
+                  @type="date"
+                  @value={{F.value}}
+                  {{on "blur" F.update}}
+                  as |F|
+                >
+                  {{formatDate F.value "MMM DD, YYYY"}}
+                </Input>
+                {{!-- <Hds::Form::Textarea::Field
+                  {{auto-height-textarea}}
+                  @value={{F.value}}
+                  class="primary-textarea"
+                  name="reviewDate"
+                  {{on "blur" F.update}}
+                  as |F|
+                /> --}}
+              </:editing>
+            </EditableField>
+          {{/if}}
+        </div>
+        
         {{#each-in this.customEditableFields as |field attributes|}}
           {{#if
             (or
