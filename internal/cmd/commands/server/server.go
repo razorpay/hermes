@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
+	"log"
 	"net/http"
 	"os"
 	"strings"
@@ -24,6 +25,7 @@ import (
 	"github.com/hashicorp-forge/hermes/pkg/links"
 	"github.com/hashicorp-forge/hermes/pkg/models"
 	"github.com/hashicorp-forge/hermes/web"
+	"github.com/joho/godotenv"
 	"gorm.io/gorm"
 )
 
@@ -104,10 +106,10 @@ func (c *Command) Run(args []string) int {
 	}
 
 	/* Remove this just for explicitly setting up the env variables*/
-	// err1 := godotenv.Load()
-	// if err1 != nil {
-	// 	log.Fatal("Error loading .env file")
-	// }
+	err1 := godotenv.Load()
+	if err1 != nil {
+		log.Fatal("Error loading .env file")
+	}
 
 	// Access and print the environment variables
 	//fmt.Println(os.LookupEnv("ALGOLIA_APPLICATION_ID"))
@@ -159,6 +161,20 @@ func (c *Command) Run(args []string) int {
 		c.UI.Error("GOOGLE_WORKSPACE_OAUTH2_REDIRECT_URI must be provided as an env variable!")
 		return 1
 	}
+
+	if val, ok := os.LookupEnv("GOOGLE_WORKSPACE_AUTH_CLIENT_EMAIL"); ok {
+		cfg.GoogleWorkspace.Auth.ClientEmail = val
+	} else {
+		c.UI.Error("GOOGLE_WORKSPACE_AUTH_CLIENT_EMAIL must be provided as an env variable!")
+		return 1
+	}
+	if val, ok := os.LookupEnv("GOOGLE_WORKSPACE_AUTH_PRIVATE_KEY"); ok {
+		cfg.GoogleWorkspace.Auth.PrivateKey = val
+	} else {
+		c.UI.Error("GOOGLE_WORKSPACE_AUTH_PRIVATE_KEY must be provided as an env variable!")
+		return 1
+	}
+
 	if val, ok := os.LookupEnv("POSTGRES_PASSWORD"); ok {
 		cfg.Postgres.Password = val
 	} else {

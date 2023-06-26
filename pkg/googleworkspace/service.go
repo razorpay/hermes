@@ -59,6 +59,9 @@ func NewFromConfig(cfg *Config) *Service {
 		Subject:  cfg.Subject,
 		TokenURL: cfg.TokenURL,
 	}
+
+	fmt.Println(string("\033[32m"), "Service Account Detected, Using it.......", string("\033[0m"))
+
 	client := conf.Client(context.TODO())
 
 	adminSrv, err := admin.NewService(context.TODO(), option.WithHTTPClient(client))

@@ -13,6 +13,7 @@ import (
 	"github.com/hashicorp-forge/hermes/internal/indexer"
 	"github.com/hashicorp-forge/hermes/pkg/algolia"
 	gw "github.com/hashicorp-forge/hermes/pkg/googleworkspace"
+	"github.com/joho/godotenv"
 )
 
 type Command struct {
@@ -78,10 +79,10 @@ func (c *Command) Run(args []string) int {
 	}
 
 	/* Remove this just for explicitly setting up the env variables*/
-	// err1 := godotenv.Load()
-	// if err1 != nil {
-	// 	panic("Error loading .env file")
-	// }
+	err1 := godotenv.Load()
+	if err1 != nil {
+		panic("Error loading .env file")
+	}
 
 	// Access and print the environment variables
 	//fmt.Println(os.LookupEnv("ALGOLIA_APPLICATION_ID"))
@@ -193,7 +194,6 @@ func (c *Command) Run(args []string) int {
 	// Initialize Google Workspace service.
 	var goog *gw.Service
 	if cfg.GoogleWorkspace.Auth != nil {
-		println("Service Account Found using it.......")
 		// Use Google Workspace auth if it is defined in the config.
 		goog = gw.NewFromConfig(cfg.GoogleWorkspace.Auth)
 	} else {
