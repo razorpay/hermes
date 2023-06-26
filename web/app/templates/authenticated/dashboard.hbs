@@ -32,6 +32,7 @@
               @productArea="{{doc.product}}"
               @status="{{lowercase doc.status}}"
               @title="{{doc.title}}"
+              @reviewDate="{{doc.reviewDate}}"
             />
           {{/if}}
         {{/each}}
@@ -61,6 +62,7 @@
             @productArea={{r.doc.product}}
             @status={{lowercase r.doc.status}}
             @title={{r.doc.title}}
+            @reviewDate={{r.doc.reviewDate}}
           />
         {{/each}}
       </div>
