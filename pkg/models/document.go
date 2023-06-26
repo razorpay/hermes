@@ -65,6 +65,9 @@ type Document struct {
 	// Title is the title of the document. It only contains the title, and not the
 	// product abbreviation, document number, or document type.
 	Title string
+
+	// ReviewDate is the date by which reviewer have to review the doc
+	ReviewDate string
 }
 
 // Documents is a slice of documents.
