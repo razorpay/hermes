@@ -37,6 +37,7 @@ type DocumentPatchRequest struct {
 	RFC            string   `json:"rfc,omitempty"`
 	Stakeholders   []string `json:"stakeholders,omitempty"`
 	TargetVersion  string   `json:"targetVersion,omitempty"`
+	ReviewDate string `json:"ReviewDate"`
 }
 
 func DocumentHandler(
