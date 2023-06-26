@@ -1,5 +1,5 @@
-/config.hcl
-/config_indexer.hcl
+# /config.hcl
+# /config_indexer.hcl
 /hermes
 
 # Google OAuth 2.0

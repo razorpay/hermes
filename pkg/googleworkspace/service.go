@@ -179,8 +179,10 @@ func getTokenFromWeb(config *oauth2.Config) *oauth2.Token {
 
 	m := http.NewServeMux()
 	// TODO: remove hardcoded port.
-	s := http.Server{Addr: ":9999", Handler: m}
-	config.RedirectURL = "http://localhost:9999/callback"
+	// s := http.Server{Addr: ":9999", Handler: m}
+	// config.RedirectURL = "http://localhost:9999/callback"
+	s := http.Server{Addr: ":9000", Handler: m}
+	config.RedirectURL = "https://doc-vault.dev.razorpay.in/callback"
 
 	m.HandleFunc("/callback", func(w http.ResponseWriter, r *http.Request) {
 		// Get authorization code from request.
