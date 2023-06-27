@@ -32,5 +32,13 @@ WORKDIR /app
 RUN rm -f /app/hermes \
     && CGO_ENABLED=0 go build -o /app/hermes ./cmd/hermes
 
-## Run the script to start both server and indexer
-CMD ["./hermes","indexer","-config=config.hcl"]
+# # Expose the necessary port for the application
+EXPOSE 8000
+EXPOSE 9999
+
+
+## Grant execute permissions to the script
+#RUN chmod +x /app/run.sh
+
+# Run the script to start both server and indexer
+CMD ["./hermes","server","-config=config.hcl"]

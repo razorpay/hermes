@@ -147,13 +147,13 @@ func (c *Command) Run(args []string) int {
 		return 1
 	}
 
-	if val, ok := os.LookupEnv("POSTGRES_dbname"); ok {
+	if val, ok := os.LookupEnv("POSTGRES_DBNAME"); ok {
 		cfg.Postgres.DBName = val
 	} else {
 		c.UI.Error("POSTGRES_dbname must be provided as an env variable!")
 		return 1
 	}
-	if val, ok := os.LookupEnv("POSTGRES_host"); ok {
+	if val, ok := os.LookupEnv("POSTGRES_HOST"); ok {
 		cfg.Postgres.Host = val
 	} else {
 		c.UI.Error("POSTGRES_host must be provided as an env variable!")
@@ -170,6 +170,38 @@ func (c *Command) Run(args []string) int {
 		cfg.GoogleWorkspace.Auth.PrivateKey = val
 	} else {
 		c.UI.Error("GOOGLE_WORKSPACE_AUTH_PRIVATE_KEY must be provided as an env variable!")
+		return 1
+	}
+	if val, ok := os.LookupEnv("GOOGLE_WORKSPACE_AUTH_SUBJECT"); ok {
+		cfg.GoogleWorkspace.Auth.Subject = val
+	} else {
+		c.UI.Error("GOOGLE_WORKSPACE_AUTH_SUBJECT must be provided as an env variable!")
+		return 1
+	}
+
+	// scanning doc folder drive ids
+	if val, ok := os.LookupEnv("DOCS_DRIVE_FOLDER_ID"); ok {
+		cfg.GoogleWorkspace.DocsFolder = val
+	} else {
+		c.UI.Error("DOCS_DRIVE_FOLDER_ID must be provided as an env variable!")
+		return 1
+	}
+	if val, ok := os.LookupEnv("DRAFTS_DRIVE_FOLDER_ID"); ok {
+		cfg.GoogleWorkspace.DraftsFolder = val
+	} else {
+		c.UI.Error("DRAFTS_DRIVE_FOLDER_ID must be provided as an env variable!")
+		return 1
+	}
+	if val, ok := os.LookupEnv("SHORTCUTS_DRIVE_FOLDER_ID"); ok {
+		cfg.GoogleWorkspace.ShortcutsFolder = val
+	} else {
+		c.UI.Error("SHORTCUTS_DRIVE_FOLDER_ID must be provided as an env variable!")
+		return 1
+	}
+	if val, ok := os.LookupEnv("EMAIL_FROM_ADDRESS"); ok {
+		cfg.Email.FromAddress = val
+	} else {
+		c.UI.Error("EMAIL_FROM_ADDRESS must be provided as an env variable!")
 		return 1
 	}
 

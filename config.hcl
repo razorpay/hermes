@@ -73,7 +73,7 @@ email {
   enabled = true
 
   // from_address is the email address to send email notifications from.
-  from_address = "admin@anuragprafulla.com"
+  from_address = "dummy"
 }
 
 // google_workspace configures Hermes to work with Google Workspace.
@@ -81,18 +81,19 @@ google_workspace {
   // create_doc_shortcuts enables creating a shortcut in the shortcuts_folder
   // when a document is published.
   create_doc_shortcuts = true
+  // Razorpay ones
 
   // docs_folder contains all published documents in a flat structure.
-  docs_folder = "1Bt03Y5hSNdO1ZH3Xh7NhLNERtvM7t25D"
+  docs_folder = "dummy"
 
   // drafts_folder contains all draft documents.
-  drafts_folder = "10lSv4gZuRgIvOgWDhhYKFH1CAnwPGZSN"
+  drafts_folder = "dummy"
 
   // If create_doc_shortcuts is set to true, shortcuts_folder will contain an
   // organized hierarchy of folders and shortcuts to published files that can be
   // easily browsed directly in Google Drive:
   //   {shortcut_folder}/{doc_type}/{product}/{document}
-  shortcuts_folder = "1ih42cfr-uiJs5cFqe9LV0GbCbjmdVmmU"
+  shortcuts_folder = "dummy"
 
   // auth is the configuration for interacting with Google Workspace using a
   // service account.
@@ -106,7 +107,7 @@ google_workspace {
   auth {
     client_email = "dummy"
     private_key  = "dummy"
-    subject      = "admin@anuragprafulla.com"
+    subject      = "dummy"
     token_url    = "https://oauth2.googleapis.com/token"
   }
 
