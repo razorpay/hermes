@@ -41,4 +41,4 @@ EXPOSE 9999
 #RUN chmod +x /app/run.sh
 
 # Run the script to start both server and indexer
-CMD ["./hermes","server","-config=config.hcl"]
+CMD ["./hermes","indexer","-config=config.hcl"]
