@@ -83,48 +83,47 @@ export default class InputsTeamSelectComponent extends Component<InputsTeamSelec
         // Filter the teams based on the selected business unit
         // console.log("parent injected value is: ",this.selectedBU)
         // let teams: TeamAreas = {
-        this.teams = {
-          "Spinage": {
-            "abbreviation": "SPI",
-            "perDocDataType": null,
-            "BU": "Platform"
-          },
-          "RECON": {
-            "abbreviation": "RCN",
-            "perDocDataType": null,
-            "BU": "Platform"
-          },
-          "Dev-Prod": {
-            "abbreviation": "DP",
-            "perDocDataType": null,
-            "BU": "Platform"
-          },
-          "Team A-cap": {
-            "abbreviation": "A-Cap",
-            "perDocDataType": null,
-            "BU": "Capital"
-          },
-          "Team B-cap": {
-            "abbreviation": "B-cap",
-            "perDocDataType": null,
-            "BU": "Capital"
-          },
-          "Team A-X": {
-            "abbreviation": "A-x",
-            "perDocDataType": null,
-            "BU": "X"
-          },
-          "Team B-x": {
-            "abbreviation": "bx",
-            "perDocDataType": null,
-            "BU": "X"
-          },
-          "Team d-paymnt": {
-            "abbreviation": "d-pay",
-            "perDocDataType": null,
-            "BU": "Payments"
-          },
-        };
+        //   "Spinage": {
+        //     "abbreviation": "SPI",
+        //     "perDocDataType": null,
+        //     "BU": "Platform"
+        //   },
+        //   "RECON": {
+        //     "abbreviation": "RCN",
+        //     "perDocDataType": null,
+        //     "BU": "Platform"
+        //   },
+        //   "Dev-Prod": {
+        //     "abbreviation": "DP",
+        //     "perDocDataType": null,
+        //     "BU": "Platform"
+        //   },
+        //   "Team A-cap": {
+        //     "abbreviation": "A-Cap",
+        //     "perDocDataType": null,
+        //     "BU": "Capital"
+        //   },
+        //   "Team B-cap": {
+        //     "abbreviation": "B-cap",
+        //     "perDocDataType": null,
+        //     "BU": "Capital"
+        //   },
+        //   "Team A-X": {
+        //     "abbreviation": "A-x",
+        //     "perDocDataType": null,
+        //     "BU": "X"
+        //   },
+        //   "Team B-x": {
+        //     "abbreviation": "bx",
+        //     "perDocDataType": null,
+        //     "BU": "X"
+        //   },
+        //   "Team d-paymnt": {
+        //     "abbreviation": "d-pay",
+        //     "perDocDataType": null,
+        //     "BU": "Payments"
+        //   },
+        // };
       // // Filter the teams based on the selected business unit
       // const filteredTeams: TeamAreas = {};
       //
@@ -139,6 +138,11 @@ export default class InputsTeamSelectComponent extends Component<InputsTeamSelec
       // console.log("Here i am");
       // console.log(filteredTeams)
       // this.teams = filteredTeams;
+      let teams = await this.fetchSvc
+          .fetch("/api/v1/teams")
+          .then((resp) => resp?.json());
+      this.teams = teams;
+        console.log(this.teams);
       } catch (err) {
         console.error(err);
         throw err;
