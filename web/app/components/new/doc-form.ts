@@ -55,6 +55,8 @@ export default class NewDocFormComponent extends Component<NewDocFormComponentSi
   @tracked protected teamAbbreviation: string | null = null;
   @tracked protected contributors: HermesUser[] = [];
 
+  @tracked selectedBU: string | null = null;
+
   @tracked protected _form: HTMLFormElement | null = null;
 
   /**
@@ -186,6 +188,7 @@ export default class NewDocFormComponent extends Component<NewDocFormComponentSi
     attributes: ProductArea
   ) {
     this.productArea = productName;
+    this.selectedBU = productName;
     this.productAbbreviation = attributes.abbreviation;
     this.maybeValidate();
   }
@@ -210,14 +213,6 @@ export default class NewDocFormComponent extends Component<NewDocFormComponentSi
     if (this.formRequirementsMet && !this.hasErrors) {
       this.createDoc.perform();
     }
-  }
-
-  @tracked selectedBU: string | null = null;
-  @action
-  updateSelectedBU(selectedBU: string) {
-    this.selectedBU = selectedBU;
-    // Trigger the necessary actions, such as fetching filtered teams
-    // ...
   }
 
   /**

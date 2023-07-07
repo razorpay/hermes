@@ -19,18 +19,20 @@
           {{on "click"  (fn this.toggleModal2)}}
   />
   </Hds::ButtonSet>
+  <br>
+  <br>
 
   <div class="hds-border-primary border-0 border-b pb-9">
     <h1>Welcome back, {{this.authenticatedUser.info.given_name}}</h1>
     <p>Here’s all the latest updates across the organization.</p>
   </div>
 
-  {{#if this.showModal1}}
-    {{#modal-dialog
-      onClose=(action (action (mut this.showModal1) false))
-      targetAttachment="center"
-      translucentOverlay=true
-    }}
+  {{#if  this.showModal1}}
+  {{#modal-dialog
+  onClose=(action (action (mut  this.showModal2) false))
+  targetAttachment="center"
+  translucentOverlay=true
+  }}
   <div class="modal-body">
     <div class="space-y-4" style="text-align: center;">
       <h4 class="modal-title">Create New Business Unit</h4>
@@ -68,13 +70,13 @@
       </div>
       <div class="modal-footer" class="space-y-4">
         <Hds::ButtonSet>
-        {{#if this.BUIsBeingCreated }}
-        <Hds::Button
-                @isIconOnly={{true}}
-                @text="Submit"
-                @icon="loading"
-        />
-        {{else}}
+          {{#if this.BUIsBeingCreated }}
+          <Hds::Button
+                  @isIconOnly={{true}}
+                  @text="Submit"
+                  @icon="loading"
+          />
+          {{else}}
           <Hds::Button
                   @text="Submit"
                   type="submit"
@@ -83,7 +85,7 @@
           <Hds::Button
                   @text="Cancel"
                   @color="critical"
-                  {{on "click" (fn this.toggleModal1 false)}}
+                  {{on "click" (fn  this.toggleModal1 false)}}
           />
         </Hds::ButtonSet>
       </div>
