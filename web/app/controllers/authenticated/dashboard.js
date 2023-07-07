@@ -3,16 +3,12 @@ import { alias } from "@ember/object/computed";
 import { inject as service } from "@ember/service";
 import {tracked} from "@glimmer/tracking";
 import {action} from "@ember/object";
-import FlashService from "ember-cli-flash/services/flash-messages";
 import {task, timeout} from "ember-concurrency";
-import cleanString from "../../utils/clean-string";
 import Ember from "ember";
 import {TaskForAsyncTaskFunction} from "ember-concurrency";
-import {assert} from "@ember/debug";
 import FetchService from "../../services/fetch";
 
 const AWAIT_DOC_DELAY = Ember.testing ? 0 : 1000;
-const AWAIT_DOC_CREATED_MODAL_DELAY = Ember.testing ? 0 : 1500;
 
 export default class AuthenticatedDashboardController extends Controller {
   @alias("model.docsWaitingForReview") docsWaitingForReview;
@@ -27,16 +23,16 @@ export default class AuthenticatedDashboardController extends Controller {
   queryParams = ["latestUpdates"];
   latestUpdates = "newDocs";
   @tracked showModal1 = false;
+  @tracked showModal2 = false;
+
   @tracked businessUnitName: string = '';
   @tracked bu_abbreviation: string = '';
   @tracked BUIsBeingCreated = false;
-  @tracked _form: HTMLFormElement | null = null;
 
-  @tracked showModal2 = false;
   @tracked TeamName: string = "";
-  @tracked TeamAbbreviation: string= "";
+  @tracked TeamAbbreviation: string = "";
   @tracked TeamIsBeingCreated = false;
-  @tracked TeamBU: string="";
+  @tracked TeamBU: string = "";
 
   @action
   toggleModal1() {
@@ -52,13 +48,13 @@ export default class AuthenticatedDashboardController extends Controller {
    * Creates a Team, then redirects to the dashboard.
    * On error, show a flashMessage and allow users to try again.
    */
-  private createTeam:  TaskForAsyncTaskFunction<unknown, () => Promise<void>> = task(async () => {
+  private createTeam: TaskForAsyncTaskFunction<unknown, () => Promise<void>> = task(async () => {
     this.TeamIsBeingCreated = true;
     try {
       const bu = await this.fetchSvc
           .fetch("/api/v1/teams", {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: {"Content-Type": "application/json"},
             body: JSON.stringify({
               teamName: this.TeamName,
               teamAbbreviation: this.TeamAbbreviation,
@@ -87,14 +83,14 @@ export default class AuthenticatedDashboardController extends Controller {
         type: "critical",
         timeout: 6000,
         extendedTimeout: 1000,
-      }); }
-    finally {
+      });
+    } finally {
       // Hide spinning wheel or loading state
       this.set('TeamIsBeingCreated', false);
     }
   });
 
-  @action  submitFormteam(event: SubmitEvent) {
+  @action submitFormteam(event: SubmitEvent) {
     // Show spinning wheel or loading state
     this.set('TeamIsBeingCreated', true);
     event.preventDefault();
@@ -120,51 +116,49 @@ export default class AuthenticatedDashboardController extends Controller {
     this.TeamBU = "";
   }
 
-
   /**
    * Creates a BU, then redirects to the dashboard.
    * On error, show a flashMessage and allow users to try again.
    */
   private createBU:  TaskForAsyncTaskFunction<unknown, () => Promise<void>> = task(async () => {
-      this.BUIsBeingCreated = true;
-      try {
-        const bu = await this.fetchSvc
-            .fetch("/api/v1/products", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                productName: this.businessUnitName,
-                productAbbreviation: this.bu_abbreviation,
-              }),
-            })
-            .then((response) => response?.json());
+    this.BUIsBeingCreated = true;
+    try {
+      const bu = await this.fetchSvc
+          .fetch("/api/v1/products", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              productName: this.businessUnitName,
+              productAbbreviation: this.bu_abbreviation,
+            }),
+          })
+          .then((response) => response?.json());
 
-        // Wait for document to be available.
-        await timeout(AWAIT_DOC_DELAY);
+      // Wait for document to be available.
+      await timeout(AWAIT_DOC_DELAY);
 
-        this.router.transitionTo("authenticated.dashboard");
-        this.toggleModal1();
-        this.flashMessages.add({
-          title: "Success",
-          message: `New Business Unit (BU) created succesfully`,
-          type: "success",
-          timeout: 6000,
-          extendedTimeout: 1000,
-        });
-      } catch (err) {
-        this.docIsBeingCreated = false;
-        this.flashMessages.add({
-          title: "Error creating new Business Unit",
-          message: `${err}`,
-          type: "critical",
-          timeout: 6000,
-          extendedTimeout: 1000,
-        }); }
-        finally {
-          // Hide spinning wheel or loading state
-          this.set('BUIsBeingCreated', false);
-        }
-    });
+      this.router.transitionTo("authenticated.dashboard");
+      this.toggleModal1();
+      this.flashMessages.add({
+        title: "Success",
+        message: `New Business Unit (BU) created succesfully`,
+        type: "success",
+        timeout: 6000,
+        extendedTimeout: 1000,
+      });
+    } catch (err) {
+      this.flashMessages.add({
+        title: "Error creating new Business Unit",
+        message: `${err}`,
+        type: "critical",
+        timeout: 6000,
+        extendedTimeout: 1000,
+      }); }
+    finally {
+      // Hide spinning wheel or loading state
+      this.set('BUIsBeingCreated', false);
+    }
+  });
 
   @action  submitFormBU(event: SubmitEvent) {
     // Show spinning wheel or loading state

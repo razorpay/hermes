@@ -3,7 +3,6 @@ package api
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/hashicorp-forge/hermes/internal/structs"
 	"gorm.io/gorm"
 	"net/http"
 
@@ -120,33 +119,33 @@ func getProductsData(db *gorm.DB) (map[string]struct {
 func AddNewProducts(ar *algolia.Client,
 	aw *algolia.Client, db *gorm.DB, req ProductRequest) error {
 
-	// Step 1: Update the algolia object
-	var productsObj = structs.Products{
-		ObjectID: "products",
-		Data:     make(map[string]structs.ProductData, 0),
-	}
-	// Retrieve the existing productsObj from Algolia
-	err := ar.Internal.GetObject("products", &productsObj)
-	if err != nil {
-		return fmt.Errorf("error retrieving existing products object from Algolia : %w", err)
-	}
-
-	// Add the new value to the productsObj
-	productsObj.Data[req.ProductName] = structs.ProductData{
-		Abbreviation: req.ProductAbbreviation,
-	}
-
-	// Save the updated productsObj back to Algolia
-	// this replaces the old object completely
-	// Save Algolia products object.
-	res, err := aw.Internal.SaveObject(&productsObj)
-	if err != nil {
-		return fmt.Errorf("error saving Algolia products object: %w", err)
-	}
-	err = res.Wait()
-	if err != nil {
-		return fmt.Errorf("error saving Algolia products object: %w", err)
-	}
+	//// Step 1: Update the algolia object
+	//var productsObj = structs.Products{
+	//	ObjectID: "products",
+	//	Data:     make(map[string]structs.ProductData, 0),
+	//}
+	//// Retrieve the existing productsObj from Algolia
+	//err := ar.Internal.GetObject("products", &productsObj)
+	//if err != nil {
+	//	return fmt.Errorf("error retrieving existing products object from Algolia : %w", err)
+	//}
+	//
+	//// Add the new value to the productsObj
+	//productsObj.Data[req.ProductName] = structs.ProductData{
+	//	Abbreviation: req.ProductAbbreviation,
+	//}
+	//
+	//// Save the updated productsObj back to Algolia
+	//// this replaces the old object completely
+	//// Save Algolia products object.
+	//res, err := aw.Internal.SaveObject(&productsObj)
+	//if err != nil {
+	//	return fmt.Errorf("error saving Algolia products object: %w", err)
+	//}
+	//err = res.Wait()
+	//if err != nil {
+	//	return fmt.Errorf("error saving Algolia products object: %w", err)
+	//}
 
 	// Step 2: upsert in the db
 	pm := models.Product{

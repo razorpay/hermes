@@ -8,6 +8,7 @@ import (
 	"github.com/hashicorp-forge/hermes/pkg/models"
 	"github.com/hashicorp/go-hclog"
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 	"net/http"
 )
 
@@ -93,9 +94,19 @@ func getTeamsData(db *gorm.DB) (map[string]struct {
 }, error) {
 	var teams []models.Team
 
-	if err := db.Find(&teams).Error; err != nil {
+	if err := db.Preload(clause.Associations).Find(&teams).Error; err != nil {
 		return nil, fmt.Errorf("failed to fetch teams: %w", err)
 	}
+
+	// Just for printing
+	//for _, team := range teams {
+	//	fmt.Printf("Team ID: %d\n", team.ID)
+	//	fmt.Printf("Team Name: %s\n", team.Name)
+	//	fmt.Printf("Team Abbreviation: %s\n", team.Abbreviation)
+	//	fmt.Printf("BU: %s\n", team.BU)
+	//	// Print other columns as needed
+	//	fmt.Println("-------------") // Separate each team
+	//}
 
 	teamsData := make(map[string]struct {
 		Abbreviation   string      `json:"abbreviation"`

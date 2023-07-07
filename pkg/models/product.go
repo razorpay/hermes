@@ -85,6 +85,7 @@ func (p *Product) Upsert(db *gorm.DB) error {
 	return db.Transaction(func(tx *gorm.DB) error {
 		// Upsert the BU.
 		if err := tx.
+			Where(Product{Name: p.Name}).
 			Omit(clause.Associations).
 			Assign(*p).
 			Clauses(clause.OnConflict{DoNothing: true}).
@@ -100,6 +101,7 @@ func (p *Product) Upsert(db *gorm.DB) error {
 
 			// Upsert the team.
 			if err := tx.
+				Where(Team{Name: team.Name}).
 				Omit(clause.Associations).
 				Clauses(clause.OnConflict{DoNothing: true}).
 				Create(&team).
