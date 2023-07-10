@@ -69,7 +69,6 @@ func TemplateHandler(
 					return
 				}
 	
-				//review-date
 				// a object of base doc
 				baseTemplateObj := &hcd.BaseTemplate{
 					TemplateId:     req.TemplateId,
