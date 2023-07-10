@@ -473,11 +473,15 @@ func ReviewHandler(
 					for _, approverEmail := range docObj.GetApprovers() {
 						err := email.SendReviewRequestedEmail(
 							email.ReviewRequestedEmailData{
-								BaseURL:           cfg.BaseURL,
-								DocumentOwner:     docObj.GetOwners()[0],
-								DocumentShortName: docObj.GetDocNumber(),
-								DocumentTitle:     docObj.GetTitle(),
-								DocumentURL:       docURL,
+								BaseURL:            cfg.BaseURL,
+								DocumentOwner:      ppl.Names[0].DisplayName,
+								DocumentType:       docObj.GetDocType(),
+								DocumentShortName:  docObj.GetDocNumber(),
+								DocumentTitle:      docObj.GetTitle(),
+								DocumentURL:        docURL,
+								DocumentProdAbbrev: docObj.GetProduct(),
+								DocumentTeamAbbrev: docObj.GetTeam(),
+								DocumentOwnerEmail: docObj.GetOwners()[0],
 							},
 							[]string{approverEmail},
 							cfg.Email.FromAddress,
@@ -531,6 +535,7 @@ func ReviewHandler(
 								DocumentType:      docObj.GetDocType(),
 								DocumentURL:       docURL,
 								Product:           docObj.GetProduct(),
+								Team:              docObj.GetTeam(),
 							},
 							[]string{subscriber.EmailAddress},
 							cfg.Email.FromAddress,
@@ -611,10 +616,25 @@ func createShortcut(
 		}
 	}
 
+	// Get folder for doc type + product + Team/Pod.
+	teamFolder, err := s.GetSubfolder(productFolder.Id, docObj.GetTeam())
+	if err != nil {
+		return nil, fmt.Errorf("error getting product subfolder: %w", err)
+	}
+
+	// Product folder wasn't found, so create it.
+	if teamFolder == nil {
+		teamFolder, err = s.CreateFolder(
+			docObj.GetTeam(), productFolder.Id)
+		if err != nil {
+			return nil, fmt.Errorf("error creating team subfolder: %w", err)
+		}
+	}
+
 	// Create shortcut.
 	if shortcut, err = s.CreateShortcut(
 		docObj.GetObjectID(),
-		productFolder.Id); err != nil {
+		teamFolder.Id); err != nil {
 
 		return nil, fmt.Errorf("error creating shortcut: %w", err)
 	}
