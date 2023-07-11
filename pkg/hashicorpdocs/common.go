@@ -2,8 +2,6 @@ package hashicorpdocs
 
 import (
 	"fmt"
-	"strings"
-
 	gw "github.com/hashicorp-forge/hermes/pkg/googleworkspace"
 	"google.golang.org/api/drive/v3"
 )
@@ -73,52 +71,80 @@ type MissingFields struct {
 }
 
 // NewEmptyDoc returns an empty doc struct for the provided doc type.
-func NewEmptyDoc(docType string) (Doc, error) {
-	switch docType {
-	case "FRD":
-		return &FRD{}, nil
-	case "RFC":
-		return &RFC{}, nil
-	case "PRD":
-		return &PRD{}, nil
-	default:
-		return nil, fmt.Errorf("invalid doc type")
-	}
+// func NewEmptyDocold(docType string) (Doc, error) {
+// 	switch docType {
+// 	case "FRD":
+// 		return &FRD{}, nil
+// 	case "RFC":
+// 		return &RFC{}, nil
+// 	case "PRD":
+// 		return &PRD{}, nil
+// 	case "TECHSPEC":
+// 		return &TECHSPEC{}, nil	
+// 	default:
+// 		return nil, fmt.Errorf("invalid doc type")
+// 	}
+// }
+
+// new version of new empty doc for custom template
+func NewEmptyDoc(docType string)(Doc,error)  {
+	return &COMMONTEMPLATE{},nil
 }
 
 // ParseDoc parses and returns a known document type, associated product name,
 // document number or returns an error if the type is unknown.
+
+// func ParseDoc(
+// 	docType string,
+// 	f *drive.File,
+// 	s *gw.Service,
+// 	allFolders []string) (Doc, error) {
+// 	// TODO: Add a Parse() function to the Doc interface to make this more
+// 	// extensible and not have to address all doc types here.
+// 	switch strings.ToLower(docType) {
+// 	case "frd":
+// 		r, err := NewFRD(f, s, allFolders)
+// 		if err != nil {
+// 			return nil, fmt.Errorf("error parsing FRD: %w", err)
+// 		}
+// 		return r, nil
+// 	case "rfc":
+// 		r, err := NewRFC(f, s, allFolders)
+// 		if err != nil {
+// 			return nil, fmt.Errorf("error parsing RFC: %w", err)
+// 		}
+// 		return r, nil
+// 	case "prd":
+// 		p, err := NewPRD(f, s, allFolders)
+// 		if err != nil {
+// 			return nil, fmt.Errorf("error parsing PRD: %w", err)
+// 		}
+// 		return p, nil
+// 	// template-add
+// 	case "techspec":
+// 		p, err := NewTECHSPEC(f, s, allFolders)
+// 		if err != nil {
+// 			return nil, fmt.Errorf("error parsing TECHSPEC: %w", err)
+// 		}
+// 		return p, nil
+// 	default:
+// 		return nil, fmt.Errorf("unknown doc type: %s", docType)
+// 	}
+// }
+
+//new parsedoc
 func ParseDoc(
 	docType string,
 	f *drive.File,
 	s *gw.Service,
 	allFolders []string) (Doc, error) {
-
-	// TODO: Add a Parse() function to the Doc interface to make this more
-	// extensible and not have to address all doc types here.
-	switch strings.ToLower(docType) {
-	case "frd":
-		r, err := NewFRD(f, s, allFolders)
+		p, err := NewCOMMONTEMPLATE(f, s, allFolders)
 		if err != nil {
-			return nil, fmt.Errorf("error parsing FRD: %w", err)
-		}
-		return r, nil
-
-	case "rfc":
-		r, err := NewRFC(f, s, allFolders)
-		if err != nil {
-			return nil, fmt.Errorf("error parsing RFC: %w", err)
-		}
-		return r, nil
-
-	case "prd":
-		p, err := NewPRD(f, s, allFolders)
-		if err != nil {
-			return nil, fmt.Errorf("error parsing PRD: %w", err)
+			return nil, fmt.Errorf("error parsing doc Type: %w", err)
 		}
 		return p, nil
 
-	default:
-		return nil, fmt.Errorf("unknown doc type: %s", docType)
-	}
+	// TODO: Add a Parse() function to the Doc interface to make this more
+	// extensible and not have to address all doc types here.
 }
+
