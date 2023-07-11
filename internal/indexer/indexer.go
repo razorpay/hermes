@@ -432,8 +432,6 @@ func (idx *Indexer) Run() error {
 
 			content, err := io.ReadAll(exp.Body)
 
-			fmt.Println("Before trimming: ", content, " ---->> lengthh: ", len(content))
-
 			if err != nil {
 				logError("error reading exported document", err)
 				os.Exit(1)
@@ -442,8 +440,6 @@ func (idx *Indexer) Run() error {
 			if len(content) > maxContentSize {
 				content = content[:maxContentSize]
 			}
-
-			fmt.Println("After trimming: ", content, " ---->> lengthh: ", len(content))
 
 			// Update document object with content and latest modified time.
 			docObj.SetContent(string(content))
