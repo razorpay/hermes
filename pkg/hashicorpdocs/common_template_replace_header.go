@@ -636,9 +636,7 @@ func (doc *COMMONTEMPLATE) oldReplaceHeader(fileID, baseURL string, isDraft bool
 	var approvers []string
 	for _, approver := range doc.Approvers {
 		if contains(doc.ApprovedBy, approver) {
-			//need-to-add
-			//approved-by-date-add
-			approvers = append(approvers, "✅ "+doc.ApprovedByDate[approver]+approver)
+			approvers = append(approvers, "✅ "+approver)
 		} else if contains(doc.ChangesRequestedBy, approver) {
 			approvers = append(approvers, "❌ "+approver)
 		} else {
