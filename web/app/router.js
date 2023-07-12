@@ -18,6 +18,7 @@ Router.map(function () {
     this.route("new", function () {
       this.route("doc");
     });
+    this.route('myprofile');
   });
   this.route("authenticate");
   this.route('404', { path: '/*path' })

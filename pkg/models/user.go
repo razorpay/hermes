@@ -1,6 +1,7 @@
 package models
 
 import (
+	"errors"
 	"fmt"
 	"time"
 
@@ -24,6 +25,9 @@ type User struct {
 
 	// RecentlyViewedDocs are the documents recently viewed by the user.
 	RecentlyViewedDocs []Document `gorm:"many2many:recently_viewed_docs;"`
+
+	// IsAdmin indicates whether the user is an admin or not.
+	IsAdmin bool `gorm:"default:false"`
 }
 
 type RecentlyViewedDoc struct {
@@ -137,4 +141,17 @@ func (u *User) getAssociations(tx *gorm.DB) error {
 	u.RecentlyViewedDocs = rvd
 
 	return nil
+}
+
+// fetchIsAdminByEmail gets the value of column "IsAdmin"
+func (u *User) FetchIsAdminByEmail(db *gorm.DB) (bool, error) {
+	var user User
+	if err := db.Where("email_address = ?", u.EmailAddress).First(&user).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return false, nil
+		}
+		return false, err
+	}
+
+	return user.IsAdmin, nil
 }

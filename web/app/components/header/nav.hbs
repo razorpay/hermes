@@ -84,6 +84,13 @@
               "highlighted-new"
             }}
           />
+          <dd.Interactive
+            data-test-user-menu-item="Your Profile"
+            @icon = "user"
+            @route="authenticated.myprofile"
+            @text="Your Profile"
+            class="highlighted-new"
+          />
           {{#if this.showSignOut}}
             <dd.Interactive
               data-test-user-menu-item="sign-out"
