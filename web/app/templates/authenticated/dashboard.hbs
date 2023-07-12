@@ -137,21 +137,25 @@
           <input type="text" class="hds-form-text-input hds-typography-body-200 hds-font-weight-regular hds-form-field__control"  name="team-abbr" required placeholder="Enter Abbreviation" >
         </div>
       </div>
-      <div class="mb-4">
-        <label for="bu-name" class="hds-form-label hds-typography-body-200 hds-font-weight-semibold hds-form-field__label">Business Unit:
-          <div class="hds-badge hds-badge--size-small hds-badge--type-filled hds-badge--color-neutral hds-form-indicator" aria-hidden="true">
-            <!---->    <div class="hds-badge__text">
-              Required
-            </div>
+         <div class="mb-4">
+          <div class="mb-2">
+            <span class="hermes-form-label">
+              Business Unit/BU &nbsp;
+              <Hds::Badge @size="small" @text="Required" />
+            </span>
+            <span class="hermes-form-helper-text hds-form-helper-text">
+              Where your Team shall be made
+            </span>
           </div>
-        </label>
-        <div class="input-group">
-        <span class="input-group-text">
-          <i class="bi bi-info-circle-fill fs-5"></i>
-        </span>
-          <input type="text" class="hds-form-text-input hds-typography-body-200 hds-font-weight-regular hds-form-field__control"  name="bu-name" required placeholder="Enter Business Unit Name">
+          <Inputs::ProductSelect
+            @selected={{this.TeamBU}}
+            @onChange={{this.onProductSelect}}
+            class="w-[300px]"
+          />
         </div>
-      </div>
+
+
+
       <div class="modal-footer" class="space-y-4">
         <Hds::ButtonSet>
           {{#if this.TeamIsBeingCreated }}
