@@ -192,10 +192,10 @@ export default class NewDocFormComponent extends Component<NewTemplateFormCompon
       await timeout(AWAIT_DOC_DELAY);
 
       // Set modal on a delay so it appears after transition.
-      this.modalAlerts.setActive.perform(
-        "docCreated",
-        AWAIT_DOC_CREATED_MODAL_DELAY
-      );
+      // this.modalAlerts.setActive.perform(
+      //   "docCreated",
+      //   AWAIT_DOC_CREATED_MODAL_DELAY
+      // );
 
       this.router.transitionTo("authenticated.new");
     } catch (err: unknown) {
