@@ -19,11 +19,11 @@ import (
 // Define a variable to hold the retrieved object
 type template struct {
 	//
-	ObjectId    string `json:"objectId"`
-	Description string `json:"description,omitempty"`
-	TemplateName  string `json:"templateName"`
-	DocId       string `json:"docId"`
-	LongName    string `json:"longName"`
+	ObjectId     string `json:"objectId"`
+	Description  string `json:"description,omitempty"`
+	TemplateName string `json:"templateName"`
+	DocId        string `json:"docId"`
+	LongName     string `json:"longName"`
 }
 
 // retrieve the doctypes and stores in a object
@@ -89,7 +89,6 @@ func registerDocumentTypes(cfg config.Config, db *gorm.DB) error {
 	return nil
 }
 
-// custom-template-add
 // new version of handler - retrieve data from algolia
 func DocumentTypesHandler(cfg config.Config, log hclog.Logger) http.Handler {
 
@@ -98,7 +97,7 @@ func DocumentTypesHandler(cfg config.Config, log hclog.Logger) http.Handler {
 		case "GET":
 			w.Header().Set("Content-Type", "application/json")
 			//objectArray contains array of template objects
-			var objectArray []template=GetDocTypeArray(cfg)
+			var objectArray []template = GetDocTypeArray(cfg)
 			// Convert the object to JSON
 			response, err := json.Marshal(objectArray)
 			if err != nil {
@@ -123,9 +122,7 @@ func DocumentTypesHandler(cfg config.Config, log hclog.Logger) http.Handler {
 			// Register document types.
 			// TODO: remove this and use the database for all document type lookups.
 			// var objectArray []template=GetDocTypeArray(cfg)
-			docTypes := map[string]hcd.Doc{
-
-			}
+			docTypes := map[string]hcd.Doc{}
 			for i := 0; i < len(objectArray); i++ {
 				doctype := objectArray[i].TemplateName
 				doctype = strings.ToLower(doctype)
@@ -133,7 +130,7 @@ func DocumentTypesHandler(cfg config.Config, log hclog.Logger) http.Handler {
 			}
 			for name, dt := range docTypes {
 				if err = doctypes.Register(name, dt); err != nil {
-					// fmt.Printf("err docTypes loop : %v\n", err)
+					fmt.Printf("err: %v\n", err)
 				}
 			}
 		default:

@@ -56,7 +56,7 @@ func webHandler(next http.Handler) http.Handler {
 type ConfigResponse struct {
 	AlgoliaDocsIndexName     string          `json:"algolia_docs_index_name"`
 	AlgoliaDraftsIndexName   string          `json:"algolia_drafts_index_name"`
-	AlgoliaTemplateIndexName string 		 `json:"algolia_template_index_name"`
+	AlgoliaTemplateIndexName string          `json:"algolia_template_index_name"`
 	AlgoliaInternalIndexName string          `json:"algolia_internal_index_name"`
 	FeatureFlags             map[string]bool `json:"feature_flags"`
 	GoogleAnalyticsTagID     string          `json:"google_analytics_tag_id"`

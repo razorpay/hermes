@@ -1,4 +1,3 @@
-//custom-template-add
 package hashicorpdocs
 
 import (

@@ -31,7 +31,6 @@ type Client struct {
 	// Drafts is an Algolia index for storing metadata for draft documents.
 	Drafts *search.Index
 
-	
 	// DraftsCreatedTimeAsc is an Algolia replica of the drafts index that is sorted
 	// by ascending created time.
 	DraftsCreatedTimeAsc *search.Index
@@ -113,7 +112,7 @@ func New(cfg *Config) (*Client, error) {
 	c.Docs = a.InitIndex(cfg.DocsIndexName)
 	c.Drafts = a.InitIndex(cfg.DraftsIndexName)
 	c.Internal = a.InitIndex(cfg.InternalIndexName)
-	c.Template=a.InitIndex(cfg.TemplateIndexName)
+	c.Template = a.InitIndex(cfg.TemplateIndexName)
 	c.Links = a.InitIndex(cfg.LinksIndexName)
 	c.MissingFields = a.InitIndex(cfg.MissingFieldsIndexName)
 
@@ -304,7 +303,7 @@ func NewSearchClient(cfg *Config) (*Client, error) {
 	c.DraftsCreatedTimeAsc = a.InitIndex(cfg.DraftsIndexName + "_createdTime_asc")
 	c.DraftsCreatedTimeDesc = a.InitIndex(cfg.DraftsIndexName + "_createdTime_desc")
 	c.DraftsModifiedTimeDesc = a.InitIndex(cfg.DraftsIndexName + "_modifiedTime_desc")
-	c.Template=a.InitIndex(cfg.TemplateIndexName)
+	c.Template = a.InitIndex(cfg.TemplateIndexName)
 	c.Internal = a.InitIndex(cfg.InternalIndexName)
 	c.Links = a.InitIndex(cfg.LinksIndexName)
 
@@ -317,7 +316,7 @@ func validate(c *Config) error {
 		validation.Field(&c.ApplicationID, validation.Required),
 		validation.Field(&c.DocsIndexName, validation.Required),
 		validation.Field(&c.DraftsIndexName, validation.Required),
-		validation.Field(&c.TemplateIndexName,validation.Required),
+		validation.Field(&c.TemplateIndexName, validation.Required),
 		validation.Field(&c.InternalIndexName, validation.Required),
 		validation.Field(&c.LinksIndexName, validation.Required),
 		validation.Field(&c.MissingFieldsIndexName, validation.Required),
