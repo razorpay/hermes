@@ -2,7 +2,7 @@ import Component from "@glimmer/component";
 import { task, timeout } from "ember-concurrency";
 import { inject as service } from "@ember/service";
 import { tracked } from "@glimmer/tracking";
-import {action, computed} from "@ember/object";
+import { action } from "@ember/object";
 import Ember from "ember";
 import FetchService from "hermes/services/fetch";
 import AuthenticatedUserService from "hermes/services/authenticated-user";
@@ -12,56 +12,44 @@ import { HermesUser } from "hermes/types/document";
 import FlashService from "ember-cli-flash/services/flash-messages";
 import { assert } from "@ember/debug";
 import cleanString from "hermes/utils/clean-string";
-import { ProductArea } from "../inputs/product-select";
-import {TeamArea} from "hermes/components/inputs/team-select";
-
+// custom-template-add
 interface DocFormErrors {
-  title: string | null;
-  summary: string | null;
-  productAbbreviation: string | null;
-  tags: string | null;
-  contributors: string | null;
+  templateName: string | null;
+  longName: string | null;
+  docId: string|null;
+  description: string | null;
 }
 
 const FORM_ERRORS: DocFormErrors = {
-  title: null,
-  summary: null,
-  productAbbreviation: null,
-  tags: null,
-  contributors: null,
+  templateName: null,
+  longName: null,
+  docId: null,
+  description: null,
 };
 
 const AWAIT_DOC_DELAY = Ember.testing ? 0 : 2000;
 const AWAIT_DOC_CREATED_MODAL_DELAY = Ember.testing ? 0 : 1500;
 
-interface NewDocFormComponentSignature {
-  Args: {
-    docType: string;
-  };
+interface NewTemplateFormComponentSignature {
 }
 
-export default class NewDocFormComponent extends Component<NewDocFormComponentSignature> {
+export default class NewDocFormComponent extends Component<NewTemplateFormComponentSignature> {
   @service("fetch") declare fetchSvc: FetchService;
   @service declare authenticatedUser: AuthenticatedUserService;
   @service declare flashMessages: FlashService;
   @service declare modalAlerts: ModalAlertsService;
   @service declare router: RouterService;
 
-  @tracked protected title: string = "";
-  @tracked protected summary: string = "";
-  @tracked protected productArea: string | null = null;
-  @tracked protected productAbbreviation: string | null = null;
-  @tracked protected teamArea: string | null = null;
-  @tracked protected teamAbbreviation: string | null = null;
-  @tracked protected contributors: HermesUser[] = [];
-
-  @tracked selectedBU: string | null = null;
+  @tracked protected templateName: string = "";
+  @tracked protected longName: string = "";
+  @tracked protected docId: string = "";
+  @tracked protected description: string = "";
 
   @tracked protected _form: HTMLFormElement | null = null;
 
   /**
    * Whether the form has all required fields filled out.
-   * True if the title and product area are filled out.
+   * True if the templateName and product area are filled out.
    */
   @tracked protected formRequirementsMet = false;
 
@@ -78,21 +66,18 @@ export default class NewDocFormComponent extends Component<NewDocFormComponentSi
   @tracked protected formErrors = { ...FORM_ERRORS };
 
   /**
-   * Whether the summary is more than 200 characters.
+   * Whether the description is more than 200 characters.
    * Used in the template to gently discourage long summaries.
    */
-  @tracked protected summaryIsLong = false;
+
+  @tracked protected descriptionIsLong = false;
+
 
   /**
    * Whether to validate eagerly, that is, after every change to the form.
    * Set true after an invalid submission attempt.
    */
   @tracked private validateEagerly = false;
-
-  @computed('productArea')
-  get shouldRenderTeamDropdown() {
-    return !!this.productArea;
-  }
 
   /**
    * The form element. Used to bind FormData to our tracked elements.
@@ -114,7 +99,8 @@ export default class NewDocFormComponent extends Component<NewDocFormComponentSi
    * Sets `formRequirementsMet` and conditionally validates the form.
    */
   private maybeValidate() {
-    if (this.title && this.productArea) {
+    
+    if (this.templateName && this.docId && this.longName) {
       this.formRequirementsMet = true;
     } else {
       this.formRequirementsMet = false;
@@ -129,12 +115,6 @@ export default class NewDocFormComponent extends Component<NewDocFormComponentSi
    */
   private validate() {
     const errors = { ...FORM_ERRORS };
-    if (this.productAbbreviation) {
-      if (/\d/.test(this.productAbbreviation)) {
-        errors.productAbbreviation =
-          "Product abbreviation can't include a number";
-      }
-    }
     this.formErrors = errors;
   }
 
@@ -151,54 +131,26 @@ export default class NewDocFormComponent extends Component<NewDocFormComponentSi
 
   /**
    * Binds the FormData to our locally tracked properties.
-   * If the summary is long, shows a gentle warning.
+   * If the description is long, shows a gentle warning.
    * Conditionally validates.
    */
+  
   @action protected updateForm() {
     const formObject = Object.fromEntries(new FormData(this.form).entries());
 
-    assert("title is missing from formObject", "title" in formObject);
-    assert("summary is missing from formObject", "summary" in formObject);
+    assert("templateName is missing from formObject", "templateName" in formObject);
+    assert("docId is missing from formObject", "docId" in formObject);
+    this.templateName = formObject["templateName"] as string;
+    this.longName = formObject["longName"] as string;
+    this.docId = formObject["docId"] as string;
+    this.description = formObject["description"] as string;
 
-    this.title = formObject["title"] as string;
-    this.summary = formObject["summary"] as string;
-
-    if ("productArea" in formObject) {
-      this.productArea = formObject["productArea"] as string;
-    }
-
-    if (this.summary.length > 200) {
-      this.summaryIsLong = true;
+    if (this.description.length > 200) {
+      this.descriptionIsLong = true;
     } else {
-      this.summaryIsLong = false;
+      this.descriptionIsLong = false;
     }
 
-    this.maybeValidate();
-  }
-
-  /**
-   * Updates the contributors property and conditionally validates the form.
-   */
-  @action protected updateContributors(contributors: HermesUser[]) {
-    this.contributors = contributors;
-  }
-
-  @action protected onProductSelect(
-    productName: string,
-    attributes: ProductArea
-  ) {
-    this.productArea = productName;
-    this.selectedBU = productName;
-    this.productAbbreviation = attributes.abbreviation;
-    this.maybeValidate();
-  }
-
-  @action protected onTeamSelect(
-      teamName: string,
-      attributes: TeamArea
-  ) {
-    this.teamArea = teamName;
-    this.teamAbbreviation = attributes.abbreviation;
     this.maybeValidate();
   }
 
@@ -214,13 +166,6 @@ export default class NewDocFormComponent extends Component<NewDocFormComponentSi
       this.createDoc.perform();
     }
   }
-  
-  @action
-  updateSelectedBU(selectedBU: string) {
-    this.selectedBU = selectedBU;
-    // Trigger the necessary actions, such as fetching filtered teams
-    // ...
-  }
 
   /**
    * Creates a document draft, then redirects to the document.
@@ -231,18 +176,14 @@ export default class NewDocFormComponent extends Component<NewDocFormComponentSi
 
     try {
       const doc = await this.fetchSvc
-        .fetch("/api/v1/drafts", {
+        .fetch("/api/v1/custom-template", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            contributors: this.getEmails(this.contributors),
-            docType: this.args.docType,
-            product: this.productArea,
-            team: this.teamArea,
-            productAbbreviation: this.productAbbreviation,
-            teamAbbreviation: this.teamAbbreviation,
-            summary: cleanString(this.summary),
-            title: cleanString(this.title),
+            templateName: cleanString(this.templateName),
+            longName: cleanString(this.longName),
+            docId: cleanString(this.docId),
+            description: cleanString(this.description),
           }),
         })
         .then((response) => response?.json());
@@ -251,18 +192,16 @@ export default class NewDocFormComponent extends Component<NewDocFormComponentSi
       await timeout(AWAIT_DOC_DELAY);
 
       // Set modal on a delay so it appears after transition.
-      this.modalAlerts.setActive.perform(
-        "docCreated",
-        AWAIT_DOC_CREATED_MODAL_DELAY
-      );
+      // this.modalAlerts.setActive.perform(
+      //   "docCreated",
+      //   AWAIT_DOC_CREATED_MODAL_DELAY
+      // );
 
-      this.router.transitionTo("authenticated.document", doc.id, {
-        queryParams: { draft: true },
-      });
+      this.router.transitionTo("authenticated.new");
     } catch (err: unknown) {
       this.docIsBeingCreated = false;
       this.flashMessages.add({
-        title: "Error creating document draft",
+        templateName: "Error creating template",
         message: `${err}`,
         type: "critical",
         timeout: 6000,
@@ -274,6 +213,6 @@ export default class NewDocFormComponent extends Component<NewDocFormComponentSi
 
 declare module "@glint/environment-ember-loose/registry" {
   export default interface Registry {
-    "New::DocForm": typeof NewDocFormComponent;
+    "New::TemplateForm": typeof NewDocFormComponent;
   }
 }
