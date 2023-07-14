@@ -1,6 +1,6 @@
 {{page-title "Dashboard"}}
 
-<Header @toggleModal1 = {{this.toggleModal1}}/>
+<Header/>
 
 
 <section class="x-container">
@@ -23,7 +23,13 @@
   <br>
 
   <div class="hds-border-primary border-0 border-b pb-9">
-    <h1>Welcome back, {{this.authenticatedUser.info.given_name}}</h1>
+    <h1>Welcome back, {{this.authenticatedUser.info.given_name}} 
+      {{#if (eq this.authenticatedUser.info.role "Basic")}}
+        <Hds::Badge @text="Basic" @size="large" @type="inverted" icon="user"/>
+      {{else}}
+        <Hds::Badge @text="Admin" @size="large" @type="inverted" icon="user" @color="success"/>
+      {{/if}}
+    </h1>
     <p>Here’s all the latest updates across the organization.</p>
   </div>
 

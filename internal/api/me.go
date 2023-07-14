@@ -4,9 +4,10 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"net/http"
+
 	"github.com/hashicorp-forge/hermes/pkg/models"
 	"gorm.io/gorm"
-	"net/http"
 
 	gw "github.com/hashicorp-forge/hermes/pkg/googleworkspace"
 	"github.com/hashicorp/go-hclog"
@@ -29,7 +30,7 @@ type MeGetResponse struct {
 	Department    string `json:"department,omitempty"`
 	Organization  string `json:"organization,omitempty"`
 	Profile       string `json:"profile,omitempty"`
-	IsAdmin       bool   `json:"isadmin,omitempty"`
+	Role          string `json:"role,omitempty"`
 }
 
 func MeHandler(
@@ -155,7 +156,7 @@ func MeHandler(
 
 			// fetch whether user is admin or not
 			user := models.User{EmailAddress: p.EmailAddresses[0].Value}
-			if resp.IsAdmin, err = user.FetchIsAdminByEmail(db); err != nil {
+			if resp.Role, err = user.FetchRole(db); err != nil {
 				errResp(
 					http.StatusInternalServerError,
 					"Error getting user information",

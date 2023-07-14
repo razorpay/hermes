@@ -16,7 +16,7 @@ export interface AuthenticatedUser {
   department :   string ;
   organization:  string ;
   profile      : string ;
-  isadmin : Boolean;
+  role : string;
   subscriptions: Subscription[];
 }
 

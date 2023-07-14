@@ -1,6 +1,7 @@
 package models
 
 import (
+	"database/sql/driver"
 	"errors"
 	"fmt"
 	"time"
@@ -26,8 +27,35 @@ type User struct {
 	// RecentlyViewedDocs are the documents recently viewed by the user.
 	RecentlyViewedDocs []Document `gorm:"many2many:recently_viewed_docs;"`
 
-	// IsAdmin indicates whether the user is an admin or not.
-	IsAdmin bool `gorm:"default:false"`
+	// Role indicates whether the user is an admin or something else, done using an enum.
+	Role RoleType `gorm:"default:'Basic'"`
+}
+
+type RoleType string
+
+const (
+	Admin RoleType = "Admin"
+	Basic RoleType = "Basic"
+)
+
+func (ct *RoleType) Scan(value interface{}) error {
+	switch v := value.(type) {
+	case []byte:
+		*ct = RoleType(v)
+	case string:
+		*ct = RoleType(v)
+	default:
+		return fmt.Errorf("unexpected value type for RoleType: %T", value)
+	}
+	return nil
+}
+
+func (ct RoleType) Value() (driver.Value, error) {
+	return string(ct), nil
+}
+
+func (rt RoleType) String() string {
+	return string(rt)
 }
 
 type RecentlyViewedDoc struct {
@@ -143,15 +171,15 @@ func (u *User) getAssociations(tx *gorm.DB) error {
 	return nil
 }
 
-// fetchIsAdminByEmail gets the value of column "IsAdmin"
-func (u *User) FetchIsAdminByEmail(db *gorm.DB) (bool, error) {
+// FetchRole gets the value of column "IsAdmin"
+func (u *User) FetchRole(db *gorm.DB) (string, error) {
 	var user User
 	if err := db.Where("email_address = ?", u.EmailAddress).First(&user).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return false, nil
+			return "", nil
 		}
-		return false, err
+		return "", err
 	}
 
-	return user.IsAdmin, nil
+	return user.Role.String(), nil
 }

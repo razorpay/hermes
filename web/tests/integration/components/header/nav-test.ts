@@ -26,7 +26,7 @@ module("Integration | Component | header/nav", function (hooks) {
       department : "",
       organization: "",
       profile     : "",
-      isadmin : false,
+      role : "",
       subscriptions: [],
     };
   });
