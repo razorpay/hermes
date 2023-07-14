@@ -15,7 +15,7 @@ import (
 //custom-template-add
 type TemplateRequest struct {
 	Description             string   `json:"description,omitempty"`
-	TemplateName              string   `json:"templateId"`
+	TemplateName              string   `json:"templateName"`
 	DocId              		string   `json:"docId"`
 	LongName              	string   `json:"longName"`
 }

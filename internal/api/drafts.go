@@ -142,11 +142,11 @@ func DraftsHandler(
 			}
 
 			// Get doc type template new.
-			templateId := getDocTypeTemplate(doctypeArray, req.DocType)
-			if templateId == "" {
-				l.Error("Bad request: no templateId configured for doc type", "doc_type", req.DocType)
+			templateName := getDocTypeTemplate(doctypeArray, req.DocType)
+			if templateName == "" {
+				l.Error("Bad request: no templateName configured for doc type", "doc_type", req.DocType)
 				http.Error(w,
-					"Bad request: no templateId configured for doc type",
+					"Bad request: no templateName configured for doc type",
 					http.StatusBadRequest)
 				return
 			}
@@ -170,9 +170,9 @@ func DraftsHandler(
 			
 
 			// Copy template to new draft file.
-			f, err := s.CopyFile(templateId, title, cfg.GoogleWorkspace.DraftsFolder)
+			f, err := s.CopyFile(templateName, title, cfg.GoogleWorkspace.DraftsFolder)
 			if err != nil {
-				l.Error("error creating draft", "error", err, "template id ", templateId,
+				l.Error("error creating draft", "error", err, "template id ", templateName,
 					"drafts_folder", cfg.GoogleWorkspace.DraftsFolder)
 				http.Error(w, "Error creating document draft",
 					http.StatusInternalServerError)

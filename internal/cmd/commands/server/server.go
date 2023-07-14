@@ -501,7 +501,7 @@ func (c *Command) ShutdownServer(s *http.Server) func() {
 type template struct {
 	ObjectId				string 	 `json:"objectId"`
 	Description             string   `json:"description,omitempty"`
-	TemplateName              string   `json:"templateId"`
+	TemplateName              string   `json:"templateName"`
 	DocId              		string   `json:"docId"`
 	LongName              	string   `json:"longName"`
 }
