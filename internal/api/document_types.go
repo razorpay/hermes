@@ -142,27 +142,3 @@ func DocumentTypesHandler(cfg config.Config, log hclog.Logger) http.Handler {
 		}
 	})
 }
-
-// old version of handler - retrieve data from config
-// func DocumentTypesHandlerOld(cfg config.Config, log hclog.Logger) http.Handler {
-// 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-// 		switch r.Method {
-// 		case "GET":
-// 			w.Header().Set("Content-Type", "application/json")
-// 			enc := json.NewEncoder(w)
-// 			err := enc.Encode(cfg.DocumentTypes.DocumentType)
-// 			if err != nil {
-// 				log.Error("error encoding document types",
-// 					"error", err,
-// 					"method", r.Method,
-// 					"path", r.URL.Path)
-// 				http.Error(w, "{\"error\": \"Error getting document types\"}",
-// 					http.StatusInternalServerError)
-// 				return
-// 			}
-// 		default:
-// 			w.WriteHeader(http.StatusMethodNotAllowed)
-// 			return
-// 		}
-// 	})
-// }
