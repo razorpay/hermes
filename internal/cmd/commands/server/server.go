@@ -368,11 +368,11 @@ func (c *Command) Run(args []string) int {
 		return 1
 	}
 
-	// Register products.
-	if err := registerProducts(cfg, algoWrite, db); err != nil {
-		c.UI.Error(fmt.Sprintf("error registering products: %v", err))
-		return 1
-	}
+	//// Register products.
+	//if err := registerProducts(cfg, algoWrite, db); err != nil {
+	//	c.UI.Error(fmt.Sprintf("error registering products: %v", err))
+	//	return 1
+	//}
 
 	// Register document types.
 	// TODO: remove this and use the database for all document type lookups.
@@ -413,13 +413,14 @@ func (c *Command) Run(args []string) int {
 			api.TemplateHandler(cfg, c.Log, algoSearch, algoWrite, goog, db)},
 		{"/api/v1/drafts/",
 			api.DraftsDocumentHandler(cfg, c.Log, algoSearch, algoWrite, goog, db)},
-		{"/api/v1/me", api.MeHandler(c.Log, goog)},
+		{"/api/v1/me", api.MeHandler(c.Log, goog, db)},
 		{"/api/v1/me/recently-viewed-docs",
 			api.MeRecentlyViewedDocsHandler(cfg, c.Log, db)},
 		{"/api/v1/me/subscriptions",
 			api.MeSubscriptionsHandler(cfg, c.Log, goog, db)},
 		{"/api/v1/people", api.PeopleDataHandler(cfg, c.Log, goog)},
-		{"/api/v1/products", api.ProductsHandler(cfg, algoSearch, c.Log)},
+		{"/api/v1/products", api.ProductsHandler(cfg, algoSearch, algoWrite, db, c.Log)},
+		{"/api/v1/teams", api.TeamsHandler(cfg, algoSearch, algoWrite, db, c.Log)},
 		{"/api/v1/reviews/",
 			api.ReviewHandler(cfg, c.Log, algoSearch, algoWrite, goog, db)},
 		{"/api/v1/web/analytics", api.AnalyticsHandler(c.Log)},

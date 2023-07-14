@@ -43,6 +43,7 @@
         @icon="file-plus"
         class="create-draft-button"
       />
+
       <div class="relative">
         {{#if this.userMenuHighlightIsShown}}
           <Header::UserMenuHighlight />
@@ -84,6 +85,21 @@
               "highlighted-new"
             }}
           />
+          <dd.Interactive
+            data-test-user-menu-item="Your Profile"
+            @icon = "user"
+            @route="authenticated.myprofile"
+            @text="Your Profile"
+          />
+          {{#if (eq this.profile.role "Admin")}}
+          <dd.Interactive
+            data-test-user-menu-item="Admin Console"
+            @icon="settings"
+            @route="authenticated.myprofile"
+            @text="Admin Console"
+          />
+        {{/if}}
+
           {{#if this.showSignOut}}
             <dd.Interactive
               data-test-user-menu-item="sign-out"

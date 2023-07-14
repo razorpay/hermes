@@ -2,15 +2,23 @@ package db
 
 import (
 	"fmt"
-
 	"github.com/hashicorp-forge/hermes/internal/config"
 	"github.com/hashicorp-forge/hermes/pkg/models"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
+func EnableUUIDExtension(db *gorm.DB) error {
+	err := db.Exec("CREATE EXTENSION IF NOT EXISTS \"uuid-ossp\";").Error
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 // NewDB returns a new migrated database.
 func NewDB(cfg config.Postgres) (*gorm.DB, error) {
+
 	// TODO: validate config.
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%d",
 		cfg.Host,
@@ -51,6 +59,11 @@ func NewDB(cfg config.Postgres) (*gorm.DB, error) {
 	); err != nil {
 		return nil, fmt.Errorf(
 			"error setting up RecentlyViewedDocs join table: %w", err)
+	}
+
+	// adding uuid.ossp extensioin in the postgres for using the uuid_generate_v4()
+	if err = EnableUUIDExtension(db); err != nil {
+		fmt.Errorf("error  installing uuid_ossp database: %w", err)
 	}
 
 	// Automatically migrate models.

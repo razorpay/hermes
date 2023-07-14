@@ -466,18 +466,72 @@ func ReviewHandler(
 					return
 				}
 
-				// Send emails to approvers.
+				// Get owner name
+				// Fetch owner name by searching Google Workspace directory.
+				// The api has a bug please kindly see this before proceeding forward
+				ppls, err := s.SearchPeople(docObj.GetOwners()[0], "emailAddresses,names")
+				if err != nil {
+					l.Error(
+						"Error getting user information",
+						"error searching people directory",
+						err,
+					)
+					return
+				}
+
+				// Verify that the result only contains one person.
+				if len(ppls) != 1 {
+					l.Error(
+						"Error getting user information",
+						fmt.Sprintf(
+							"wrong number of people in search result: %d", len(ppls)),
+						err,
+					)
+					return
+				}
+				ppl := ppls[0]
+
+				// Replace the names in the People API result with data from the Admin
+				// Directory API.
+				// TODO: remove this when the bug in the People API is fixed:
+				// https://issuetracker.google.com/issues/196235775
+				if err := replaceNamesWithAdminAPIResponse(
+					ppl, s,
+				); err != nil {
+					l.Error(
+						"Error getting user information",
+						"error replacing names with Admin API response",
+						err,
+					)
+					return
+				}
+
+				// Verify other required values are set.
+				if len(ppl.Names) == 0 {
+					l.Error(
+						"Error getting user information",
+						"no names in result",
+						err,
+					)
+					return
+				}
+
+				// Send emails to reviewers.
 				if len(docObj.GetApprovers()) > 0 {
 					// TODO: use an asynchronous method for sending emails because we
 					// can't currently recover gracefully from a failure here.
 					for _, approverEmail := range docObj.GetApprovers() {
 						err := email.SendReviewRequestedEmail(
 							email.ReviewRequestedEmailData{
-								BaseURL:           cfg.BaseURL,
-								DocumentOwner:     docObj.GetOwners()[0],
-								DocumentShortName: docObj.GetDocNumber(),
-								DocumentTitle:     docObj.GetTitle(),
-								DocumentURL:       docURL,
+								BaseURL:            cfg.BaseURL,
+								DocumentOwner:      ppl.Names[0].DisplayName,
+								DocumentType:       docObj.GetDocType(),
+								DocumentShortName:  docObj.GetDocNumber(),
+								DocumentTitle:      docObj.GetTitle(),
+								DocumentURL:        docURL,
+								DocumentProdAbbrev: docObj.GetProduct(),
+								DocumentTeamAbbrev: docObj.GetTeam(),
+								DocumentOwnerEmail: docObj.GetOwners()[0],
 							},
 							[]string{approverEmail},
 							cfg.Email.FromAddress,
@@ -531,6 +585,7 @@ func ReviewHandler(
 								DocumentType:      docObj.GetDocType(),
 								DocumentURL:       docURL,
 								Product:           docObj.GetProduct(),
+								Team:              docObj.GetTeam(),
 							},
 							[]string{subscriber.EmailAddress},
 							cfg.Email.FromAddress,
@@ -611,10 +666,25 @@ func createShortcut(
 		}
 	}
 
+	// Get folder for doc type + product + Team/Pod.
+	teamFolder, err := s.GetSubfolder(productFolder.Id, docObj.GetTeam())
+	if err != nil {
+		return nil, fmt.Errorf("error getting product subfolder: %w", err)
+	}
+
+	// Product folder wasn't found, so create it.
+	if teamFolder == nil {
+		teamFolder, err = s.CreateFolder(
+			docObj.GetTeam(), productFolder.Id)
+		if err != nil {
+			return nil, fmt.Errorf("error creating team subfolder: %w", err)
+		}
+	}
+
 	// Create shortcut.
 	if shortcut, err = s.CreateShortcut(
 		docObj.GetObjectID(),
-		productFolder.Id); err != nil {
+		teamFolder.Id); err != nil {
 
 		return nil, fmt.Errorf("error creating shortcut: %w", err)
 	}

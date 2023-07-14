@@ -10,6 +10,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/hashicorp-forge/hermes/internal/email"
+
 	"github.com/algolia/algoliasearch-client-go/v3/algolia/errs"
 	"github.com/algolia/algoliasearch-client-go/v3/algolia/opt"
 	"github.com/algolia/algoliasearch-client-go/v3/algolia/search"
@@ -29,6 +31,8 @@ type DraftsRequest struct {
 	DocType             string   `json:"docType,omitempty"`
 	Product             string   `json:"product,omitempty"`
 	ProductAbbreviation string   `json:"productAbbreviation,omitempty"`
+	Team                string   `json:"team,omitempty"`
+	TeamAbbreviation    string   `json:"teamAbbreviation,omitempty"`
 	Summary             string   `json:"summary,omitempty"`
 	Tags                []string `json:"tags,omitempty"`
 	Title               string   `json:"title"`
@@ -40,6 +44,7 @@ type DraftsPatchRequest struct {
 	Approvers    []string `json:"approvers,omitempty"`
 	Contributors []string `json:"contributors,omitempty"`
 	Product      string   `json:"product,omitempty"`
+	Team         string   `json:"team,omitempty"`
 	Summary      string   `json:"summary,omitempty"`
 	// Tags                []string `json:"tags,omitempty"`
 	Title string `json:"title,omitempty"`
@@ -116,28 +121,11 @@ func DraftsHandler(
 				return
 			}
 
-			//******************** old way to validate doctype ***********************
-			// template-add
-			// switch req.DocType {
-			// case "FRD":
-			// case "RFC":
-			// case "PRD":
-			// case "TECHSPEC":
-			// case "":
-			// 	l.Error("Bad request: docType is required")
-			// 	http.Error(w, "Bad request: docType is required", http.StatusBadRequest)
-			// 	return
-			// default:
-			// 	l.Error("Bad request: docType is required", "doc_type", req.DocType)
-			// 	http.Error(w, "Bad request: invalid docType", http.StatusBadRequest)
-			// 	return
-			// }
-			//**************************************************************************
-
 			if req.Title == "" {
 				http.Error(w, "Bad request: title is required", http.StatusBadRequest)
 				return
 			}
+
 
 			// Get doc type template new.
 			templateName := getDocTypeTemplate(doctypeArray, req.DocType)
@@ -149,23 +137,14 @@ func DraftsHandler(
 				return
 			}
 
-			// Get doc type template old.
-			// template := getDocTypeTemplate(cfg.DocumentTypes.DocumentType, req.DocType)
-			// if template == "" {
-			// 	l.Error("Bad request: no template configured for doc type", "doc_type", req.DocType)
-			// 	http.Error(w,
-			// 		"Bad request: no template configured for doc type",
-			// 		http.StatusBadRequest)
-			// 	return
-			// }
-
 
 			// Build title.
 			if req.ProductAbbreviation == "" {
 				req.ProductAbbreviation = "TODO"
 			}
-			title := fmt.Sprintf("[%s-???] %s", req.ProductAbbreviation, req.Title)
-			
+
+			//title := fmt.Sprintf("[%s-???] %s", req.ProductAbbreviation, req.Title)
+			title := fmt.Sprintf("[%s-%s(%s)] %s", req.ProductAbbreviation, req.TeamAbbreviation, req.DocType, req.Title)
 
 			// Copy template to new draft file.
 			f, err := s.CopyFile(templateName, title, cfg.GoogleWorkspace.DraftsFolder)
@@ -229,6 +208,7 @@ func DraftsHandler(
 				Owners:       []string{userEmail},
 				OwnerPhotos:  op,
 				Product:      req.Product,
+				Team:         req.Team,
 				Status:       "WIP",
 				Summary:      req.Summary,
 				Tags:         req.Tags,
@@ -322,6 +302,9 @@ func DraftsHandler(
 				Product: models.Product{
 					Name: req.Product,
 				},
+				Team: models.Team{
+					Name: req.Team,
+				},
 				Status:  models.WIPDocumentStatus,
 				Summary: req.Summary,
 				Title:   req.Title,
@@ -356,6 +339,115 @@ func DraftsHandler(
 					http.Error(w, "Error creating document draft",
 						http.StatusInternalServerError)
 					return
+				}
+			}
+
+			// Send emails to contributors.
+			// Get owner name
+			// Fetch owner name by searching Google Workspace directory.
+			// The api has a bug please kindly see this before proceeding forward
+			ppl, err := s.SearchPeople(userEmail, "emailAddresses,names")
+			if err != nil {
+				errResp(
+					http.StatusInternalServerError,
+					"Error getting user information",
+					"error searching people directory",
+					err,
+				)
+				return
+			}
+
+			// Verify that the result only contains one person.
+			if len(ppl) != 1 {
+				errResp(
+					http.StatusInternalServerError,
+					"Error getting user information",
+					fmt.Sprintf(
+						"wrong number of people in search result: %d", len(ppl)),
+					err,
+				)
+				return
+			}
+			p := ppl[0]
+
+			// Replace the names in the People API result with data from the Admin
+			// Directory API.
+			// TODO: remove this when the bug in the People API is fixed:
+			// https://issuetracker.google.com/issues/196235775
+			if err := replaceNamesWithAdminAPIResponse(
+				p, s,
+			); err != nil {
+				errResp(
+					http.StatusInternalServerError,
+					"Error getting user information",
+					"error replacing names with Admin API response",
+					err,
+				)
+				return
+			}
+
+			// Verify other required values are set.
+			if len(p.Names) == 0 {
+				errResp(
+					http.StatusInternalServerError,
+					"Error getting user information",
+					"no names in result",
+					err,
+				)
+				return
+			}
+
+			// Send emails, if enabled.
+			if cfg.Email != nil && cfg.Email.Enabled {
+				docURL, err := getDocumentURL(cfg.BaseURL, docObj.GetObjectID())
+				if err != nil {
+					l.Error("error getting document URL",
+						"error", err,
+						"doc_id", docObj.GetObjectID(),
+						"method", r.Method,
+						"path", r.URL.Path,
+					)
+					http.Error(w, "Error creating review",
+						http.StatusInternalServerError)
+					return
+				}
+
+				if len(req.Contributors) > 0 {
+					// TODO: use an asynchronous method for sending emails because we
+					// can't currently recover gracefully from a failure here.
+					for _, c := range req.Contributors {
+						err := email.SendContributorRequestedEmail(
+							email.ContributorRequestedEmailData{
+								BaseURL:            cfg.BaseURL,
+								DocumentOwner:      p.Names[0].DisplayName,
+								DocumentOwnerEmail: docObj.GetOwners()[0],
+								DocumentType:       docObj.GetDocType(),
+								DocumentTitle:      docObj.GetTitle(),
+								DocumentURL:        docURL,
+								DocumentProdAbbrev: docObj.GetProduct(),
+								DocumentTeamAbbrev: docObj.GetTeam(),
+							},
+							[]string{c},
+							cfg.Email.FromAddress,
+							s,
+						)
+						if err != nil {
+							l.Error("error sending contributors email",
+								"error", err,
+								"doc_id", docObj.GetObjectID(),
+								"method", r.Method,
+								"path", r.URL.Path,
+							)
+							http.Error(w, "Error creating review",
+								http.StatusInternalServerError)
+							return
+						}
+						l.Info("doc contributors email sent",
+							"doc_id", docObj.GetObjectID(),
+							"method", r.Method,
+							"path", r.URL.Path,
+						)
+					}
 				}
 			}
 
@@ -751,6 +843,24 @@ func DraftsDocumentHandler(
 				productAbbreviation = p.Abbreviation
 			}
 
+			var teamAbbreviation string
+			// Validate product if it is in the patch request.
+			if req.Team != "" {
+				p := models.Team{Name: req.Team}
+				if err := p.Get(db); err != nil {
+					l.Error("error getting team",
+						"error", err,
+						"method", r.Method,
+						"path", r.URL.Path,
+						"team", req.Team,
+						"doc_id", docId)
+					http.Error(w, "Bad request: invalid product",
+						http.StatusBadRequest)
+					return
+				}
+				teamAbbreviation = p.Abbreviation
+			}
+
 			// Check if document is locked.
 			locked, err := hcd.IsLocked(docId, db, s, l)
 			if err != nil {
@@ -873,6 +983,29 @@ func DraftsDocumentHandler(
 				}
 
 				// Update doc number in Algolia object.
+				docObj.SetDocNumber(fmt.Sprintf("[%s-%s]-???", productAbbreviation, teamAbbreviation))
+			}
+
+			// Update team (if it is in the patch request).
+			if req.Team != "" {
+				// Update in database.
+				d := models.Document{
+					GoogleFileID: docId,
+					Team:         models.Team{Name: req.Team},
+				}
+				if err := d.Upsert(db); err != nil {
+					l.Error("error upserting document to update team",
+						"error", err,
+						"method", r.Method,
+						"path", r.URL.Path,
+						"team", req.Team,
+						"doc_id", docId)
+					http.Error(w, "Error patching document draft",
+						http.StatusInternalServerError)
+					return
+				}
+
+				// Update doc number in Algolia object.
 				docObj.SetDocNumber(fmt.Sprintf("%s-???", productAbbreviation))
 			}
 
@@ -907,7 +1040,7 @@ func DraftsDocumentHandler(
 
 			// Rename file with new title.
 			s.RenameFile(docId,
-				fmt.Sprintf("[%s] %s", docObj.GetDocNumber(), docObj.GetTitle()))
+				fmt.Sprintf("[%s-%s] %s", docObj.GetProduct(), docObj.GetTeam(), req.Title))
 
 			w.WriteHeader(http.StatusOK)
 			l.Info("patched draft document", "doc_id", docId)
