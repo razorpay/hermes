@@ -73,12 +73,11 @@
           <Inputs::ProductSelect
             @selected={{this.productArea}}
             @onChange={{this.onProductSelect}}
+            @onSelectBU={{this.updateSelectedBU}}
             class="w-[300px]"
           />
         </div>
 
-{{! Testing new functionality for Teams}}
-        {{!-- Render the team dropdown only when BU is selected --}}
         <div>
           <div class="mb-2">
             <span class="hermes-form-label">
