@@ -16,7 +16,6 @@ Router.map(function () {
     this.route("results");
     this.route("settings");
     this.route("new", function () {
-      this.route("custom-template")
       this.route("doc");
     });
     this.route('myprofile');

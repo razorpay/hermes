@@ -45,7 +45,6 @@ module.exports = function (environment) {
       appID: getEnv("ALGOLIA_APP_ID"),
       docsIndexName: getEnv("ALGOLIA_DOCS_INDEX_NAME", "docs"),
       draftsIndexName: getEnv("ALGOLIA_DRAFTS_INDEX_NAME", "drafts"),
-      templateIndexName: getEnv("ALGOLIA_TEMPLATE_INDEX_NAME","template"),
       internalIndexName: getEnv("ALGOLIA_INTERNAL_INDEX_NAME", "internal"),
       apiKey: getEnv("ALGOLIA_SEARCH_API_KEY"),
     },
