@@ -1,8 +1,26 @@
 {{page-title "Dashboard"}}
 
-<Header />
+<Header @toggleModal1 = {{this.toggleModal1}}/>
+
 
 <section class="x-container">
+  <Hds::ButtonSet>
+  <Hds::Button
+          @text="Add BU"
+          @icon="org"
+          @color="secondary"
+          {{on "click"  (fn this.toggleModal1)}}
+  />
+
+  <Hds::Button
+          @text="Team/Pod"
+          @icon="user-plus"
+          @color="secondary"
+          {{on "click"  (fn this.toggleModal2)}}
+  />
+  </Hds::ButtonSet>
+  <br>
+  <br>
 
   <div class="hds-border-primary border-0 border-b pb-9">
     <h1>Welcome back, {{this.authenticatedUser.info.given_name}}</h1>

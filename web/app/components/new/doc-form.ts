@@ -2,7 +2,7 @@ import Component from "@glimmer/component";
 import { task, timeout } from "ember-concurrency";
 import { inject as service } from "@ember/service";
 import { tracked } from "@glimmer/tracking";
-import { action } from "@ember/object";
+import {action, computed} from "@ember/object";
 import Ember from "ember";
 import FetchService from "hermes/services/fetch";
 import AuthenticatedUserService from "hermes/services/authenticated-user";
@@ -13,6 +13,7 @@ import FlashService from "ember-cli-flash/services/flash-messages";
 import { assert } from "@ember/debug";
 import cleanString from "hermes/utils/clean-string";
 import { ProductArea } from "../inputs/product-select";
+import {TeamArea} from "hermes/components/inputs/team-select";
 
 interface DocFormErrors {
   title: string | null;
@@ -50,7 +51,11 @@ export default class NewDocFormComponent extends Component<NewDocFormComponentSi
   @tracked protected summary: string = "";
   @tracked protected productArea: string | null = null;
   @tracked protected productAbbreviation: string | null = null;
+  @tracked protected teamArea: string | null = null;
+  @tracked protected teamAbbreviation: string | null = null;
   @tracked protected contributors: HermesUser[] = [];
+
+  @tracked selectedBU: string | null = null;
 
   @tracked protected _form: HTMLFormElement | null = null;
 
@@ -83,6 +88,11 @@ export default class NewDocFormComponent extends Component<NewDocFormComponentSi
    * Set true after an invalid submission attempt.
    */
   @tracked private validateEagerly = false;
+
+  @computed('productArea')
+  get shouldRenderTeamDropdown() {
+    return !!this.productArea;
+  }
 
   /**
    * The form element. Used to bind FormData to our tracked elements.
@@ -178,7 +188,17 @@ export default class NewDocFormComponent extends Component<NewDocFormComponentSi
     attributes: ProductArea
   ) {
     this.productArea = productName;
+    this.selectedBU = productName;
     this.productAbbreviation = attributes.abbreviation;
+    this.maybeValidate();
+  }
+
+  @action protected onTeamSelect(
+      teamName: string,
+      attributes: TeamArea
+  ) {
+    this.teamArea = teamName;
+    this.teamAbbreviation = attributes.abbreviation;
     this.maybeValidate();
   }
 
@@ -193,6 +213,14 @@ export default class NewDocFormComponent extends Component<NewDocFormComponentSi
     if (this.formRequirementsMet && !this.hasErrors) {
       this.createDoc.perform();
     }
+  }
+
+  @tracked selectedBU: string | null = null;
+  @action
+  updateSelectedBU(selectedBU: string) {
+    this.selectedBU = selectedBU;
+    // Trigger the necessary actions, such as fetching filtered teams
+    // ...
   }
 
   /**

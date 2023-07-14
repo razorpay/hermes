@@ -1726,7 +1726,27 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ember-decorators/utils@npm:^6.1.0":
+"@ember-decorators/component@npm:^6.1.1":
+  version: 6.1.1
+  resolution: "@ember-decorators/component@npm:6.1.1"
+  dependencies:
+    "@ember-decorators/utils": ^6.1.1
+    ember-cli-babel: ^7.1.3
+  checksum: 0b731884ff2d84db32eae9c006179153ad1d7f93eee040260d0622101017f363caf38db98e536ffd4008312af91cc57a8dda0d0f2c71f80d3643d5456658bee6
+  languageName: node
+  linkType: hard
+
+"@ember-decorators/object@npm:^6.1.1":
+  version: 6.1.1
+  resolution: "@ember-decorators/object@npm:6.1.1"
+  dependencies:
+    "@ember-decorators/utils": ^6.1.1
+    ember-cli-babel: ^7.1.3
+  checksum: 806f753a58ecca5924da110efa614e9a33b4ed7734aa5e67ea41a8a5f555734852e50e78dadcd269407efe1cc08756e8dbc55c077183892f9dc38a0701b8641d
+  languageName: node
+  linkType: hard
+
+"@ember-decorators/utils@npm:^6.1.0, @ember-decorators/utils@npm:^6.1.1":
   version: 6.1.1
   resolution: "@ember-decorators/utils@npm:6.1.1"
   dependencies:
@@ -7833,7 +7853,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ember-cli-babel@npm:^7.0.0, ember-cli-babel@npm:^7.1.0, ember-cli-babel@npm:^7.1.3, ember-cli-babel@npm:^7.10.0, ember-cli-babel@npm:^7.13.0, ember-cli-babel@npm:^7.13.2, ember-cli-babel@npm:^7.18.0, ember-cli-babel@npm:^7.19.0, ember-cli-babel@npm:^7.20.5, ember-cli-babel@npm:^7.21.0, ember-cli-babel@npm:^7.22.1, ember-cli-babel@npm:^7.23.0, ember-cli-babel@npm:^7.23.1, ember-cli-babel@npm:^7.26.0, ember-cli-babel@npm:^7.26.10, ember-cli-babel@npm:^7.26.11, ember-cli-babel@npm:^7.26.3, ember-cli-babel@npm:^7.26.4, ember-cli-babel@npm:^7.26.5, ember-cli-babel@npm:^7.26.6, ember-cli-babel@npm:^7.7.3":
+"ember-cli-babel@npm:^7.0.0, ember-cli-babel@npm:^7.1.0, ember-cli-babel@npm:^7.1.3, ember-cli-babel@npm:^7.10.0, ember-cli-babel@npm:^7.13.0, ember-cli-babel@npm:^7.13.2, ember-cli-babel@npm:^7.18.0, ember-cli-babel@npm:^7.19.0, ember-cli-babel@npm:^7.20.5, ember-cli-babel@npm:^7.21.0, ember-cli-babel@npm:^7.22.1, ember-cli-babel@npm:^7.23.0, ember-cli-babel@npm:^7.23.1, ember-cli-babel@npm:^7.26.0, ember-cli-babel@npm:^7.26.10, ember-cli-babel@npm:^7.26.11, ember-cli-babel@npm:^7.26.3, ember-cli-babel@npm:^7.26.4, ember-cli-babel@npm:^7.26.5, ember-cli-babel@npm:^7.26.6, ember-cli-babel@npm:^7.26.8, ember-cli-babel@npm:^7.7.3":
   version: 7.26.11
   resolution: "ember-cli-babel@npm:7.26.11"
   dependencies:
@@ -8518,6 +8538,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"ember-decorators@npm:^6.1.1":
+  version: 6.1.1
+  resolution: "ember-decorators@npm:6.1.1"
+  dependencies:
+    "@ember-decorators/component": ^6.1.1
+    "@ember-decorators/object": ^6.1.1
+    ember-cli-babel: ^7.7.3
+  checksum: ffe95d41dae393586190340c0e65d772c2132ff50269ef21a408d999e10fff79214ac9e14a49e1a94bf3fdd18c660759bc23c79de9ca41375f0e9ba8204b5168
+  languageName: node
+  linkType: hard
+
 "ember-destroyable-polyfill@npm:^2.0.2, ember-destroyable-polyfill@npm:^2.0.3":
   version: 2.0.3
   resolution: "ember-destroyable-polyfill@npm:2.0.3"
@@ -8722,6 +8753,26 @@ __metadata:
     ember-cli-babel: ^7.26.6
     ember-cli-typescript: ^5.1.1
   checksum: ffb0cd27b1b6f093167a668b7e1c83def8e7b35aeca52f2e2a155405c5e354c15d5f54bf9b92634c88e1ad7181d12d45813450c405852ca855fa03209f612d39
+  languageName: node
+  linkType: hard
+
+"ember-modal-dialog@npm:^4.1.2":
+  version: 4.1.2
+  resolution: "ember-modal-dialog@npm:4.1.2"
+  dependencies:
+    "@embroider/macros": ^1.0.0
+    "@embroider/util": ^1.0.0
+    ember-cli-babel: ^7.26.8
+    ember-cli-htmlbars: ^6.0.1
+    ember-cli-version-checker: ^2.1.0
+    ember-decorators: ^6.1.1
+    ember-wormhole: ^0.6.0
+  peerDependencies:
+    ember-tether: ^3.0.0
+  peerDependenciesMeta:
+    ember-tether:
+      optional: true
+  checksum: 49f1546422bd514ea7b8b35e11023e41abb921658f66248294744cd93694b87a67977c168340255826dacfba2e78237d2fa711afa61c672748f112673c2db1ab
   languageName: node
   linkType: hard
 
@@ -9088,6 +9139,16 @@ __metadata:
     ember-cli-babel: ^7.26.11
     ember-cli-htmlbars: ^6.0.1
   checksum: e06d077fe72e6dacd070cb7c41e9646bc2357996ab4ca0d0ae0c869fe23159a29de297894f45561a8bfe8b630dbb875b52513032872f5ed74adfbe161c606843
+  languageName: node
+  linkType: hard
+
+"ember-wormhole@npm:^0.6.0":
+  version: 0.6.0
+  resolution: "ember-wormhole@npm:0.6.0"
+  dependencies:
+    ember-cli-babel: ^7.22.1
+    ember-cli-htmlbars: ^5.3.1
+  checksum: e49975babc0d9b79b18bca00916fe2bbb77253948e1074c291e0a2f22b97f049c68a6d5e4ddef703a69e7a390c56fa6e52c128848c75da7507af3f022debb3db
   languageName: node
   linkType: hard
 
@@ -11171,6 +11232,7 @@ __metadata:
     ember-composable-helpers: ^5.0.0
     ember-concurrency: ^2.2.1
     ember-data: ~3.28.6
+    ember-decorators: ^6.1.1
     ember-element-helper: ^0.6.1
     ember-export-application-global: ^2.0.1
     ember-fetch: ^8.1.1
@@ -11179,6 +11241,7 @@ __metadata:
     ember-maybe-import-regenerator: ^0.1.6
     ember-maybe-in-element: ^2.1.0
     ember-metrics: ^2.0.0-beta.2
+    ember-modal-dialog: ^4.1.2
     ember-modifier: ^4.1.0
     ember-on-helper: ^0.1.0
     ember-page-title: ^6.2.2
