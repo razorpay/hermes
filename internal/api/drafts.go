@@ -107,7 +107,7 @@ func DraftsHandler(
 			// replace switch case with loop
 			check:=true
 			for i := 0; i < len(doctypeArray); i++ {
-				if(doctypeArray[i].TemplateId==req.DocType){					
+				if(doctypeArray[i].TemplateName==req.DocType){					
 					check=false
 					break;
 				}
@@ -993,7 +993,7 @@ func getDocTypeTemplate(
 	docId := ""
 
 	for _, t := range docTypes {
-		if strings.ToUpper(t.TemplateId) == strings.ToUpper(docType) {
+		if strings.ToUpper(t.TemplateName) == strings.ToUpper(docType) {
 			docId = t.DocId
 			break
 		}

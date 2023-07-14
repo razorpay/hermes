@@ -382,7 +382,7 @@ func (c *Command) Run(args []string) int {
 		// "prd": &hcd.PRD{},
 	}
 	for i := 0; i < len(objectArray); i++ {
-		doctype:=objectArray[i].TemplateId
+		doctype:=objectArray[i].TemplateName
 		doctype=strings.ToLower(doctype)
 		docTypes[doctype]=&hcd.COMMONTEMPLATE{}
 	}
@@ -501,7 +501,7 @@ func (c *Command) ShutdownServer(s *http.Server) func() {
 type template struct {
 	ObjectId				string 	 `json:"objectId"`
 	Description             string   `json:"description,omitempty"`
-	TemplateId              string   `json:"templateId"`
+	TemplateName              string   `json:"templateId"`
 	DocId              		string   `json:"docId"`
 	LongName              	string   `json:"longName"`
 }
@@ -553,7 +553,7 @@ func registerDocumentTypes(cfg config.Config, db *gorm.DB) error {
 	var objectArray []template=GetDocTypeArray(cfg)
 	for _, d := range objectArray {
 		dt := models.DocumentType{
-			Name:         d.TemplateId,
+			Name:         d.TemplateName,
 			LongName:     d.LongName,
 			Description:  d.Description,
 			Checks:       nil,

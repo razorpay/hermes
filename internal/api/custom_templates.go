@@ -15,7 +15,7 @@ import (
 //custom-template-add
 type TemplateRequest struct {
 	Description             string   `json:"description,omitempty"`
-	TemplateId              string   `json:"templateId"`
+	TemplateName              string   `json:"templateId"`
 	DocId              		string   `json:"docId"`
 	LongName              	string   `json:"longName"`
 }
@@ -64,14 +64,14 @@ func TemplateHandler(
 					return
 				}
 
-				if req.TemplateId == "" {
+				if req.TemplateName == "" {
 					http.Error(w, "Bad request: template is required", http.StatusBadRequest)
 					return
 				}
 	
 				// a object of base doc
 				baseTemplateObj := &hcd.BaseTemplate{
-					TemplateId:     req.TemplateId,
+					TemplateName:     req.TemplateName,
 					Description:    req.Description,
 					DocId: req.DocId,
 					LongName: req.LongName,
@@ -99,7 +99,7 @@ func TemplateHandler(
 				w.WriteHeader(http.StatusOK)
 	
 				resp := &TemplateResponse{
-					ID: req.TemplateId,
+					ID: req.TemplateName,
 				}
 	
 				enc := json.NewEncoder(w)
