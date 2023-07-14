@@ -14,14 +14,14 @@ import { assert } from "@ember/debug";
 import cleanString from "hermes/utils/clean-string";
 // custom-template-add
 interface DocFormErrors {
-  templateId: string | null;
+  templateName: string | null;
   longName: string | null;
   docId: string|null;
   description: string | null;
 }
 
 const FORM_ERRORS: DocFormErrors = {
-  templateId: null,
+  templateName: null,
   longName: null,
   docId: null,
   description: null,
@@ -40,7 +40,7 @@ export default class NewDocFormComponent extends Component<NewTemplateFormCompon
   @service declare modalAlerts: ModalAlertsService;
   @service declare router: RouterService;
 
-  @tracked protected templateId: string = "";
+  @tracked protected templateName: string = "";
   @tracked protected longName: string = "";
   @tracked protected docId: string = "";
   @tracked protected description: string = "";
@@ -49,7 +49,7 @@ export default class NewDocFormComponent extends Component<NewTemplateFormCompon
 
   /**
    * Whether the form has all required fields filled out.
-   * True if the templateId and product area are filled out.
+   * True if the templateName and product area are filled out.
    */
   @tracked protected formRequirementsMet = false;
 
@@ -100,7 +100,7 @@ export default class NewDocFormComponent extends Component<NewTemplateFormCompon
    */
   private maybeValidate() {
     
-    if (this.templateId && this.docId && this.longName) {
+    if (this.templateName && this.docId && this.longName) {
       this.formRequirementsMet = true;
     } else {
       this.formRequirementsMet = false;
@@ -138,9 +138,9 @@ export default class NewDocFormComponent extends Component<NewTemplateFormCompon
   @action protected updateForm() {
     const formObject = Object.fromEntries(new FormData(this.form).entries());
 
-    assert("templateId is missing from formObject", "templateId" in formObject);
+    assert("templateName is missing from formObject", "templateName" in formObject);
     assert("docId is missing from formObject", "docId" in formObject);
-    this.templateId = formObject["templateId"] as string;
+    this.templateName = formObject["templateName"] as string;
     this.longName = formObject["longName"] as string;
     this.docId = formObject["docId"] as string;
     this.description = formObject["description"] as string;
@@ -180,7 +180,7 @@ export default class NewDocFormComponent extends Component<NewTemplateFormCompon
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            templateId: cleanString(this.templateId),
+            templateName: cleanString(this.templateName),
             longName: cleanString(this.longName),
             docId: cleanString(this.docId),
             description: cleanString(this.description),
@@ -201,7 +201,7 @@ export default class NewDocFormComponent extends Component<NewTemplateFormCompon
     } catch (err: unknown) {
       this.docIsBeingCreated = false;
       this.flashMessages.add({
-        templateId: "Error creating template",
+        templateName: "Error creating template",
         message: `${err}`,
         type: "critical",
         timeout: 6000,

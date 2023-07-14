@@ -42,7 +42,7 @@ export default class AuthenticatedNewDocRoute extends Route {
     .then((data) => {
       let check=true
       data.forEach(element => {
-        if (element.templateId==params.docType) {
+        if (element.templateName==params.docType) {
           check=false
         }
       });

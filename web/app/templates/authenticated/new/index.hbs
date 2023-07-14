@@ -8,7 +8,7 @@
       <LinkTo
         class="w-full h-full no-underline"
         @route="authenticated.new.doc"
-        @query={{hash docType=docType.templateId}}
+        @query={{hash docType=docType.templateName}}
       >
         <Hds::Card::Container
           @level="mid"
@@ -18,7 +18,7 @@
         >
           <div>
             <p class="text-display-200 text-color-foreground-primary mb-1">
-              {{docType.templateId}}
+              {{docType.templateName}}
             </p>
             <h2
               class="text-display-400 font-semibold text-color-foreground-strong"
