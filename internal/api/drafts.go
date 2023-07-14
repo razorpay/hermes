@@ -32,7 +32,6 @@ type DraftsRequest struct {
 	Summary             string   `json:"summary,omitempty"`
 	Tags                []string `json:"tags,omitempty"`
 	Title               string   `json:"title"`
-	ReviewDate 			string `json:"ReviewDate"`
 }
 
 // DraftsPatchRequest contains a subset of drafts fields that are allowed to
@@ -53,7 +52,6 @@ type DraftsPatchRequest struct {
 	RFC            string   `json:"rfc,omitempty"`
 	Stakeholders   []string `json:"stakeholders,omitempty"`
 	TargetVersion  string   `json:"targetVersion,omitempty"`
-	ReviewDate string `json:"ReviewDate"`
 }
 
 type DraftsResponse struct {
@@ -234,7 +232,6 @@ func DraftsHandler(
 				Status:       "WIP",
 				Summary:      req.Summary,
 				Tags:         req.Tags,
-				ReviewDate:   req.ReviewDate,
 			}
 
 			res, err := aw.Drafts.SaveObject(baseDocObj)
@@ -328,7 +325,6 @@ func DraftsHandler(
 				Status:  models.WIPDocumentStatus,
 				Summary: req.Summary,
 				Title:   req.Title,
-				ReviewDate: req.ReviewDate,
 			}
 			if err := d.Create(db); err != nil {
 				l.Error("error creating document in database",
