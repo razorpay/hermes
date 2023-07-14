@@ -14,10 +14,10 @@ import (
 
 //custom-template-add
 type TemplateRequest struct {
-	Description             string   `json:"description,omitempty"`
-	TemplateName              string   `json:"templateName"`
-	DocId              		string   `json:"docId"`
-	LongName              	string   `json:"longName"`
+	Description		string   `json:"description,omitempty"`
+	TemplateName      	string   `json:"templateName"`
+	DocId              	string   `json:"docId"`
+	LongName        	string   `json:"longName"`
 }
 type TemplateResponse struct {
 	ID string `json:"id"`
