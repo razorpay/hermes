@@ -11,7 +11,7 @@
   </div>
 {{else}}
   <form
-    class="grid gap-10 grid-cols-[1fr_250px] grid-rows-1"
+    class="grid gap-5 grid-cols-[300px_700px] grid-rows-1"
     {{on "submit" this.submit}}
     {{did-insert this.registerForm}}
   >
@@ -92,12 +92,37 @@
     </div>
     <div>
       <div class="preview-card">
-        <Hds::Button
-          @text="Create new template"
-          type="submit"
-          disabled={{not this.formRequirementsMet}}
-          class="w-full"
-        />
+        <h3>
+          <FlightIcon @name="eye" />
+          Preview
+        </h3>
+        <iframe
+          title="Google Doc"
+          height="420px"
+          width="100%"
+          class="border-0"
+          src="https://docs.google.com/document/d/{{this.docId}}/edit?embedded=true"
+        >
+        </iframe>
+        <div class="flex items-start px-3 gap-2 right-align w-full">
+          <Hds::Button
+            @text="Create"
+            type="submit"
+            disabled={{not this.formRequirementsMet}}
+            class="w-half right-align"
+          />
+          <a href="/new">
+            <Hds::Button
+              @text="Discard"
+              @size="medium"
+              @color="critical"
+              @icon="trash"
+              @isIconOnly={{false}}
+              class="w-half"
+            />
+          </a>
+          
+        </div>
       </div>
     </div>
   </form>
