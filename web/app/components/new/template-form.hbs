@@ -92,10 +92,12 @@
     </div>
     <div>
       <div class="preview-card">
-        <h3>
-          <FlightIcon @name="eye" />
-          Preview
-        </h3>
+        <div class="flex w-full">
+          <h3 class="right-align">
+            <FlightIcon @name="eye" />
+            Preview Template
+          </h3>
+        </div>
         <iframe
           title="Google Doc"
           height="420px"
@@ -104,21 +106,20 @@
           src="https://docs.google.com/document/d/{{this.docId}}/edit?embedded=true"
         >
         </iframe>
-        <div class="flex items-start px-3 gap-2 right-align w-full">
+        <div class="flex items-start px-3 gap-2 w-full">
           <Hds::Button
             @text="Create"
             type="submit"
             disabled={{not this.formRequirementsMet}}
-            class="w-half right-align"
+            class="right-align"
           />
           <a href="/new">
             <Hds::Button
-              @text="Discard"
+              @text="Cancel"
               @size="medium"
               @color="critical"
-              @icon="trash"
+              @icon="x-circle"
               @isIconOnly={{false}}
-              class="w-half"
             />
           </a>
           
