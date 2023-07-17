@@ -119,3 +119,71 @@ func TemplateHandler(
 	})
 
 }
+
+func TemplateDeleteHandler(
+	cfg *config.Config,
+	l hclog.Logger,
+	ar *algolia.Client,
+	aw *algolia.Client,
+	s *gw.Service,
+	db *gorm.DB) http.Handler {
+
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// Get document ID from URL path
+		ObjectID, err := parseURLPath(r.URL.Path, "/api/v1/custom-template")
+		if err != nil {
+			l.Error("error requesting template from algolia",
+				"error", err,
+				"path", r.URL.Path,
+			)
+			http.Error(w, "Error requesting template", http.StatusInternalServerError)
+			return
+		}
+
+		switch r.Method {
+		case "DELETE":
+
+			// Delete object in Algolia
+			res, err := aw.Template.DeleteObject(ObjectID)
+			if err != nil {
+				l.Error("error deleting document draft from algolia",
+					"error", err,
+					"doc_id", ObjectID,
+				)
+				http.Error(w, "Error deleting document draft",
+					http.StatusInternalServerError)
+				return
+			}
+			err = res.Wait()
+			if err != nil {
+				l.Error("error deleting template from algolia",
+					"error", err,
+					"doc_id", ObjectID,
+				)
+				http.Error(w, "Error deleting template",
+					http.StatusInternalServerError)
+				return
+			}
+
+			resp := &DraftsResponse{
+				ID: ObjectID,
+			}
+
+			// Write response.
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusOK)
+
+			enc := json.NewEncoder(w)
+			err = enc.Encode(resp)
+			if err != nil {
+				l.Error("error encoding document id", "error", err, "templateObjectId", ObjectID)
+				http.Error(w, "Error deleting document draft",
+					http.StatusInternalServerError)
+				return
+			}
+		default:
+			w.WriteHeader(http.StatusMethodNotAllowed)
+			return
+		}
+	})
+}

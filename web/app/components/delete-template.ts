@@ -82,6 +82,7 @@ export default class DeleteTemplateComponent extends Component<DeleteTemplateCom
         });
 
         this.router.transitionTo("authenticated.new");
+        window.location.reload();
       }
     } catch (e) {
       this.showError(e);
