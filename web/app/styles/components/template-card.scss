@@ -2,18 +2,14 @@
   @apply p-5 h-full flex flex-col justify-between duration-300 cursor-pointer;
 
   transition-property: background, box-shadow;
-  background: linear-gradient(
-    to bottom,
-    var(--token-color-surface-interactive),
-    var(--token-color-surface-interactive)
-  );
+  background: linear-gradient(to bottom,
+      var(--token-color-surface-interactive),
+      var(--token-color-surface-interactive));
 
   &:hover {
-    background: linear-gradient(
-      to bottom,
-      var(--token-color-surface-interactive),
-      var(--token-color-surface-action)
-    );
+    background: linear-gradient(to bottom,
+        var(--token-color-surface-interactive),
+        var(--token-color-surface-action));
   }
 
   &.disabled {
@@ -29,4 +25,19 @@
   &--with-link {
     @apply pb-12;
   }
+}
+
+.create-template-card-image {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.create-template-card{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
