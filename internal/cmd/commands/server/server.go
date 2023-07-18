@@ -433,6 +433,8 @@ func (c *Command) Run(args []string) int {
 	adminRequiredPatterns := []string{
 		"/api/v1/products",
 		"/api/v1/teams",
+		"/api/v1/custom-template",
+		"/api/v1/custom-template/",
 		// Add more patterns here if needed.
 	}
 

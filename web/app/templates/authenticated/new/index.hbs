@@ -38,42 +38,23 @@
         </LinkTo >
         
         <div class="flex items-start px-3 gap-2">
-          <LinkTo
-            class="w-full h-full no-underline"
-            @route="authenticated.dashboard"
-          >
-            <Hds::Button
-              @text="edit"
-              @size="medium"
-              @color="primary"
-              class="w-full"
-            />
-          </LinkTo>
+          <EditTemplate @template={{docType}}/>
           <DeleteTemplate @template={{docType}}/>
         </div>
       </Hds::Card::Container>
     </li>
 
   {{/each}}
-
-  <li class="relative">
-      <LinkTo
-        class="w-full h-full no-underline"
-        @route="authenticated.new.custom-template"
-      >
-        <Hds::Card::Container
-          @level="mid"
-          @levelHover="high"
-          @hasBorder="true"
-          class="template-card template-card--with-link create-template-card"
-        >
-            <img 
-              src="/images/create.png" 
-              alt="create template"
-              class="w-full create-template-card-image"
-            >
-        </Hds::Card::Container>
-      </LinkTo>
-  </li>
-
 </ol>
+  {{!-- fixed button - click to add new template  --}}
+  <a class="fixedButton" href="/new/custom-template">
+    <div class="roundedFixedBtn" data-tooltip="Create new template">
+      <img 
+        src="/images/create.png" 
+        alt="create template"
+        class="w-full create-template-card-image"
+      >
+    </div>
+  </a>
+
+
