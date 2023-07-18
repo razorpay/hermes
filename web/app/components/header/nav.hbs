@@ -34,7 +34,12 @@
     </div>
 
     <Header::Search class="global-search" />
-
+    <Hds::Button
+      @icon ="folder-users"
+      @isIconOnly={{true}}
+      @color="secondary"
+      {{on "click"  (fn this.toggleModal)}}
+    />
     <div class="user-buttons">
       <Hds::Button
         @route="authenticated.new"
@@ -112,3 +117,39 @@
     </div>
   </nav>
 </div>
+
+
+
+ {{#if this.showModal}}
+      <Hds::Modal id="basic-modal" @onClose={{fn this.toggleModal}} as |M|>
+        <M.Header>
+          Business Units & Teams Explorer (Collapsible Directory List)
+        </M.Header>
+        <M.Body>
+          <p class="hds-typography-body-300 hds-foreground-primary">
+          <ul class="directory-list">
+          {{#each-in this.products as |buKey buValue|}}
+            <li>{{buKey}}
+              {{#if buValue.teams}}
+                <ul>
+                  {{#each-in buValue.teams as |teamKey teamValue|}}
+                    <li>{{teamKey}}</li>
+                  {{/each-in}}
+                </ul>
+              {{else}}
+                <p>No teams found for {{buKey}}.</p>
+              {{/if}}
+            </li>
+          {{/each-in}}
+        </ul>
+        </p>
+        </M.Body>
+        <M.Footer as |F|>
+      <Hds::ButtonSet>
+        <Hds::Button type="button" @text="Cancel" @color="critical"
+          {{on "click"  (fn this.toggleModal)}}
+        />
+      </Hds::ButtonSet>
+    </M.Footer>
+      </Hds::Modal>
+    {{/if}}
