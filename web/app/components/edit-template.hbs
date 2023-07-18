@@ -20,14 +20,10 @@
   <form
     {{on "submit" this.submit}}
     {{did-insert this.registerForm}}
+    class="grid gap-1 grid-cols-[1fr_200px] grid-rows-1"
   >
     
     <div>
-      <div class="space-y-4">
-        <h1
-          class="hds-typography-display-500 hds-font-weight-bold hds-foreground-strong"
-        >Edit Template</h1>
-      </div>
       {{!-- template name  --}}
       <div class="pt-10 space-y-7">
         <Hds::Form::TextInput::Field
@@ -97,12 +93,12 @@
 
       {{!-- <div class="h-24"></div> --}}
     </div>
-    {{!-- <div>
+    <div>
       <div class="preview-card">
         <div class="flex w-full">
           <h3>
             <FlightIcon @name="eye" />
-            Preview Template
+            Preview
           </h3>
         </div>
         <div class="div-template">
@@ -114,7 +110,7 @@
           >
         </div>
       </div>
-    </div> --}}
+    </div>
   </form>
 </M.Body>
     <M.Footer as |F|>

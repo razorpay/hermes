@@ -215,7 +215,7 @@ export default class DeleteTemplateComponent extends Component<DeleteTemplateCom
       throw error;
     }
     // this.router.transitionTo("authenticated.new");
-    // window.location.reload();
+    window.location.reload();
   });
 
   patchTemplate = task(async (fields) => { 
