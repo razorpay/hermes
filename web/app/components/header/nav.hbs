@@ -98,15 +98,6 @@
             @route="authenticated.myprofile"
             @text="Your Profile"
           />
-          {{#if (eq this.profile.role "Admin")}}
-          <dd.Interactive
-            data-test-user-menu-item="Admin Console"
-            @icon="settings"
-            @route="authenticated.myprofile"
-            @text="Admin Console"
-          />
-        {{/if}}
-
           {{#if this.showSignOut}}
             <dd.Interactive
               data-test-user-menu-item="sign-out"
@@ -124,7 +115,7 @@
 
  {{#if this.showModal}}
       <Hds::Modal id="basic-modal" @onClose={{fn this.toggleModal}} as |M|>
-        <M.Header>
+        <M.Header @icon="folder-users">
           <h2>Directory List</h2> 
         </M.Header>
         <M.Body>
@@ -143,7 +134,7 @@
         <M.Footer as |F|>
       <Hds::ButtonSet>
         <Hds::Button type="button" @text="Cancel" @color="critical"
-          {{on "click" (fn this.toggleModal)}}
+          {{on "click" F.close}}
         />
       </Hds::ButtonSet>
     </M.Footer>
