@@ -34,12 +34,7 @@
     </div>
 
     <Header::Search class="global-search" />
-    <Hds::Button
-      @icon ="folder-users"
-      @isIconOnly={{true}}
-      @color="secondary"
-      {{on "click"  (fn this.toggleModal)}}
-    />
+
     <div class="user-buttons">
       <Hds::Button
         @route="authenticated.new"
@@ -48,6 +43,13 @@
         @icon="file-plus"
         class="create-draft-button"
       />
+
+      <Hds::Button
+      @icon ="folder-users"
+      @isIconOnly={{true}}
+      @color="secondary"
+      {{on "click"  (fn this.toggleModal)}}
+    />
 
       <div class="relative">
         {{#if this.userMenuHighlightIsShown}}
@@ -123,33 +125,27 @@
  {{#if this.showModal}}
       <Hds::Modal id="basic-modal" @onClose={{fn this.toggleModal}} as |M|>
         <M.Header>
-          Business Units & Teams Explorer (Collapsible Directory List)
+          <h2>Directory List</h2> 
         </M.Header>
         <M.Body>
           <p class="hds-typography-body-300 hds-foreground-primary">
-          <ul class="directory-list">
-          {{#each-in this.products as |buKey buValue|}}
-            <li>{{buKey}}
-              {{#if buValue.teams}}
-                <ul>
-                  {{#each-in buValue.teams as |teamKey teamValue|}}
-                    <li>{{teamKey}}</li>
-                  {{/each-in}}
-                </ul>
-              {{else}}
-                <p>No teams found for {{buKey}}.</p>
-              {{/if}}
-            </li>
-          {{/each-in}}
-        </ul>
-        </p>
+            <ul class="directory-list">
+              {{#each-in this.products as |buKey buValue|}}
+                {{!-- Use the 'collapsible-folder' component --}}
+                <CollapsibleFolder
+                 @folderName={{buKey}} 
+                 @teams={{buValue.teams}} 
+                 />
+              {{/each-in}}
+            </ul>
+           </p>
         </M.Body>
         <M.Footer as |F|>
       <Hds::ButtonSet>
         <Hds::Button type="button" @text="Cancel" @color="critical"
-          {{on "click"  (fn this.toggleModal)}}
+          {{on "click" (fn this.toggleModal)}}
         />
       </Hds::ButtonSet>
     </M.Footer>
       </Hds::Modal>
-    {{/if}}
+  {{/if}}

@@ -76,6 +76,19 @@ $background-color_2: #fff;
   }
 }
 
+/* CSS Styles for reducing logo size and centering it */
+.logo-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo-img {
+  max-width: 50px; /* Adjust the maximum width as needed */
+  height: auto; /* Allow the image to scale proportionally */
+  padding: 0px; /* Add padding to make it slightly bigger */
+  border-radius: 10px; /* Add some border-radius for a rounded look (optional) */
+}
 
 /* For Directory View dialogue in navbar*/ 
 
@@ -83,7 +96,7 @@ $background-color_2: #fff;
 $color_1: #aaa;
 $color_2: #888;
 $color_3: #000;
-$color_4: #777;
+$color_4: #0091f9;
 $font-family_1: "times new roman", serif;
 $border-color_1: #eee;
 
@@ -93,16 +106,6 @@ $border-color_1: #eee;
 -------------------------------------------------------------- */
 /* The icons
 -------------------------------------------------------------- */
-h2 {
-	color: $color_1;
-	font-size: 30px;
-	line-height: 40px;
-	font-style: italic;
-	font-weight: 200;
-	margin: 40px;
-	text-align: center;
-	text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.7);
-}
 .directory-list {
 	ul {
 		margin-left: 10px;
@@ -161,7 +164,7 @@ h2 {
 		padding: 40px;
 	}
 }
- // End for directory view dialogue
+/* End for directory view dialogue */
 
 
 .user-card {
