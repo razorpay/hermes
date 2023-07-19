@@ -304,29 +304,7 @@
                     <p>{{@document.lastModified}}</p>
                 </div>
 
-                {{#each-in this.customEditableFields as |field attributes|}}
-                    {{#if
-                            (or
-                                    (and (not this.editingIsDisabled) (not this.docIsApproved))
-                                    attributes.value
-                            )
-                    }}
-                        <div class="flex flex-col items-start space-y-2">
-                            <small class="hds-typography-body-100 hds-foreground-faint">
-                                {{attributes.displayName}}
-                            </small>
-                            <CustomEditableField
-                                    @document={{@document}}
-                                    @field={{field}}
-                                    @attributes={{attributes}}
-                                    @onChange={{perform this.save field}}
-                                    @updateFieldValue={{this.updateCustomFieldValue}}
-                                    @loading={{this.save.isRunning}}
-                                    @disabled={{or this.editingIsDisabled (not this.isOwner)}}
-                            />
-                        </div>
-                    {{/if}}
-                {{/each-in}}
+                
             </div>
         </div>
 
@@ -401,29 +379,49 @@
                         {{#if this.isOwner}}
                             <div class="flex items-start px-3 gap-2">
 
-                                <Hds::Button
+                                {{#if (eq this.moveToStatusButtonText "Move to Approved")}}
+                                    <Hds::Button
+                                        @text={{this.moveToStatusButtonText}}
+                                        @size="medium"
+                                        @color={{this.moveToStatusButtonColor}}
+                                        class="w-full"
+                                        @icon={{if this.changeDocumentStatus.isRunning "loading"}}
+                                        disabled={{true}}
+                                        {{on
+                                                "click"
+                                                (perform
+                                                        this.changeDocumentStatus
+                                                        this.moveToStatusButtonTargetStatus
+                                                )
+                                        }}
+                                    {{!-- {{on "click" (perform this.approve @profile.email)}} --}}
+                                    />
+                                {{else}}
+                                    <Hds::Button
                                         @text={{this.moveToStatusButtonText}}
                                         @size="medium"
                                         @color={{this.moveToStatusButtonColor}}
                                         class="w-full"
                                         @icon={{if this.changeDocumentStatus.isRunning "loading"}}
                                         disabled={{this.changeDocumentStatus.isRunning}}
-                                    {{on
-                                            "click"
-                                            (perform
-                                                    this.changeDocumentStatus
-                                                    this.moveToStatusButtonTargetStatus
-                                            )
-                                    }}
-                                />
+                                        {{on
+                                                "click"
+                                                (perform
+                                                        this.changeDocumentStatus
+                                                        this.moveToStatusButtonTargetStatus
+                                                )
+                                        }}
+                                    />
+                                {{/if}}
+                                
                                 <Hds::Button
-                                        @text="Archive"
-                                        @size="medium"
-                                        @color="critical"
-                                        @icon="archive"
-                                        @isIconOnly={{true}}
-                                        class="basis-0"
-                                        disabled={{(eq @document.status "Obsolete")}}
+                                    @text="Archive"
+                                    @size="medium"
+                                    @color="critical"
+                                    @icon="archive"
+                                    @isIconOnly={{true}}
+                                    class="basis-0"
+                                    disabled={{(eq @document.status "Obsolete")}}
                                     {{on "click" (fn (set this "archiveModalIsActive" true))}}
                                 />
                             </div>

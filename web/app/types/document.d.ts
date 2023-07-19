@@ -19,9 +19,9 @@ export interface HermesDocument {
   owners?: string[];
   appCreated?: boolean;
   contributors?: HermesUser[];
-  approvers?: HermesUser[];
+  approvers: HermesUser[];
   changesRequestedBy?: string[];
-  approvedBy?: string[];
+  approvedBy: string[];
   summary?: string;
   isDraft?: boolean;
   customEditableFields?: CustomEditableFields;

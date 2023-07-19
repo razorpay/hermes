@@ -67,6 +67,7 @@ export default class DocumentSidebarComponent extends Component<DocumentSidebarC
   @tracked userHasScrolled = false;
   @tracked _body: HTMLElement | null = null;
 
+
   get body() {
     assert("_body must exist", this._body);
     return this._body;
@@ -162,7 +163,7 @@ export default class DocumentSidebarComponent extends Component<DocumentSidebarC
 
   // hasApproved returns true if the logged in user has approved the document.
   get hasApproved() {
-    return this.args.document.approvedBy?.includes(this.args.profile.email);
+    return this.args.document.approvedBy.includes(this.args.profile.email);
   }
 
   // hasRequestedChanges returns true if the logged in user has requested
@@ -254,6 +255,27 @@ export default class DocumentSidebarComponent extends Component<DocumentSidebarC
     // productAbbreviation is computed by the back end
   });
 
+  areArraysEqual(approvedApprovers: string[], allApprovers: string[]): boolean {
+
+    for (let i = 0; i < allApprovers.length; i++) {
+      let check=false;
+      for (let j = 0; j < approvedApprovers.length; j++) {
+        if(allApprovers[i]==approvedApprovers[j])
+        {
+          check=true;
+          break;
+        }
+      }
+      if (check==false) {
+        return false;
+      }
+      
+    }
+
+    return true;
+  }
+
+
   save = task(async (field: string, val: string | HermesUser[]) => {
     if (field && val) {
       let serializedValue;
@@ -275,6 +297,170 @@ export default class DocumentSidebarComponent extends Component<DocumentSidebarC
         this.showFlashError(err as Error, "Unable to save document");
       }
     }
+
+    //*************************************************************************/
+    var approvedApprovers = this.args.document.approvedBy
+    var allApprovers: string[] = this.approvers.map(obj => obj.email);
+
+    console.log("approvedApprovers : ", approvedApprovers);
+    console.log("allApprovers : ", allApprovers);
+
+    // if all elements of allApprovers presents in approvedApprovers
+    // and if document 
+    // not in approved
+    // move it to approved
+    if (this.areArraysEqual(approvedApprovers, allApprovers)) {
+      if (this.args.document.status != "Approved") {
+        console.log("moving to approved");
+        try {
+          await this.patchDocument.perform({
+            status: "Approved",
+          });
+          this.showFlashSuccess("Done!", `Document status changed to Approved`);
+        } catch (error: unknown) {
+          this.maybeShowFlashError(
+            error as Error,
+            "Unable to change document status"
+          );
+          throw error;
+        }
+        this.refreshRoute();
+      }
+    }
+
+    // if all elements of allApprovers not presents in approvedApprovers
+    // and if document 
+    // not in in review
+    // move it to in review
+    else {
+      if (this.args.document.status != "In-Review") {
+        console.log("moving to in review");
+        try {
+          await this.patchDocument.perform({
+            status: "In-Review",
+          });
+          this.showFlashSuccess("Done!", `Document status changed to In-Review`);
+        } catch (error: unknown) {
+          this.maybeShowFlashError(
+            error as Error,
+            "Unable to change document status"
+          );
+          throw error;
+        }
+        this.refreshRoute();
+      }
+
+    }
+
+
+  });
+
+  // this function is called when we observe that approvers and approved list are same
+  // moveToApproved = task(async () => {
+  //   console.log("moving to approved");
+  //   try {
+  //     await this.patchDocument.perform({
+  //       status: "Approved",
+  //     });
+  //     this.showFlashSuccess("Done!", "Document status changed to Approved");
+  //   } catch (error: unknown) {
+  //     this.maybeShowFlashError(
+  //       error as Error,
+  //       "Unable to change document status"
+  //     );
+  //     throw error;
+  //   }
+  //   this.refreshRoute();
+  // });
+
+  // moveToApproved = task(async (status) => {
+  //   try {
+  //     await this.patchDocument.perform({
+  //       status: status,
+  //     });
+  //     this.showFlashSuccess("Done!", `Document status changed to "${status}"`);
+  //   } catch (error: unknown) {
+  //     this.maybeShowFlashError(
+  //       error as Error,
+  //       "Unable to change document status"
+  //     );
+  //     throw error;
+  //   }
+  //   this.refreshRoute();
+  // });
+
+  addUserToApprovedArray(array: string[], newString: string): string[] {
+    return array.includes(newString) ? array : [...array, newString];
+  }
+
+  approve = task(async () => {
+    try {
+      await this.fetchSvc.fetch(`/api/v1/approvals/${this.docID}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+      });
+      this.showFlashSuccess("Done!", "Document approved");
+    } catch (error: unknown) {
+      this.maybeShowFlashError(error as Error, "Unable to approve");
+      throw error;
+    }
+    var approvedApprovers: string[] = this.args.document.approvedBy;
+    var allApprovers: string[] = this.approvers.map(obj => obj.email);
+
+    approvedApprovers=this.addUserToApprovedArray(approvedApprovers,this.args.profile.email);
+
+    console.log("approvedApprovers : ", approvedApprovers);
+    console.log("allApprovers : ", allApprovers);
+
+    // if all elements of allApprovers presents in approvedApprovers
+    // and if document 
+    // not in approved
+    // move it to approved
+    if (this.areArraysEqual(approvedApprovers, allApprovers)) {
+      if (this.args.document.status != "Approved") {
+        console.log("moving to approved");
+        try {
+          await this.patchDocument.perform({
+            status: "Approved",
+          });
+          this.showFlashSuccess("Done!", `Document status changed to Approved`);
+        } catch (error: unknown) {
+          this.maybeShowFlashError(
+            error as Error,
+            "Unable to change document status"
+          );
+          throw error;
+        }
+        this.refreshRoute();
+      }
+    }
+
+    // if all elements of allApprovers not presents in approvedApprovers
+    // and if document 
+    // not in in review
+    // move it to in review
+    else {
+      if (this.args.document.status != "In-Review") {
+        console.log("moving to in review");
+        try {
+          await this.patchDocument.perform({
+            status: "In-Review",
+          });
+          this.showFlashSuccess("Done!", `Document status changed to In-Review`);
+        } catch (error: unknown) {
+          this.maybeShowFlashError(
+            error as Error,
+            "Unable to change document status"
+          );
+          throw error;
+        }
+        this.refreshRoute();
+      }
+
+    }
+    
+
+    this.refreshRoute();
   });
 
   patchDocument = task(async (fields) => {
@@ -373,20 +559,7 @@ export default class DocumentSidebarComponent extends Component<DocumentSidebarC
     this._body = element;
   }
 
-  approve = task(async () => {
-    try {
-      await this.fetchSvc.fetch(`/api/v1/approvals/${this.docID}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-      });
-      this.showFlashSuccess("Done!", "Document approved");
-    } catch (error: unknown) {
-      this.maybeShowFlashError(error as Error, "Unable to approve");
-      throw error;
-    }
-
-    this.refreshRoute();
-  });
+  
 
   requestChanges = task(async () => {
     try {
