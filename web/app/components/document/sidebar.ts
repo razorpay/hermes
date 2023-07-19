@@ -67,7 +67,7 @@ export default class DocumentSidebarComponent extends Component<DocumentSidebarC
   @tracked userHasScrolled = false;
   @tracked _body: HTMLElement | null = null;
 
-  @tracked notReviewedYet = true;
+  @tracked notReviewedYet = false;
 
   get body() {
     assert("_body must exist", this._body);
@@ -326,13 +326,13 @@ export default class DocumentSidebarComponent extends Component<DocumentSidebarC
       // not in approved
       // move it to approved
       if (this.areArraysEqual(approvedApprovers, allApprovers)) {
-      if (this.args.document.status != "Approved") {
+        if (this.args.document.status != "Approved") {
           console.log("moving to approved");
           try {
             await this.patchDocument.perform({
-            status: "Approved",
+              status: "Approved",
             });
-          this.showFlashSuccess("Done!", `Document status changed to Approved`);
+            this.showFlashSuccess("Done!", `Document status changed to Approved`);
           } catch (error: unknown) {
             this.maybeShowFlashError(
               error as Error,
@@ -428,8 +428,8 @@ export default class DocumentSidebarComponent extends Component<DocumentSidebarC
 
     approvedApprovers = this.addUserToApprovedArray(approvedApprovers, this.args.profile.email);
 
-    console.log("approvedApprovers approve(): ", approvedApprovers);
-    console.log("allApprovers approve(): ", allApprovers);
+    // console.log("approvedApprovers approve(): ", approvedApprovers);
+    // console.log("allApprovers approve(): ", allApprovers);
 
     // if all elements of allApprovers presents in approvedApprovers
     // and if document 
@@ -479,6 +479,47 @@ export default class DocumentSidebarComponent extends Component<DocumentSidebarC
     }
 
 
+    this.refreshRoute();
+  });
+
+  isReadyToGoToApproved(): boolean {
+    let approvedApprovers: string[] = this.args.document.approvedBy ?? [];
+    var allApprovers: string[] = this.approvers.map(obj => obj.email);
+    console.log("isReadyToGoToApproved");
+    // approvedApprovers = this.addUserToApprovedArray(approvedApprovers, this.args.profile.email);
+    console.log(approvedApprovers);
+    console.log(allApprovers);
+    return this.areArraysEqual(approvedApprovers, allApprovers)
+  }
+
+  moveToApproved = task(async () => {
+    console.log("trying");
+    if (this.isReadyToGoToApproved()) {
+      try {
+
+        await this.patchDocument.perform({
+          status: "Approved",
+        });
+        this.showFlashSuccess("Done!", `Document status changed to Approved`);
+
+      } catch (error: unknown) {
+        this.maybeShowFlashError(
+          error as Error,
+          "Unable to change document status"
+        );
+        throw error;
+      }
+    }
+    else {
+      this.flashMessages.add({
+        title:"Unable To Change Status",
+        message: "There must be atleast one reviewer and all of them must be reviewed to move the doc to Reviewed",
+        type: "critical",
+        timeout: 6000,
+        extendedTimeout: 1000,
+        preventDuplicates: true,
+      });
+    }
     this.refreshRoute();
   });
 

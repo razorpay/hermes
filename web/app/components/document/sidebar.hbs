@@ -393,7 +393,8 @@
                                                         this.moveToStatusButtonTargetStatus
                                                     )
                                         }} --}}
-                                    {{on "click" (perform this.approve @profile.email)}}
+                                        {{on "click" (perform this.moveToApproved)}}
+                                    {{!-- {{on "click" (perform this.approve @profile.email)}} --}}
                                     />
                                 {{else}}
                                     <Hds::Button
