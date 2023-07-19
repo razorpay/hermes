@@ -67,7 +67,7 @@ export default class DocumentSidebarComponent extends Component<DocumentSidebarC
   @tracked userHasScrolled = false;
   @tracked _body: HTMLElement | null = null;
 
-  @tracked notReviewedYet=true;
+  @tracked notReviewedYet = true;
 
   get body() {
     assert("_body must exist", this._body);
@@ -260,31 +260,29 @@ export default class DocumentSidebarComponent extends Component<DocumentSidebarC
 
     //variable to count how many matches are there 
     // in betwwen approvedApprovers and allApprovers array
-    let matchCount=0;
+    let matchCount = 0;
 
 
     // loop through all reviewers 
     for (let i = 0; i < allApprovers.length; i++) {
-      let check=false;
+      let check = false;
 
-    // check if a reviewer has reviewed by traversing approvedApprovers array
+      // check if a reviewer has reviewed by traversing approvedApprovers array
       for (let j = 0; j < approvedApprovers.length; j++) {
-        if(allApprovers[i]==approvedApprovers[j])
-        {
+        if (allApprovers[i] == approvedApprovers[j]) {
           matchCount++;
-          check=true;
+          check = true;
           break;
         }
       }
-      if (check==false) {
+      if (check == false) {
         return false;
       }
-      
+
     }
 
     // if no reviewers are there we cann't move it to reviewed 
-    if(matchCount==0)
-    {
+    if (matchCount == 0) {
       return false;
     }
     return true;
@@ -313,58 +311,62 @@ export default class DocumentSidebarComponent extends Component<DocumentSidebarC
       }
     }
 
-    //*************************************************************************/
-    let approvedApprovers: string[] = this.args.document.approvedBy ?? [];
-    var allApprovers: string[] = this.approvers.map(obj => obj.email);
+    this.refreshRoute();
+    // console.log("save status : ", this.args.document.status);
 
-    console.log("approvedApprovers save(): ", approvedApprovers);
-    console.log("allApprovers save(): ", allApprovers);
+    if (this.args.document.status != "WIP") {
+      let approvedApprovers: string[] = this.args.document.approvedBy ?? [];
+      var allApprovers: string[] = this.approvers.map(obj => obj.email);
 
-    // if all elements of allApprovers presents in approvedApprovers
-    // and if document 
-    // not in approved
-    // move it to approved
-    if (this.areArraysEqual(approvedApprovers, allApprovers)) {
+      console.log("approvedApprovers save(): ", approvedApprovers);
+      console.log("allApprovers save(): ", allApprovers);
+
+      // if all elements of allApprovers presents in approvedApprovers
+      // and if document 
+      // not in approved
+      // move it to approved
+      if (this.areArraysEqual(approvedApprovers, allApprovers)) {
       if (this.args.document.status != "Approved") {
-        console.log("moving to approved");
-        try {
-          await this.patchDocument.perform({
+          console.log("moving to approved");
+          try {
+            await this.patchDocument.perform({
             status: "Approved",
-          });
+            });
           this.showFlashSuccess("Done!", `Document status changed to Approved`);
-        } catch (error: unknown) {
-          this.maybeShowFlashError(
-            error as Error,
-            "Unable to change document status"
-          );
-          throw error;
+          } catch (error: unknown) {
+            this.maybeShowFlashError(
+              error as Error,
+              "Unable to change document status"
+            );
+            throw error;
+          }
+          this.refreshRoute();
         }
-        this.refreshRoute();
-      }
-    }
-
-    // if all elements of allApprovers not presents in approvedApprovers
-    // and if document 
-    // not in in review
-    // move it to in review
-    else {
-      if (this.args.document.status != "In-Review") {
-        console.log("moving to in review");
-        try {
-          await this.patchDocument.perform({
-            status: "In-Review",
-          });
-          this.showFlashSuccess("Done!", `Document status changed to In-Review`);
-        } catch (error: unknown) {
-          this.maybeShowFlashError(
-            error as Error,
-            "Unable to change document status"
-          );
-          throw error;
-        }
-        this.refreshRoute();
       }
 
+      // if all elements of allApprovers not presents in approvedApprovers
+      // and if document 
+      // not in in review
+      // move it to in review
+      else {
+        if (this.args.document.status != "In-Review") {
+          console.log("moving to in review");
+          try {
+            await this.patchDocument.perform({
+              status: "In-Review",
+            });
+            this.showFlashSuccess("Done!", `Document status changed to In-Review`);
+          } catch (error: unknown) {
+            this.maybeShowFlashError(
+              error as Error,
+              "Unable to change document status"
+            );
+            throw error;
+          }
+          this.refreshRoute();
+        }
+
+      }
     }
 
 
@@ -419,10 +421,12 @@ export default class DocumentSidebarComponent extends Component<DocumentSidebarC
       this.maybeShowFlashError(error as Error, "Unable to approve");
       throw error;
     }
+    this.refreshRoute();
+
     let approvedApprovers: string[] = this.args.document.approvedBy ?? [];
     var allApprovers: string[] = this.approvers.map(obj => obj.email);
 
-    approvedApprovers=this.addUserToApprovedArray(approvedApprovers,this.args.profile.email);
+    approvedApprovers = this.addUserToApprovedArray(approvedApprovers, this.args.profile.email);
 
     console.log("approvedApprovers approve(): ", approvedApprovers);
     console.log("allApprovers approve(): ", allApprovers);
@@ -473,7 +477,7 @@ export default class DocumentSidebarComponent extends Component<DocumentSidebarC
       }
 
     }
-    
+
 
     this.refreshRoute();
   });
@@ -574,7 +578,7 @@ export default class DocumentSidebarComponent extends Component<DocumentSidebarC
     this._body = element;
   }
 
-  
+
 
   requestChanges = task(async () => {
     try {
