@@ -381,20 +381,19 @@
 
                                 {{#if (eq this.moveToStatusButtonText "Move to Approved")}}
                                     <Hds::Button
-                                        @text={{this.moveToStatusButtonText}}
+                                        @text="Move to Approved"
                                         @size="medium"
                                         @color={{this.moveToStatusButtonColor}}
                                         class="w-full"
                                         @icon={{if this.changeDocumentStatus.isRunning "loading"}}
-                                        disabled={{true}}
-                                        {{on
-                                                "click"
-                                                (perform
+                                        disabled={{this.notReviewedYet}}
+                                        {{!-- disabled={{true}} --}}
+                                        {{!-- {{on "click" (perform
                                                         this.changeDocumentStatus
                                                         this.moveToStatusButtonTargetStatus
-                                                )
-                                        }}
-                                    {{!-- {{on "click" (perform this.approve @profile.email)}} --}}
+                                                    )
+                                        }} --}}
+                                    {{on "click" (perform this.approve @profile.email)}}
                                     />
                                 {{else}}
                                     <Hds::Button

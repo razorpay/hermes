@@ -67,6 +67,7 @@ export default class DocumentSidebarComponent extends Component<DocumentSidebarC
   @tracked userHasScrolled = false;
   @tracked _body: HTMLElement | null = null;
 
+  @tracked notReviewedYet=true;
 
   get body() {
     assert("_body must exist", this._body);
@@ -257,11 +258,20 @@ export default class DocumentSidebarComponent extends Component<DocumentSidebarC
 
   areArraysEqual(approvedApprovers: string[], allApprovers: string[]): boolean {
 
+    //variable to count how many matches are there 
+    // in betwwen approvedApprovers and allApprovers array
+    let matchCount=0;
+
+
+    // loop through all reviewers 
     for (let i = 0; i < allApprovers.length; i++) {
       let check=false;
+
+    // check if a reviewer has reviewed by traversing approvedApprovers array
       for (let j = 0; j < approvedApprovers.length; j++) {
         if(allApprovers[i]==approvedApprovers[j])
         {
+          matchCount++;
           check=true;
           break;
         }
@@ -272,6 +282,11 @@ export default class DocumentSidebarComponent extends Component<DocumentSidebarC
       
     }
 
+    // if no reviewers are there we cann't move it to reviewed 
+    if(matchCount==0)
+    {
+      return false;
+    }
     return true;
   }
 
@@ -299,11 +314,11 @@ export default class DocumentSidebarComponent extends Component<DocumentSidebarC
     }
 
     //*************************************************************************/
-    var approvedApprovers = this.args.document.approvedBy
+    let approvedApprovers: string[] = this.args.document.approvedBy ?? [];
     var allApprovers: string[] = this.approvers.map(obj => obj.email);
 
-    console.log("approvedApprovers : ", approvedApprovers);
-    console.log("allApprovers : ", allApprovers);
+    console.log("approvedApprovers save(): ", approvedApprovers);
+    console.log("allApprovers save(): ", allApprovers);
 
     // if all elements of allApprovers presents in approvedApprovers
     // and if document 
@@ -404,13 +419,13 @@ export default class DocumentSidebarComponent extends Component<DocumentSidebarC
       this.maybeShowFlashError(error as Error, "Unable to approve");
       throw error;
     }
-    var approvedApprovers: string[] = this.args.document.approvedBy;
+    let approvedApprovers: string[] = this.args.document.approvedBy ?? [];
     var allApprovers: string[] = this.approvers.map(obj => obj.email);
 
     approvedApprovers=this.addUserToApprovedArray(approvedApprovers,this.args.profile.email);
 
-    console.log("approvedApprovers : ", approvedApprovers);
-    console.log("allApprovers : ", allApprovers);
+    console.log("approvedApprovers approve(): ", approvedApprovers);
+    console.log("allApprovers approve(): ", allApprovers);
 
     // if all elements of allApprovers presents in approvedApprovers
     // and if document 
