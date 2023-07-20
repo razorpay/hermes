@@ -105,13 +105,13 @@ func TestDocumentReviewModel(t *testing.T) {
 				User: User{
 					EmailAddress: "b@approver.com",
 				},
-				Status: ApprovedDocumentReviewStatus,
+				Status: ReviewedDocumentReviewStatus,
 			}
 			err := dr.Update(db)
 			require.NoError(err)
 			assert.EqualValues(1, dr.DocumentID)
 			assert.EqualValues(2, dr.UserID)
-			assert.Equal(ApprovedDocumentReviewStatus, dr.Status)
+			assert.Equal(ReviewedDocumentReviewStatus, dr.Status)
 		})
 
 		t.Run("Get the review to verify", func(t *testing.T) {
@@ -128,7 +128,7 @@ func TestDocumentReviewModel(t *testing.T) {
 			require.NoError(err)
 			assert.EqualValues(1, dr.DocumentID)
 			assert.EqualValues(2, dr.UserID)
-			assert.Equal(ApprovedDocumentReviewStatus, dr.Status)
+			assert.Equal(ReviewedDocumentReviewStatus, dr.Status)
 		})
 	})
 
@@ -336,7 +336,7 @@ func TestDocumentReviewModel(t *testing.T) {
 				assert.EqualValues(1, d.ID)
 			})
 
-			t.Run("Update review status to approved", func(t *testing.T) {
+			t.Run("Update review status to reviewed", func(t *testing.T) {
 				assert, require := assert.New(t), require.New(t)
 				dr := DocumentReview{
 					Document: Document{
@@ -345,13 +345,13 @@ func TestDocumentReviewModel(t *testing.T) {
 					User: User{
 						EmailAddress: "b@approver.com",
 					},
-					Status: ApprovedDocumentReviewStatus,
+					Status: ReviewedDocumentReviewStatus,
 				}
 				err := dr.Update(db)
 				require.NoError(err)
 				assert.EqualValues(1, dr.DocumentID)
 				assert.EqualValues(2, dr.UserID)
-				assert.Equal(ApprovedDocumentReviewStatus, dr.Status)
+				assert.Equal(ReviewedDocumentReviewStatus, dr.Status)
 			})
 		})
 }

@@ -18,7 +18,7 @@
     }
   }
 
-  &--approved {
+  &--reviewed {
     .progress-bar {
       @apply bg-color-palette-green-200 opacity-75;
     }

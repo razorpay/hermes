@@ -29,8 +29,8 @@ export default class DashboardRoute extends Route {
     // Create facet filter for recently updated docs depending on the selected
     // "Latest updates" tab.
     let facetFilter = "";
-    if (params.latestUpdates == "approved") {
-      facetFilter = "status:approved";
+    if (params.latestUpdates == "reviewed") {
+      facetFilter = "status:reviewed";
     } else if (params.latestUpdates == "inReview") {
       facetFilter = "status:In-Review";
     }
@@ -41,7 +41,7 @@ export default class DashboardRoute extends Route {
       .perform(this.configSvc.config.algolia_docs_index_name, "", {
         filters:
           `approvers:'${userInfo.email}'` +
-          ` AND NOT approvedBy:'${userInfo.email}'` +
+          ` AND NOT reviewedBy:'${userInfo.email}'` +
           " AND appCreated:true" +
           " AND status:In-Review",
         hitsPerPage: 4,

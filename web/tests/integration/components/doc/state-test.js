@@ -21,11 +21,11 @@ module("Integration | Component | doc/state", function (hooks) {
     assert.dom(".doc-state--in-review").exists();
     assert.dom(".hds-badge--color-highlight").hasText("In review");
 
-    // Approved
-    this.set("state", "Approved");
+    // Reviewed
+    this.set("state", "Reviewed");
 
-    assert.dom(".doc-state--approved").exists();
-    assert.dom(".hds-badge--color-success").hasText("Approved");
+    assert.dom(".doc-state--reviewed").exists();
+    assert.dom(".hds-badge--color-success").hasText("Reviewed");
 
     // Obsolete
     this.set("state", "Obsolete");

@@ -3,8 +3,9 @@ package models
 import (
 	"errors"
 	"fmt"
-	"github.com/google/uuid"
 	"time"
+
+	"github.com/google/uuid"
 
 	validation "github.com/go-ozzo/ozzo-validation/v4"
 	"gorm.io/gorm"
@@ -76,14 +77,14 @@ type Document struct {
 type Documents []Document
 
 // DocumentStatus is the status of the document (e.g., "WIP", "In-Review",
-// "Approved", "Obsolete").
+// "Reviewed", "Obsolete").
 type DocumentStatus int
 
 const (
 	UnspecifiedDocumentStatus DocumentStatus = iota
 	WIPDocumentStatus
 	InReviewDocumentStatus
-	ApprovedDocumentStatus
+	ReviewedDocumentStatus
 	ObsoleteDocumentStatus
 )
 

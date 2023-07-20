@@ -379,9 +379,9 @@
                         {{#if this.isOwner}}
                             <div class="flex items-start px-3 gap-2">
 
-                                {{#if (eq this.moveToStatusButtonText "Move to Approved")}}
+                                {{#if (eq this.moveToStatusButtonText "Move to Reviewed")}}
                                     <Hds::Button
-                                        @text="Move to Approved"
+                                        @text="Move to Reviewed"
                                         @size="medium"
                                         @color={{this.moveToStatusButtonColor}}
                                         class="w-full"
@@ -393,7 +393,7 @@
                                                         this.moveToStatusButtonTargetStatus
                                                     )
                                         }} --}}
-                                        {{on "click" (perform this.moveToApproved)}}
+                                        {{on "click" (perform this.moveToReviewed)}}
                                     {{!-- {{on "click" (perform this.approve @profile.email)}} --}}
                                     />
                                 {{else}}
@@ -438,7 +438,7 @@
                                             disabled={{(or
                                     this.approve.isRunning
                                     this.requestChanges.isRunning
-                                    this.hasApproved
+                                    this.hasReviewed
                                     )}}
                                         {{on "click" (perform this.approve @profile.email)}}
                                     />

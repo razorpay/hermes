@@ -16,7 +16,7 @@ export default class DocStateComponent extends Component<DocStateComponentSignat
     }
     switch (name) {
       case "in-review":
-      case "approved":
+      case "reviewed":
       case "obsolete":
         return name;
       default:
@@ -32,9 +32,9 @@ export default class DocStateComponent extends Component<DocStateComponentSignat
           color: "highlight",
         };
 
-      case "approved":
+      case "reviewed":
         return {
-          label: "Approved",
+          label: "Reviewed",
           color: "success",
         };
 

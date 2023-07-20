@@ -14,7 +14,7 @@ const FACETS = {
   },
   product: { Labs: { count: 9, selected: false } },
   status: {
-    Approved: { count: 3, selected: false },
+    Reviewed: { count: 3, selected: false },
   },
 };
 
@@ -74,7 +74,7 @@ module("Integration | Component | header/toolbar", function (hooks) {
 
   test("it handles status values correctly", async function (assert) {
     const STATUS_NAMES = [
-      "Approved",
+      "Reviewed",
       "In-Review",
       "In Review",
       "Obsolete",
@@ -104,7 +104,7 @@ module("Integration | Component | header/toolbar", function (hooks) {
       findAll(".x-dropdown-list-item-value")?.map((el) =>
         el.textContent?.trim()
       ),
-      ["Approved", "In-Review", "In Review", "Obsolete", "WIP"],
+      ["Reviewed", "In-Review", "In Review", "Obsolete", "WIP"],
       "Unsupported statuses are filtered out"
     );
   });

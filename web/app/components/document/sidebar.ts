@@ -92,20 +92,20 @@ export default class DocumentSidebarComponent extends Component<DocumentSidebarC
   }
 
   get approveButtonText() {
-    if (!this.hasApproved) {
+    if (!this.hasReviewed) {
       return "Approve";
     } else {
-      return "Already approved";
+      return "Already reviewed";
     }
   }
 
   get requestChangesButtonText() {
-    // FRDs are a special case that can be approved or not approved.
+    // FRDs are a special case that can be reviewed or not reviewed.
     if (this.args.document.docType === "FRD") {
       if (!this.hasRequestedChanges) {
-        return "Not approved";
+        return "Not reviewed";
       } else {
-        return "Already not approved";
+        return "Already not reviewed";
       }
     }
 
@@ -139,7 +139,7 @@ export default class DocumentSidebarComponent extends Component<DocumentSidebarC
   get moveToStatusButtonTargetStatus() {
     switch (this.args.document.status) {
       case "In-Review":
-        return "Approved";
+        return "Reviewed";
       default:
         return "In-Review";
     }
@@ -162,9 +162,9 @@ export default class DocumentSidebarComponent extends Component<DocumentSidebarC
     );
   }
 
-  // hasApproved returns true if the logged in user has approved the document.
-  get hasApproved() {
-    return this.args.document.approvedBy.includes(this.args.profile.email);
+  // hasReviewed returns true if the logged in user has reviewed the document.
+  get hasReviewed() {
+    return this.args.document.reviewedBy.includes(this.args.profile.email);
   }
 
   // hasRequestedChanges returns true if the logged in user has requested
@@ -175,8 +175,8 @@ export default class DocumentSidebarComponent extends Component<DocumentSidebarC
     );
   }
 
-  get docIsApproved() {
-    return this.args.document.status.toLowerCase() === "approved";
+  get docIsReviewed() {
+    return this.args.document.status.toLowerCase() === "reviewed";
   }
 
   get docIsInReview() {
@@ -196,8 +196,8 @@ export default class DocumentSidebarComponent extends Component<DocumentSidebarC
     if (!this.args.document.appCreated || this.docIsLocked) {
       // true is the doc wasn't appCreated or is in a locked state
       return true;
-    } else if (this.isDraft || this.docIsInReview || this.docIsApproved) {
-      // true is the doc is a draft/in review/approved and the user is not an owner, contributor, or approver
+    } else if (this.isDraft || this.docIsInReview || this.docIsReviewed) {
+      // true is the doc is a draft/in review/reviewed and the user is not an owner, contributor, or approver
       return !this.userHasEditPrivileges;
     } else {
       // doc is obsolete or some unknown status..
@@ -256,10 +256,10 @@ export default class DocumentSidebarComponent extends Component<DocumentSidebarC
     // productAbbreviation is computed by the back end
   });
 
-  areArraysEqual(approvedApprovers: string[], allApprovers: string[]): boolean {
+  areArraysEqual(reviewedApprovers: string[], allApprovers: string[]): boolean {
 
     //variable to count how many matches are there 
-    // in betwwen approvedApprovers and allApprovers array
+    // in betwwen reviewedApprovers and allApprovers array
     let matchCount = 0;
 
 
@@ -267,9 +267,9 @@ export default class DocumentSidebarComponent extends Component<DocumentSidebarC
     for (let i = 0; i < allApprovers.length; i++) {
       let check = false;
 
-      // check if a reviewer has reviewed by traversing approvedApprovers array
-      for (let j = 0; j < approvedApprovers.length; j++) {
-        if (allApprovers[i] == approvedApprovers[j]) {
+      // check if a reviewer has reviewed by traversing reviewedApprovers array
+      for (let j = 0; j < reviewedApprovers.length; j++) {
+        if (allApprovers[i] == reviewedApprovers[j]) {
           matchCount++;
           check = true;
           break;
@@ -315,24 +315,24 @@ export default class DocumentSidebarComponent extends Component<DocumentSidebarC
     // console.log("save status : ", this.args.document.status);
 
     if (this.args.document.status != "WIP") {
-      let approvedApprovers: string[] = this.args.document.approvedBy ?? [];
+      let reviewedApprovers: string[] = this.args.document.reviewedBy ?? [];
       var allApprovers: string[] = this.approvers.map(obj => obj.email);
 
-      console.log("approvedApprovers save(): ", approvedApprovers);
+      console.log("reviewedApprovers save(): ", reviewedApprovers);
       console.log("allApprovers save(): ", allApprovers);
 
-      // if all elements of allApprovers presents in approvedApprovers
+      // if all elements of allApprovers presents in reviewedApprovers
       // and if document 
-      // not in approved
-      // move it to approved
-      if (this.areArraysEqual(approvedApprovers, allApprovers)) {
-        if (this.args.document.status != "Approved") {
-          console.log("moving to approved");
+      // not in reviewed
+      // move it to reviewed
+      if (this.areArraysEqual(reviewedApprovers, allApprovers)) {
+        if (this.args.document.status != "Reviewed") {
+          console.log("moving to reviewed");
           try {
             await this.patchDocument.perform({
-              status: "Approved",
+              status: "Reviewed",
             });
-            this.showFlashSuccess("Done!", `Document status changed to Approved`);
+            this.showFlashSuccess("Done!", `Document status changed to Reviewed`);
           } catch (error: unknown) {
             this.maybeShowFlashError(
               error as Error,
@@ -344,7 +344,7 @@ export default class DocumentSidebarComponent extends Component<DocumentSidebarC
         }
       }
 
-      // if all elements of allApprovers not presents in approvedApprovers
+      // if all elements of allApprovers not presents in reviewedApprovers
       // and if document 
       // not in in review
       // move it to in review
@@ -372,14 +372,14 @@ export default class DocumentSidebarComponent extends Component<DocumentSidebarC
 
   });
 
-  // this function is called when we observe that approvers and approved list are same
-  // moveToApproved = task(async () => {
-  //   console.log("moving to approved");
+  // this function is called when we observe that approvers and reviewed list are same
+  // moveToReviewed = task(async () => {
+  //   console.log("moving to reviewed");
   //   try {
   //     await this.patchDocument.perform({
-  //       status: "Approved",
+  //       status: "Reviewed",
   //     });
-  //     this.showFlashSuccess("Done!", "Document status changed to Approved");
+  //     this.showFlashSuccess("Done!", "Document status changed to Reviewed");
   //   } catch (error: unknown) {
   //     this.maybeShowFlashError(
   //       error as Error,
@@ -390,7 +390,7 @@ export default class DocumentSidebarComponent extends Component<DocumentSidebarC
   //   this.refreshRoute();
   // });
 
-  // moveToApproved = task(async (status) => {
+  // moveToReviewed = task(async (status) => {
   //   try {
   //     await this.patchDocument.perform({
   //       status: status,
@@ -406,7 +406,7 @@ export default class DocumentSidebarComponent extends Component<DocumentSidebarC
   //   this.refreshRoute();
   // });
 
-  addUserToApprovedArray(array: string[], newString: string): string[] {
+  addUserToReviewedArray(array: string[], newString: string): string[] {
     return array.includes(newString) ? array : [...array, newString];
   }
 
@@ -416,33 +416,33 @@ export default class DocumentSidebarComponent extends Component<DocumentSidebarC
         method: "POST",
         headers: { "Content-Type": "application/json" },
       });
-      this.showFlashSuccess("Done!", "Document approved");
+      this.showFlashSuccess("Done!", "Document reviewed");
     } catch (error: unknown) {
       this.maybeShowFlashError(error as Error, "Unable to approve");
       throw error;
     }
     this.refreshRoute();
 
-    let approvedApprovers: string[] = this.args.document.approvedBy ?? [];
+    let reviewedApprovers: string[] = this.args.document.reviewedBy ?? [];
     var allApprovers: string[] = this.approvers.map(obj => obj.email);
 
-    approvedApprovers = this.addUserToApprovedArray(approvedApprovers, this.args.profile.email);
+    reviewedApprovers = this.addUserToReviewedArray(reviewedApprovers, this.args.profile.email);
 
-    // console.log("approvedApprovers approve(): ", approvedApprovers);
+    // console.log("reviewedApprovers approve(): ", reviewedApprovers);
     // console.log("allApprovers approve(): ", allApprovers);
 
-    // if all elements of allApprovers presents in approvedApprovers
+    // if all elements of allApprovers presents in reviewedApprovers
     // and if document 
-    // not in approved
-    // move it to approved
-    if (this.areArraysEqual(approvedApprovers, allApprovers)) {
-      if (this.args.document.status != "Approved") {
-        console.log("moving to approved");
+    // not in reviewed
+    // move it to reviewed
+    if (this.areArraysEqual(reviewedApprovers, allApprovers)) {
+      if (this.args.document.status != "Reviewed") {
+        console.log("moving to reviewed");
         try {
           await this.patchDocument.perform({
-            status: "Approved",
+            status: "Reviewed",
           });
-          this.showFlashSuccess("Done!", `Document status changed to Approved`);
+          this.showFlashSuccess("Done!", `Document status changed to Reviewed`);
         } catch (error: unknown) {
           this.maybeShowFlashError(
             error as Error,
@@ -454,7 +454,7 @@ export default class DocumentSidebarComponent extends Component<DocumentSidebarC
       }
     }
 
-    // if all elements of allApprovers not presents in approvedApprovers
+    // if all elements of allApprovers not presents in reviewedApprovers
     // and if document 
     // not in in review
     // move it to in review
@@ -482,25 +482,25 @@ export default class DocumentSidebarComponent extends Component<DocumentSidebarC
     this.refreshRoute();
   });
 
-  isReadyToGoToApproved(): boolean {
-    let approvedApprovers: string[] = this.args.document.approvedBy ?? [];
+  isReadyToGoToReviewed(): boolean {
+    let reviewedApprovers: string[] = this.args.document.reviewedBy ?? [];
     var allApprovers: string[] = this.approvers.map(obj => obj.email);
-    console.log("isReadyToGoToApproved");
-    // approvedApprovers = this.addUserToApprovedArray(approvedApprovers, this.args.profile.email);
-    console.log(approvedApprovers);
+    console.log("isReadyToGoToReviewed");
+    // reviewedApprovers = this.addUserToReviewedArray(reviewedApprovers, this.args.profile.email);
+    console.log(reviewedApprovers);
     console.log(allApprovers);
-    return this.areArraysEqual(approvedApprovers, allApprovers)
+    return this.areArraysEqual(reviewedApprovers, allApprovers)
   }
 
-  moveToApproved = task(async () => {
+  moveToReviewed = task(async () => {
     console.log("trying");
-    if (this.isReadyToGoToApproved()) {
+    if (this.isReadyToGoToReviewed()) {
       try {
 
         await this.patchDocument.perform({
-          status: "Approved",
+          status: "Reviewed",
         });
-        this.showFlashSuccess("Done!", `Document status changed to Approved`);
+        this.showFlashSuccess("Done!", `Document status changed to Reviewed`);
 
       } catch (error: unknown) {
         this.maybeShowFlashError(
@@ -629,9 +629,9 @@ export default class DocumentSidebarComponent extends Component<DocumentSidebarC
       });
       // Add a notification for the user
       let msg = "Requested changes for document";
-      // FRDs are a special case that can be approved or not approved.
+      // FRDs are a special case that can be reviewed or not reviewed.
       if (this.args.document.docType === "FRD") {
-        msg = "Document marked as not approved";
+        msg = "Document marked as not reviewed";
       }
       this.showFlashSuccess("Done!", msg);
     } catch (error: unknown) {

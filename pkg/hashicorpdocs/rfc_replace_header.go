@@ -501,7 +501,7 @@ func (doc *RFC) ReplaceHeader(fileID, baseURL string, isDraft bool, s *gw.Servic
 
 	// Status cell.
 	cellReqs, cellLength = createTextCellRequests(
-		"Status", "WIP | In-Review | Approved | Obsolete", int64(pos))
+		"Status", "WIP | In-Review | Reviewed | Obsolete", int64(pos))
 	reqs = append(reqs, cellReqs...)
 	var statusStartIndex, statusEndIndex int
 	switch strings.ToLower(doc.Status) {
@@ -510,7 +510,7 @@ func (doc *RFC) ReplaceHeader(fileID, baseURL string, isDraft bool, s *gw.Servic
 	case "in-review":
 		statusStartIndex = 14
 		statusEndIndex = 23
-	case "approved":
+	case "reviewed":
 		statusStartIndex = 26
 		statusEndIndex = 34
 	case "obsolete":
@@ -629,10 +629,10 @@ func (doc *RFC) ReplaceHeader(fileID, baseURL string, isDraft bool, s *gw.Servic
 	pos += cellLength + 2
 
 	// Approvers cell.
-	// Build approvers slice with a check next to reviewers who have approved.
+	// Build approvers slice with a check next to reviewers who have reviewed.
 	var approvers []string
 	for _, approver := range doc.Approvers {
-		if contains(doc.ApprovedBy, approver) {
+		if contains(doc.ReviewedBy, approver) {
 			approvers = append(approvers, "✅ "+approver)
 		} else if contains(doc.ChangesRequestedBy, approver) {
 			approvers = append(approvers, "❌ "+approver)

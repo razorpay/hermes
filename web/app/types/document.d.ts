@@ -21,7 +21,7 @@ export interface HermesDocument {
   contributors?: HermesUser[];
   approvers: HermesUser[];
   changesRequestedBy?: string[];
-  approvedBy: string[];
+  reviewedBy: string[];
   summary?: string;
   isDraft?: boolean;
   customEditableFields?: CustomEditableFields;
