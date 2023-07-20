@@ -204,7 +204,7 @@ func DraftsHandler(
 				OwnerPhotos:  op,
 				Product:      req.Product,
 				Team:         req.Team,
-				Status:       "WIP",
+				Status:       "Draft",
 				Summary:      req.Summary,
 				Tags:         req.Tags,
 			}
@@ -300,7 +300,7 @@ func DraftsHandler(
 				Team: models.Team{
 					Name: req.Team,
 				},
-				Status:  models.WIPDocumentStatus,
+				Status:  models.DraftDocumentStatus,
 				Summary: req.Summary,
 				Title:   req.Title,
 			}

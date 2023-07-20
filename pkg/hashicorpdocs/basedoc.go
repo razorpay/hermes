@@ -84,7 +84,7 @@ type BaseDoc struct {
 	// Summary is a summary of the document.
 	Summary string `json:"summary,omitempty"`
 
-	// Status is the status of the document (e.g., "WIP", "In-Review", "Reviewed",
+	// Status is the status of the document (e.g., "Draft", "In-Review", "Reviewed",
 	// "Obsolete").
 	Status string `json:"status,omitempty"`
 

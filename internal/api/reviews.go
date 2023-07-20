@@ -775,9 +775,9 @@ func revertReviewCreation(
 			result, fmt.Errorf("error moving doc back to drafts folder: %w", err))
 	}
 
-	// Change back document number to "ABC-???" and status to "WIP".
+	// Change back document number to "ABC-???" and status to "Draft".
 	docObj.SetDocNumber(fmt.Sprintf("%s-???", productAbbreviation))
-	docObj.SetStatus("WIP")
+	docObj.SetStatus("Draft")
 
 	// Replace the doc header.
 	if err := docObj.ReplaceHeader(

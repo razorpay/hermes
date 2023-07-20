@@ -76,13 +76,13 @@ type Document struct {
 // Documents is a slice of documents.
 type Documents []Document
 
-// DocumentStatus is the status of the document (e.g., "WIP", "In-Review",
+// DocumentStatus is the status of the document (e.g., "Draft", "In-Review",
 // "Reviewed", "Obsolete").
 type DocumentStatus int
 
 const (
 	UnspecifiedDocumentStatus DocumentStatus = iota
-	WIPDocumentStatus
+	DraftDocumentStatus
 	InReviewDocumentStatus
 	ReviewedDocumentStatus
 	ObsoleteDocumentStatus

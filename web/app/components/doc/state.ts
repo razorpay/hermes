@@ -20,7 +20,7 @@ export default class DocStateComponent extends Component<DocStateComponentSignat
       case "obsolete":
         return name;
       default:
-        return "wip";
+        return "draft";
     }
   }
 
@@ -43,7 +43,7 @@ export default class DocStateComponent extends Component<DocStateComponentSignat
 
       default:
         return {
-          label: "WIP",
+          label: "Draft",
           color: "neutral",
         };
     }

@@ -314,7 +314,7 @@ export default class DocumentSidebarComponent extends Component<DocumentSidebarC
     this.refreshRoute();
     // console.log("save status : ", this.args.document.status);
 
-    if (this.args.document.status != "WIP") {
+    if (this.args.document.status != "Draft") {
       let reviewedReviewers: string[] = this.args.document.reviewedBy ?? [];
       var allReviewers: string[] = this.reviewers.map(obj => obj.email);
 

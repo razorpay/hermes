@@ -78,7 +78,7 @@ module("Integration | Component | header/toolbar", function (hooks) {
       "In-Review",
       "In Review",
       "Obsolete",
-      "WIP",
+      "Draft",
       "Archived",
       "Draft",
       "Rejected",
@@ -104,7 +104,7 @@ module("Integration | Component | header/toolbar", function (hooks) {
       findAll(".x-dropdown-list-item-value")?.map((el) =>
         el.textContent?.trim()
       ),
-      ["Reviewed", "In-Review", "In Review", "Obsolete", "WIP"],
+      ["Reviewed", "In-Review", "In Review", "Obsolete", "Draft"],
       "Unsupported statuses are filtered out"
     );
   });

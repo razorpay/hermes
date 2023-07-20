@@ -522,7 +522,7 @@ func (doc *COMMONTEMPLATE) oldReplaceHeader(fileID, baseURL string, isDraft bool
 
 	// Status cell.
 	cellReqs, cellLength = createTextCellRequests(
-		"Status", "WIP | In-Review | Reviewed | Obsolete", int64(pos))
+		"Status", "Draft | In-Review | Reviewed | Obsolete", int64(pos))
 	reqs = append(reqs, cellReqs...)
 	var statusStartIndex, statusEndIndex int
 	switch strings.ToLower(doc.Status) {
@@ -537,10 +537,10 @@ func (doc *COMMONTEMPLATE) oldReplaceHeader(fileID, baseURL string, isDraft bool
 	case "obsolete":
 		statusStartIndex = 37
 		statusEndIndex = 45
-	case "wip":
+	case "draft":
 		fallthrough
 	default:
-		// Default to "WIP" for all unknown statuses.
+		// Default to "Draft" for all unknown statuses.
 		statusStartIndex = 8
 		statusEndIndex = 11
 	}

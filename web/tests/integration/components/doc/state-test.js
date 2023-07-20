@@ -32,18 +32,18 @@ module("Integration | Component | doc/state", function (hooks) {
     assert.dom(".doc-state--obsolete").exists();
     assert.dom(".hds-badge--color-neutral").hasText("Obsolete");
 
-    // WIP
+    // Draft
     this.set("state", "any text");
-    assert.dom(".doc-state--wip").exists();
-    assert.dom(".hds-badge--color-neutral").hasText("WIP");
+    assert.dom(".doc-state--draft").exists();
+    assert.dom(".hds-badge--color-neutral").hasText("Draft");
 
     this.set("state", undefined);
-    assert.dom(".hds-badge--color-neutral").hasText("WIP");
+    assert.dom(".hds-badge--color-neutral").hasText("Draft");
 
     this.set("state", null);
-    assert.dom(".hds-badge--color-neutral").hasText("WIP");
+    assert.dom(".hds-badge--color-neutral").hasText("Draft");
 
     this.set("state", true);
-    assert.dom(".hds-badge--color-neutral").hasText("WIP");
+    assert.dom(".hds-badge--color-neutral").hasText("Draft");
   });
 });

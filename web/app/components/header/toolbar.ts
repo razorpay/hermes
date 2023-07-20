@@ -108,7 +108,7 @@ export default class ToolbarComponent extends Component<ToolbarComponentSignatur
         status === "In-Review" ||
         status === "In Review" ||
         status === "Obsolete" ||
-        status === "WIP"
+        status === "Draft"
       ) {
         statuses[status] = this.args.facets.status[
           status
