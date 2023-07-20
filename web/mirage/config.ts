@@ -175,7 +175,7 @@ export default function (mirageConfig) {
         return new Response(200, {}, [
           {
             name: "RFC",
-            longName: "Request for Comments",
+            // longName: "Request for Comments",
             description:
               "Create a Request for Comments document to present a proposal to colleagues for their review and feedback.",
             moreInfoLink: {
@@ -210,7 +210,7 @@ export default function (mirageConfig) {
           },
           {
             name: "PRD",
-            longName: "Product Requirements",
+            // longName: "Product Requirements",
             description:
               "Create a Product Requirements Document to summarize a problem statement and outline a phased approach to addressing the problem.",
           },

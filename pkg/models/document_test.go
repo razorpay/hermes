@@ -29,7 +29,7 @@ func TestDocumentModel(t *testing.T) {
 		// Create a document type.
 		dt := DocumentType{
 			Name:     "DT1",
-			LongName: "DocumentType1",
+			// LongName: "DocumentType1",
 			CustomFields: []DocumentTypeCustomField{
 				{
 					Name: "CustomStringField",
@@ -146,7 +146,7 @@ func TestDocumentModel(t *testing.T) {
 			// DocumentType.
 			assert.NotEmpty(d.DocumentType.ID)
 			assert.Equal("DT1", d.DocumentType.Name)
-			assert.Equal("DocumentType1", d.DocumentType.LongName)
+			// assert.Equal("DocumentType1", d.DocumentType.LongName)
 
 			// Imported.
 			assert.Equal(true, d.Imported)
@@ -229,7 +229,7 @@ func TestDocumentModel(t *testing.T) {
 				_, require := assert.New(t), require.New(t)
 				dt := DocumentType{
 					Name:     "DT1",
-					LongName: "DocumentType1",
+					// LongName: "DocumentType1",
 				}
 				err := dt.FirstOrCreate(db)
 				require.NoError(err)
@@ -262,7 +262,7 @@ func TestDocumentModel(t *testing.T) {
 				assert.Equal("fileID1", d.GoogleFileID)
 				assert.NotEmpty(d.DocumentType.ID)
 				assert.Equal("DT1", d.DocumentType.Name)
-				assert.Equal("DocumentType1", d.DocumentType.LongName)
+				// assert.Equal("DocumentType1", d.DocumentType.LongName)
 				assert.NotEmpty(d.Product.ID)
 				assert.Equal("Product1", d.Product.Name)
 				assert.Equal("P1", d.Product.Abbreviation)
@@ -285,7 +285,7 @@ func TestDocumentModel(t *testing.T) {
 				assert.Equal("fileID2", d.GoogleFileID)
 				assert.NotEmpty(d.DocumentType.ID)
 				assert.Equal("DT1", d.DocumentType.Name)
-				assert.Equal("DocumentType1", d.DocumentType.LongName)
+				// assert.Equal("DocumentType1", d.DocumentType.LongName)
 				assert.NotEmpty(d.Product.ID)
 				assert.Equal("Product1", d.Product.Name)
 				assert.Equal("P1", d.Product.Abbreviation)
@@ -302,7 +302,7 @@ func TestDocumentModel(t *testing.T) {
 				assert.Equal("fileID1", d.GoogleFileID)
 				assert.NotEmpty(d.DocumentType.ID)
 				assert.Equal("DT1", d.DocumentType.Name)
-				assert.Equal("DocumentType1", d.DocumentType.LongName)
+				// assert.Equal("DocumentType1", d.DocumentType.LongName)
 				assert.NotEmpty(d.Product.ID)
 				assert.Equal("Product1", d.Product.Name)
 				assert.Equal("P1", d.Product.Abbreviation)
@@ -319,7 +319,7 @@ func TestDocumentModel(t *testing.T) {
 				assert.Equal("fileID2", d.GoogleFileID)
 				assert.NotEmpty(d.DocumentType.ID)
 				assert.Equal("DT1", d.DocumentType.Name)
-				assert.Equal("DocumentType1", d.DocumentType.LongName)
+				// assert.Equal("DocumentType1", d.DocumentType.LongName)
 				assert.NotEmpty(d.Product.ID)
 				assert.Equal("Product1", d.Product.Name)
 				assert.Equal("P1", d.Product.Abbreviation)
@@ -334,7 +334,7 @@ func TestDocumentModel(t *testing.T) {
 			_, require := assert.New(t), require.New(t)
 			dt := DocumentType{
 				Name:     "DT1",
-				LongName: "DocumentType1",
+				// LongName: "DocumentType1",
 			}
 			err := dt.FirstOrCreate(db)
 			require.NoError(err)
@@ -357,7 +357,7 @@ func TestDocumentModel(t *testing.T) {
 					GoogleFileID: "fileID1",
 					DocumentType: DocumentType{
 						Name:     "DT1",
-						LongName: "DocumentType1",
+						// LongName: "DocumentType1",
 					},
 					Product: Product{
 						Name:         "Product1",
@@ -556,7 +556,7 @@ func TestDocumentModel(t *testing.T) {
 			_, require := assert.New(t), require.New(t)
 			dt := DocumentType{
 				Name:     "DT1",
-				LongName: "DocumentType1",
+				// LongName: "DocumentType1",
 			}
 			err := dt.FirstOrCreate(db)
 			require.NoError(err)
@@ -586,7 +586,7 @@ func TestDocumentModel(t *testing.T) {
 				GoogleFileID: "fileID1",
 				DocumentType: DocumentType{
 					Name:     "DT1",
-					LongName: "DocumentType1",
+					// LongName: "DocumentType1",
 				},
 				Product: Product{
 					Name:         "Product1",
@@ -635,7 +635,7 @@ func TestDocumentModel(t *testing.T) {
 			_, require := assert.New(t), require.New(t)
 			dt := DocumentType{
 				Name:     "DT1",
-				LongName: "DocumentType1",
+				// LongName: "DocumentType1",
 			}
 			err := dt.FirstOrCreate(db)
 			require.NoError(err)
@@ -657,7 +657,7 @@ func TestDocumentModel(t *testing.T) {
 				GoogleFileID: "fileID1",
 				DocumentType: DocumentType{
 					Name:     "DT1",
-					LongName: "DocumentType1",
+					// LongName: "DocumentType1",
 				},
 				Product: Product{
 					Name: "Product1",
@@ -722,7 +722,7 @@ func TestDocumentModel(t *testing.T) {
 			_, require := assert.New(t), require.New(t)
 			dt := DocumentType{
 				Name:     "DT1",
-				LongName: "DocumentType1",
+				// LongName: "DocumentType1",
 			}
 			err := dt.FirstOrCreate(db)
 			require.NoError(err)
@@ -747,7 +747,7 @@ func TestDocumentModel(t *testing.T) {
 			_, require := assert.New(t), require.New(t)
 			dt := DocumentType{
 				Name:     "DT2",
-				LongName: "DocumentType2",
+				// LongName: "DocumentType2",
 			}
 			err := dt.FirstOrCreate(db)
 			require.NoError(err)
@@ -850,7 +850,7 @@ func TestGetLatestProductNumber(t *testing.T) {
 
 		dt := DocumentType{
 			Name:     "DT1",
-			LongName: "DocumentType1",
+			// LongName: "DocumentType1",
 		}
 		err := dt.FirstOrCreate(db)
 		require.NoError(err)
@@ -932,7 +932,7 @@ func TestGetLatestProductNumber(t *testing.T) {
 
 		dt := DocumentType{
 			Name:     "DT2",
-			LongName: "DocumentType2",
+			// LongName: "DocumentType2",
 		}
 		err := dt.FirstOrCreate(db)
 		require.NoError(err)

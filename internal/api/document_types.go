@@ -23,7 +23,7 @@ type template struct {
 	Description  string `json:"description,omitempty"`
 	TemplateName string `json:"templateName"`
 	DocId        string `json:"docId"`
-	LongName     string `json:"longName"`
+	// LongName     string `json:"longName"`
 }
 
 // retrieve the doctypes and stores in a object
@@ -76,7 +76,7 @@ func registerDocumentTypes(cfg config.Config, db *gorm.DB) error {
 	for _, d := range objectArray {
 		dt := models.DocumentType{
 			Name:         d.TemplateName,
-			LongName:     d.LongName,
+			// LongName:     d.LongName,
 			Description:  d.Description,
 			Checks:       nil,
 			CustomFields: nil,

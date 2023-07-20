@@ -4,6 +4,6 @@ package hashicorpdocs
 type BaseTemplate struct {
 	TemplateName string `json:"templateName"`
 	Description  string `json:"description"`
-	LongName     string `json:"longName"`
+	// LongName     string `json:"longName"`
 	DocId        string `json:"docId"`
 }

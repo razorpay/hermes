@@ -38,7 +38,7 @@ export interface HermesTemplate {
   readonly objectId: string;
   templateName: string;
   description?: string;
-  longName: string;
+  // longName: string;
   docId: string;
 }
 

@@ -22,7 +22,7 @@ func TestDocumentReviewModel(t *testing.T) {
 			_, require := assert.New(t), require.New(t)
 			dt := DocumentType{
 				Name:     "DT1",
-				LongName: "DocumentType1",
+				// LongName: "DocumentType1",
 			}
 			err := dt.FirstOrCreate(db)
 			require.NoError(err)
@@ -140,7 +140,7 @@ func TestDocumentReviewModel(t *testing.T) {
 			_, require := assert.New(t), require.New(t)
 			dt := DocumentType{
 				Name:     "DT1",
-				LongName: "DocumentType1",
+				// LongName: "DocumentType1",
 			}
 			err := dt.FirstOrCreate(db)
 			require.NoError(err)
@@ -270,7 +270,7 @@ func TestDocumentReviewModel(t *testing.T) {
 				_, require := assert.New(t), require.New(t)
 				dt := DocumentType{
 					Name:     "DT1",
-					LongName: "DocumentType1",
+					// LongName: "DocumentType1",
 				}
 				err := dt.FirstOrCreate(db)
 				require.NoError(err)

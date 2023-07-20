@@ -65,7 +65,7 @@ type DocumentType struct {
 
 	// LongName is the longer name for the document type.
 	// Example: "Request for Comments"
-	LongName string `hcl:"long_name,optional" json:"longName"`
+	// LongName string `hcl:"long_name,optional" json:"longName"`
 
 	// Description is the description of the document type.
 	// Example: "Create a Request for Comments document to present a proposal to
