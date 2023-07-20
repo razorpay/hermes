@@ -256,14 +256,15 @@ export default class DocumentSidebarComponent extends Component<DocumentSidebarC
     // productAbbreviation is computed by the back end
   });
 
-  areArraysEqual(reviewedReviewers: string[], allReviewers: string[]): boolean {
-
-    //variable to count how many matches are there 
+  isAllReviewersReviewed(
+    reviewedReviewers: string[],
+    allReviewers: string[]
+  ): boolean {
+    //variable to count how many matches are there
     // in betwwen reviewedReviewers and allReviewers array
     let matchCount = 0;
 
-
-    // loop through all reviewers 
+    // loop through all reviewers
     for (let i = 0; i < allReviewers.length; i++) {
       let check = false;
 
@@ -278,16 +279,14 @@ export default class DocumentSidebarComponent extends Component<DocumentSidebarC
       if (check == false) {
         return false;
       }
-
     }
 
-    // if no reviewers are there we cann't move it to reviewed 
+    // if no reviewers are there we cann't move it to reviewed
     if (matchCount == 0) {
       return false;
     }
     return true;
   }
-
 
   save = task(async (field: string, val: string | HermesUser[]) => {
     if (field && val) {
@@ -312,27 +311,23 @@ export default class DocumentSidebarComponent extends Component<DocumentSidebarC
     }
 
     this.refreshRoute();
-    // console.log("save status : ", this.args.document.status);
 
     if (this.args.document.status != "Draft") {
-      let reviewedReviewers: string[] = this.args.document.reviewedBy ?? [];
-      var allReviewers: string[] = this.reviewers.map(obj => obj.email);
-
-      console.log("reviewedReviewers save(): ", reviewedReviewers);
-      console.log("allReviewers save(): ", allReviewers);
-
       // if all elements of allReviewers presents in reviewedReviewers
-      // and if document 
+      // and if document
       // not in reviewed
       // move it to reviewed
-      if (this.areArraysEqual(reviewedReviewers, allReviewers)) {
+      if (this.isReadyToGoToReviewed()) {
         if (this.args.document.status != "Reviewed") {
           console.log("moving to reviewed");
           try {
             await this.patchDocument.perform({
               status: "Reviewed",
             });
-            this.showFlashSuccess("Done!", `Document status changed to Reviewed`);
+            this.showFlashSuccess(
+              "Done!",
+              `Document status changed to Reviewed`
+            );
           } catch (error: unknown) {
             this.maybeShowFlashError(
               error as Error,
@@ -345,7 +340,7 @@ export default class DocumentSidebarComponent extends Component<DocumentSidebarC
       }
 
       // if all elements of allReviewers not presents in reviewedReviewers
-      // and if document 
+      // and if document
       // not in in review
       // move it to in review
       else {
@@ -355,7 +350,10 @@ export default class DocumentSidebarComponent extends Component<DocumentSidebarC
             await this.patchDocument.perform({
               status: "In-Review",
             });
-            this.showFlashSuccess("Done!", `Document status changed to In-Review`);
+            this.showFlashSuccess(
+              "Done!",
+              `Document status changed to In-Review`
+            );
           } catch (error: unknown) {
             this.maybeShowFlashError(
               error as Error,
@@ -365,46 +363,9 @@ export default class DocumentSidebarComponent extends Component<DocumentSidebarC
           }
           this.refreshRoute();
         }
-
       }
     }
-
-
   });
-
-  // this function is called when we observe that reviewers and reviewed list are same
-  // moveToReviewed = task(async () => {
-  //   console.log("moving to reviewed");
-  //   try {
-  //     await this.patchDocument.perform({
-  //       status: "Reviewed",
-  //     });
-  //     this.showFlashSuccess("Done!", "Document status changed to Reviewed");
-  //   } catch (error: unknown) {
-  //     this.maybeShowFlashError(
-  //       error as Error,
-  //       "Unable to change document status"
-  //     );
-  //     throw error;
-  //   }
-  //   this.refreshRoute();
-  // });
-
-  // moveToReviewed = task(async (status) => {
-  //   try {
-  //     await this.patchDocument.perform({
-  //       status: status,
-  //     });
-  //     this.showFlashSuccess("Done!", `Document status changed to "${status}"`);
-  //   } catch (error: unknown) {
-  //     this.maybeShowFlashError(
-  //       error as Error,
-  //       "Unable to change document status"
-  //     );
-  //     throw error;
-  //   }
-  //   this.refreshRoute();
-  // });
 
   addUserToReviewedArray(array: string[], newString: string): string[] {
     return array.includes(newString) ? array : [...array, newString];
@@ -424,18 +385,21 @@ export default class DocumentSidebarComponent extends Component<DocumentSidebarC
     this.refreshRoute();
 
     let reviewedReviewers: string[] = this.args.document.reviewedBy ?? [];
-    var allReviewers: string[] = this.reviewers.map(obj => obj.email);
+    var allReviewers: string[] = this.reviewers.map((obj) => obj.email);
 
-    reviewedReviewers = this.addUserToReviewedArray(reviewedReviewers, this.args.profile.email);
+    reviewedReviewers = this.addUserToReviewedArray(
+      reviewedReviewers,
+      this.args.profile.email
+    );
 
     // console.log("reviewedReviewers review(): ", reviewedReviewers);
     // console.log("allReviewers review(): ", allReviewers);
 
     // if all elements of allReviewers presents in reviewedReviewers
-    // and if document 
+    // and if document
     // not in reviewed
     // move it to reviewed
-    if (this.areArraysEqual(reviewedReviewers, allReviewers)) {
+    if (this.isAllReviewersReviewed(reviewedReviewers, allReviewers)) {
       if (this.args.document.status != "Reviewed") {
         console.log("moving to reviewed");
         try {
@@ -455,7 +419,7 @@ export default class DocumentSidebarComponent extends Component<DocumentSidebarC
     }
 
     // if all elements of allReviewers not presents in reviewedReviewers
-    // and if document 
+    // and if document
     // not in in review
     // move it to in review
     else {
@@ -465,7 +429,10 @@ export default class DocumentSidebarComponent extends Component<DocumentSidebarC
           await this.patchDocument.perform({
             status: "In-Review",
           });
-          this.showFlashSuccess("Done!", `Document status changed to In-Review`);
+          this.showFlashSuccess(
+            "Done!",
+            `Document status changed to In-Review`
+          );
         } catch (error: unknown) {
           this.maybeShowFlashError(
             error as Error,
@@ -475,33 +442,25 @@ export default class DocumentSidebarComponent extends Component<DocumentSidebarC
         }
         this.refreshRoute();
       }
-
     }
-
 
     this.refreshRoute();
   });
 
   isReadyToGoToReviewed(): boolean {
     let reviewedReviewers: string[] = this.args.document.reviewedBy ?? [];
-    var allReviewers: string[] = this.reviewers.map(obj => obj.email);
-    console.log("isReadyToGoToReviewed");
-    // reviewedReviewers = this.addUserToReviewedArray(reviewedReviewers, this.args.profile.email);
-    console.log(reviewedReviewers);
-    console.log(allReviewers);
-    return this.areArraysEqual(reviewedReviewers, allReviewers)
+    var allReviewers: string[] = this.reviewers.map((obj) => obj.email);
+
+    return this.isAllReviewersReviewed(reviewedReviewers, allReviewers);
   }
 
   moveToReviewed = task(async () => {
-    console.log("trying");
     if (this.isReadyToGoToReviewed()) {
       try {
-
         await this.patchDocument.perform({
           status: "Reviewed",
         });
         this.showFlashSuccess("Done!", `Document status changed to Reviewed`);
-
       } catch (error: unknown) {
         this.maybeShowFlashError(
           error as Error,
@@ -509,11 +468,11 @@ export default class DocumentSidebarComponent extends Component<DocumentSidebarC
         );
         throw error;
       }
-    }
-    else {
+    } else {
       this.flashMessages.add({
-        title:"Unable To Change Status",
-        message: "There must be atleast one reviewer and all of them must be reviewed to move the doc to Reviewed",
+        title: "Unable To Change Status",
+        message:
+          "There must be atleast one reviewer and all of them must be reviewed to move the doc to Reviewed",
         type: "critical",
         timeout: 6000,
         extendedTimeout: 1000,
@@ -618,8 +577,6 @@ export default class DocumentSidebarComponent extends Component<DocumentSidebarC
   @action registerBody(element: HTMLElement) {
     this._body = element;
   }
-
-
 
   requestChanges = task(async () => {
     try {
