@@ -19,7 +19,7 @@ export interface HermesDocument {
   owners?: string[];
   appCreated?: boolean;
   contributors?: HermesUser[];
-  approvers: HermesUser[];
+  reviewers: HermesUser[];
   changesRequestedBy?: string[];
   reviewedBy: string[];
   summary?: string;

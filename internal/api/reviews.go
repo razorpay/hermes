@@ -519,10 +519,10 @@ func ReviewHandler(
 				}
 
 				// Send emails to reviewers.
-				if len(docObj.GetApprovers()) > 0 {
+				if len(docObj.GetReviewers()) > 0 {
 					// TODO: use an asynchronous method for sending emails because we
 					// can't currently recover gracefully from a failure here.
-					for _, approverEmail := range docObj.GetApprovers() {
+					for _, reviewerEmail := range docObj.GetReviewers() {
 						err := email.SendReviewRequestedEmail(
 							email.ReviewRequestedEmailData{
 								BaseURL:            cfg.BaseURL,
@@ -535,12 +535,12 @@ func ReviewHandler(
 								DocumentTeamAbbrev: docObj.GetTeam(),
 								DocumentOwnerEmail: docObj.GetOwners()[0],
 							},
-							[]string{approverEmail},
+							[]string{reviewerEmail},
 							cfg.Email.FromAddress,
 							s,
 						)
 						if err != nil {
-							l.Error("error sending approver email",
+							l.Error("error sending reviewer email",
 								"error", err,
 								"doc_id", docID,
 								"method", r.Method,
@@ -550,7 +550,7 @@ func ReviewHandler(
 								http.StatusInternalServerError)
 							return
 						}
-						l.Info("doc approver email sent",
+						l.Info("doc reviewer email sent",
 							"doc_id", docID,
 							"method", r.Method,
 							"path", r.URL.Path,
@@ -560,8 +560,8 @@ func ReviewHandler(
 					// Also send the slack message tagginhg all the reviewers in the
 					// dedicated channel
 					// tagging all reviewers emails
-					emails := make([]string, len(docObj.GetApprovers()))
-					for i, c := range docObj.GetApprovers() {
+					emails := make([]string, len(docObj.GetReviewers()))
+					for i, c := range docObj.GetReviewers() {
 						emails[i] = c
 					}
 					err = slackbot.SendSlackMessage_Reviewer(slackbot.ReviewerRequestedSlackData{

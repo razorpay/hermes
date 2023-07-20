@@ -59,12 +59,12 @@ func TestDocumentModel(t *testing.T) {
 		// Create a first document with all fields.
 		d = Document{
 			GoogleFileID: "fileID1",
-			Approvers: []*User{
+			Reviewers: []*User{
 				{
-					EmailAddress: "a@approver.com",
+					EmailAddress: "a@reviewer.com",
 				},
 				{
-					EmailAddress: "b@approver.com",
+					EmailAddress: "b@reviewer.com",
 				},
 			},
 			Contributors: []*User{
@@ -114,12 +114,12 @@ func TestDocumentModel(t *testing.T) {
 			// GoogleFileID.
 			assert.Equal("fileID1", d.GoogleFileID)
 
-			// Approvers.
-			require.Len(d.Approvers, 2)
-			assert.NotEmpty(d.Approvers[0].ID)
-			assert.Equal("a@approver.com", d.Approvers[0].EmailAddress)
-			assert.NotEmpty(d.Approvers[1].ID)
-			assert.Equal("b@approver.com", d.Approvers[1].EmailAddress)
+			// Reviewers.
+			require.Len(d.Reviewers, 2)
+			assert.NotEmpty(d.Reviewers[0].ID)
+			assert.Equal("a@reviewer.com", d.Reviewers[0].EmailAddress)
+			assert.NotEmpty(d.Reviewers[1].ID)
+			assert.Equal("b@reviewer.com", d.Reviewers[1].EmailAddress)
 
 			// Contributors.
 			require.Equal(2, len(d.Contributors))
@@ -575,12 +575,12 @@ func TestDocumentModel(t *testing.T) {
 		t.Run("Create a document by Upsert", func(t *testing.T) {
 			assert, require := assert.New(t), require.New(t)
 			d := Document{
-				Approvers: []*User{
+				Reviewers: []*User{
 					{
-						EmailAddress: "a@approver.com",
+						EmailAddress: "a@reviewer.com",
 					},
 					{
-						EmailAddress: "b@approver.com",
+						EmailAddress: "b@reviewer.com",
 					},
 				},
 				GoogleFileID: "fileID1",
@@ -782,12 +782,12 @@ func TestDocumentModel(t *testing.T) {
 			assert, require := assert.New(t), require.New(t)
 			d := Document{
 				GoogleFileID: "fileID1",
-				Approvers: []*User{
+				Reviewers: []*User{
 					{
-						EmailAddress: "a@approver.com",
+						EmailAddress: "a@reviewer.com",
 					},
 					{
-						EmailAddress: "b@approver.com",
+						EmailAddress: "b@reviewer.com",
 					},
 				},
 				CustomFields: []*DocumentCustomField{

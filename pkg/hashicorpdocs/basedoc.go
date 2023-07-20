@@ -25,9 +25,9 @@ type BaseDoc struct {
 	// the document.
 	ReviewedBy []string `json:"reviewedBy,omitempty"`
 
-	// Approvers is a slice of email address strings for users whose approvals
+	// Reviewers is a slice of email address strings for users whose approvals
 	// are requested for the document.
-	Approvers []string `json:"approvers,omitempty"`
+	Reviewers []string `json:"reviewers,omitempty"`
 
 	// ChangesRequestedBy is a slice of email address strings for users that have
 	// requested changes for the document.
@@ -104,8 +104,8 @@ func (d BaseDoc) GetReviewedBy() []string {
 	return d.ReviewedBy
 }
 
-func (d BaseDoc) GetApprovers() []string {
-	return d.Approvers
+func (d BaseDoc) GetReviewers() []string {
+	return d.Reviewers
 }
 
 func (d BaseDoc) GetChangesRequestedBy() []string {

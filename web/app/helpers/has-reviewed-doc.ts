@@ -3,15 +3,15 @@ import { HermesDocument } from "hermes/types/document";
 
 interface HasReviewedDocHelperSignature {
   Args: {
-    Positional: [document: HermesDocument, approverEmail: string];
+    Positional: [document: HermesDocument, reviewerEmail: string];
   };
   Return: boolean;
 }
 
 const hasReviewedDocHelper = helper<HasReviewedDocHelperSignature>(
-  ([document, approverEmail]: [HermesDocument, string]) => {
+  ([document, reviewerEmail]: [HermesDocument, string]) => {
     if (document.reviewedBy) {
-      return document.reviewedBy.some((email) => email === approverEmail);
+      return document.reviewedBy.some((email) => email === reviewerEmail);
     } else {
       return false;
     }

@@ -177,9 +177,9 @@ func (r *RFC) parseRFCHeader(d *docs.Document) {
 					label := p.Elements[0].TextRun.Content
 
 					switch {
-					case strings.HasPrefix(label, "Approver:") ||
-						strings.HasPrefix(label, "Approvers:"):
-						r.parseRFCApprovers(p)
+					case strings.HasPrefix(label, "Reviewer:") ||
+						strings.HasPrefix(label, "Reviewers:"):
+						r.parseRFCReviewers(p)
 
 					case strings.HasPrefix(label, "Contributor:") ||
 						strings.HasPrefix(label, "Contributors:"):
@@ -211,9 +211,9 @@ func (r *RFC) parseRFCHeader(d *docs.Document) {
 	}
 }
 
-// parseRFCApprovers parses RFC Approvers from a Google Doc paragraph.
-func (r *RFC) parseRFCApprovers(p *docs.Paragraph) {
-	r.Approvers = parseParagraphWithEmails("Approver", p)
+// parseRFCReviewers parses RFC Reviewers from a Google Doc paragraph.
+func (r *RFC) parseRFCReviewers(p *docs.Paragraph) {
+	r.Reviewers = parseParagraphWithEmails("Reviewer", p)
 }
 
 // parseRFCContributors parses the RFC Contributors from a Google Docs paragraph.

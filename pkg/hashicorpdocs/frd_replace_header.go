@@ -28,7 +28,7 @@ import (
 //   |-----------------------------------------------------------------------------------|
 //   | Product: {{product}}                 | Owner: {{owner}}                           |
 //   |-----------------------------------------------------------------------------------|
-//   | Contributors: {{contributors}}       | Approvers: {{approvers}}                   |
+//   | Contributors: {{contributors}}       | Reviewers: {{reviewers}}                   |
 //   |-----------------------------------------------------------------------------------|
 //   | PRFAQ: {{prfaq}}                     | PRD: {{prd}}                               |
 //   |-----------------------------------------------------------------------------------|
@@ -575,20 +575,20 @@ func (doc *FRD) ReplaceHeader(fileID, baseURL string, isDraft bool, s *gw.Servic
 	reqs = append(reqs, cellReqs...)
 	pos += cellLength + 2
 
-	// Approvers cell.
-	// Build approvers slice with a check next to reviewers who have reviewed.
-	var approvers []string
-	for _, approver := range doc.Approvers {
-		if contains(doc.ReviewedBy, approver) {
-			approvers = append(approvers, "✅ "+approver)
-		} else if contains(doc.ChangesRequestedBy, approver) {
-			approvers = append(approvers, "❌ "+approver)
+	// Reviewers cell.
+	// Build reviewers slice with a check next to reviewers who have reviewed.
+	var reviewers []string
+	for _, reviewer := range doc.Reviewers {
+		if contains(doc.ReviewedBy, reviewer) {
+			reviewers = append(reviewers, "✅ "+reviewer)
+		} else if contains(doc.ChangesRequestedBy, reviewer) {
+			reviewers = append(reviewers, "❌ "+reviewer)
 		} else {
-			approvers = append(approvers, approver)
+			reviewers = append(reviewers, reviewer)
 		}
 	}
 	cellReqs, cellLength = createTextCellRequests(
-		"Approvers", strings.Join(approvers[:], ", "), int64(pos))
+		"Reviewers", strings.Join(reviewers[:], ", "), int64(pos))
 	reqs = append(reqs, cellReqs...)
 	pos += cellLength + 3
 

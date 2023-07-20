@@ -25,9 +25,8 @@ import (
 	"gorm.io/gorm"
 )
 
-
 type DraftsRequest struct {
-	Approvers           []string `json:"approvers,omitempty"`
+	Reviewers           []string `json:"reviewers,omitempty"`
 	Contributors        []string `json:"contributors,omitempty"`
 	DocType             string   `json:"docType,omitempty"`
 	Product             string   `json:"product,omitempty"`
@@ -42,7 +41,7 @@ type DraftsRequest struct {
 // DraftsPatchRequest contains a subset of drafts fields that are allowed to
 // be updated with a PATCH request.
 type DraftsPatchRequest struct {
-	Approvers    []string `json:"approvers,omitempty"`
+	Reviewers    []string `json:"reviewers,omitempty"`
 	Contributors []string `json:"contributors,omitempty"`
 	Product      string   `json:"product,omitempty"`
 	Team         string   `json:"team,omitempty"`
@@ -63,8 +62,6 @@ type DraftsPatchRequest struct {
 type DraftsResponse struct {
 	ID string `json:"id"`
 }
-
-
 
 func DraftsHandler(
 	cfg *config.Config,
@@ -107,16 +104,16 @@ func DraftsHandler(
 				return
 			}
 			// Define a variable to hold the retrieved document type array
-			var doctypeArray []template=GetDocTypeArray(*cfg)
+			var doctypeArray []template = GetDocTypeArray(*cfg)
 			// replace switch case with loop
-			check:=true
+			check := true
 			for i := 0; i < len(doctypeArray); i++ {
-				if(doctypeArray[i].TemplateName==req.DocType){					
-					check=false
-					break;
+				if doctypeArray[i].TemplateName == req.DocType {
+					check = false
+					break
 				}
 			}
-			if(check){
+			if check {
 				l.Error("Bad request: docType is required", "doc_type", req.DocType)
 				http.Error(w, "Bad request: invalid docType", http.StatusBadRequest)
 				return
@@ -127,7 +124,6 @@ func DraftsHandler(
 				return
 			}
 
-
 			// Get doc type template new.
 			templateName := getDocTypeTemplate(doctypeArray, req.DocType)
 			if templateName == "" {
@@ -137,7 +133,6 @@ func DraftsHandler(
 					http.StatusBadRequest)
 				return
 			}
-
 
 			// Build title.
 			if req.ProductAbbreviation == "" {
@@ -156,7 +151,6 @@ func DraftsHandler(
 					http.StatusInternalServerError)
 				return
 			}
-
 
 			// Build created date.
 			ct, err := time.Parse(time.RFC3339Nano, f.CreatedTime)
@@ -267,9 +261,9 @@ func DraftsHandler(
 			// }
 
 			// Create document in the database.
-			var approvers []*models.User
-			for _, c := range req.Approvers {
-				approvers = append(approvers, &models.User{
+			var reviewers []*models.User
+			for _, c := range req.Reviewers {
+				reviewers = append(reviewers, &models.User{
 					EmailAddress: c,
 				})
 			}
@@ -290,7 +284,7 @@ func DraftsHandler(
 			// TODO: add custom fields.
 			d := models.Document{
 				GoogleFileID:       f.Id,
-				Approvers:          approvers,
+				Reviewers:          reviewers,
 				Contributors:       contributors,
 				DocumentCreatedAt:  createdTime,
 				DocumentModifiedAt: createdTime,
@@ -1171,7 +1165,6 @@ func getDocTypeTemplate(
 // 	}
 // 	return template
 // }
-
 
 // removeSharing lists permissions for a document and then
 // deletes the permission for the supplied user email

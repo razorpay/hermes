@@ -19,9 +19,9 @@ type Document struct {
 	// GoogleFileID is the Google Drive file ID of the document.
 	GoogleFileID string `gorm:"index;not null;unique"`
 
-	// Approvers is the list of users whose approval is requested for the
+	// Reviewers is the list of users whose approval is requested for the
 	// document.
-	Approvers []*User `gorm:"many2many:document_reviews;"`
+	Reviewers []*User `gorm:"many2many:document_reviews;"`
 
 	// Contributors are users who have contributed to the document.
 	Contributors []*User `gorm:"many2many:document_contributors;"`
@@ -290,15 +290,15 @@ func (d *Document) Upsert(db *gorm.DB) error {
 
 // createAssocations creates required assocations for a document.
 func (d *Document) createAssocations(db *gorm.DB) error {
-	// Find or create approvers.
-	var approvers []*User
-	for _, a := range d.Approvers {
+	// Find or create reviewers.
+	var reviewers []*User
+	for _, a := range d.Reviewers {
 		if err := a.FirstOrCreate(db); err != nil {
-			return fmt.Errorf("error finding or creating approver: %w", err)
+			return fmt.Errorf("error finding or creating reviewer: %w", err)
 		}
-		approvers = append(approvers, a)
+		reviewers = append(reviewers, a)
 	}
-	d.Approvers = approvers
+	d.Reviewers = reviewers
 
 	// Find or create contributors.
 	var contributors []*User
@@ -339,15 +339,15 @@ func (d *Document) createAssocations(db *gorm.DB) error {
 
 // getAssociations gets associations.
 func (d *Document) getAssociations(db *gorm.DB) error {
-	// Get approvers.
-	var approvers []*User
-	for _, a := range d.Approvers {
+	// Get reviewers.
+	var reviewers []*User
+	for _, a := range d.Reviewers {
 		if err := a.Get(db); err != nil {
-			return fmt.Errorf("error getting approver: %w", err)
+			return fmt.Errorf("error getting reviewer: %w", err)
 		}
-		approvers = append(approvers, a)
+		reviewers = append(reviewers, a)
 	}
-	d.Approvers = approvers
+	d.Reviewers = reviewers
 
 	// Get contributors.
 	var contributors []*User
@@ -423,12 +423,12 @@ func (d *Document) getAssociations(db *gorm.DB) error {
 
 // replaceAssocations replaces assocations for a document.
 func (d *Document) replaceAssocations(db *gorm.DB) error {
-	// Replace approvers.
+	// Replace reviewers.
 	if err := db.
 		Session(&gorm.Session{SkipHooks: true}).
 		Model(&d).
-		Association("Approvers").
-		Replace(d.Approvers); err != nil {
+		Association("Reviewers").
+		Replace(d.Reviewers); err != nil {
 		return err
 	}
 

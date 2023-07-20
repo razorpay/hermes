@@ -104,8 +104,8 @@ func ApprovalHandler(
 					http.StatusBadRequest)
 				return
 			}
-			if !contains(docObj.GetApprovers(), userEmail) {
-				http.Error(w, "Not authorized as a document approver",
+			if !contains(docObj.GetReviewers(), userEmail) {
+				http.Error(w, "Not authorized as a document reviewer",
 					http.StatusUnauthorized)
 				return
 			}
@@ -293,9 +293,9 @@ func ApprovalHandler(
 					http.StatusBadRequest)
 				return
 			}
-			if !contains(docObj.GetApprovers(), userEmail) {
+			if !contains(docObj.GetReviewers(), userEmail) {
 				http.Error(w,
-					"Not authorized as a document approver",
+					"Not authorized as a document reviewer",
 					http.StatusUnauthorized)
 				return
 			}
@@ -359,7 +359,7 @@ func ApprovalHandler(
 					"method", r.Method,
 					"path", r.URL.Path,
 				)
-				http.Error(w, "Error approving document",
+				http.Error(w, "Error reviewing document",
 					http.StatusInternalServerError)
 				return
 			}
@@ -371,7 +371,7 @@ func ApprovalHandler(
 					"method", r.Method,
 					"path", r.URL.Path,
 				)
-				http.Error(w, "Error approving document",
+				http.Error(w, "Error reviewing document",
 					http.StatusInternalServerError)
 				return
 			}
@@ -386,7 +386,7 @@ func ApprovalHandler(
 					"method", r.Method,
 					"path", r.URL.Path,
 				)
-				http.Error(w, "Error approving document",
+				http.Error(w, "Error reviewing document",
 					http.StatusInternalServerError)
 				return
 			}

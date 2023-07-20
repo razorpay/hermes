@@ -240,20 +240,20 @@
                     >Reviewers</small>
                     {{#if this.isOwner}}
                         <EditableField
-                                @value={{this.approvers}}
-                                @onChange={{perform this.save "approvers"}}
+                                @value={{this.reviewers}}
+                                @onChange={{perform this.save "reviewers"}}
                                 @loading={{this.save.isRunning}}
                                 @disabled={{this.editingIsDisabled}}
                         >
                             <:default>
-                                {{#if this.approvers.length}}
+                                {{#if this.reviewers.length}}
                                     <ol class="person-list">
-                                        {{#each this.approvers as |approver|}}
+                                        {{#each this.reviewers as |reviewer|}}
                                             <li>
-                                                <Person::Approver
+                                                <Person::Reviewer
                                                         @document={{@document}}
-                                                        @imgURL={{approver.imgURL}}
-                                                        @email={{approver.email}}
+                                                        @imgURL={{reviewer.imgURL}}
+                                                        @email={{reviewer.email}}
                                                 />
                                             </li>
                                         {{/each}}
@@ -265,21 +265,21 @@
                             <:editing as |F|>
                                 <Inputs::PeopleSelect
                                         class="multiselect--narrow"
-                                        @selected={{this.approvers}}
-                                        @onChange={{this.updateApprovers}}
-                                    {{click-outside (fn F.update this.approvers)}}
+                                        @selected={{this.reviewers}}
+                                        @onChange={{this.updateReviewers}}
+                                    {{click-outside (fn F.update this.reviewers)}}
                                 />
                             </:editing>
                         </EditableField>
                     {{else}}
-                        {{#if this.approvers.length}}
+                        {{#if this.reviewers.length}}
                             <ol class="person-list">
-                                {{#each this.approvers as |approver|}}
+                                {{#each this.reviewers as |reviewer|}}
                                     <li>
-                                        <Person::Approver
+                                        <Person::Reviewer
                                                 @document={{@document}}
-                                                @imgURL={{approver.imgURL}}
-                                                @email={{approver.email}}
+                                                @imgURL={{reviewer.imgURL}}
+                                                @email={{reviewer.email}}
                                         />
                                     </li>
                                 {{/each}}
@@ -394,7 +394,7 @@
                                                     )
                                         }} --}}
                                         {{on "click" (perform this.moveToReviewed)}}
-                                    {{!-- {{on "click" (perform this.approve @profile.email)}} --}}
+                                    {{!-- {{on "click" (perform this.review @profile.email)}} --}}
                                     />
                                 {{else}}
                                     <Hds::Button
@@ -427,20 +427,20 @@
                             </div>
 
                         {{else}}
-                            {{#if this.isApprover}}
+                            {{#if this.isReviewer}}
                                 <div class="flex flex-col items-start px-3 gap-2">
                                     <Hds::Button
-                                            @text={{this.approveButtonText}}
+                                            @text={{this.reviewButtonText}}
                                             @size="medium"
                                             @color="primary"
                                             class="w-full"
-                                            @icon={{if this.approve.isRunning "loading"}}
+                                            @icon={{if this.review.isRunning "loading"}}
                                             disabled={{(or
-                                    this.approve.isRunning
+                                    this.review.isRunning
                                     this.requestChanges.isRunning
                                     this.hasReviewed
                                     )}}
-                                        {{on "click" (perform this.approve @profile.email)}}
+                                        {{on "click" (perform this.review @profile.email)}}
                                     />
                                     {{#if (eq @document.docType "FRD")}}
                                         <Hds::Button
@@ -450,7 +450,7 @@
                                                 class="w-full"
                                                 @icon={{if this.requestChanges.isRunning "loading"}}
                                                 disabled={{(or
-                                        this.approve.isRunning
+                                        this.review.isRunning
                                         this.requestChanges.isRunning
                                         this.hasRequestedChanges
                                         )}}
@@ -546,13 +546,13 @@
                         <F.Control>
                             <Inputs::PeopleSelect
                                     @renderInPlace={{true}}
-                                    @selected={{this.approvers}}
-                                    @onChange={{this.updateApprovers}}
+                                    @selected={{this.reviewers}}
+                                    @onChange={{this.updateReviewers}}
                                     @disabled={{M.taskIsRunning}}
                                     class="mb-0"
                             />
                         </F.Control>
-                        <F.Label>Add approvers</F.Label>
+                        <F.Label>Add reviewers</F.Label>
                     </Hds::Form::Field>
                     {{#if @docType.checks.length}}
                     {{! For now, we only support one check }}

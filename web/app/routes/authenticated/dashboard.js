@@ -40,7 +40,7 @@ export default class DashboardRoute extends Route {
     const docsWaitingForReview = this.algolia.searchIndex
       .perform(this.configSvc.config.algolia_docs_index_name, "", {
         filters:
-          `approvers:'${userInfo.email}'` +
+          `reviewers:'${userInfo.email}'` +
           ` AND NOT reviewedBy:'${userInfo.email}'` +
           " AND appCreated:true" +
           " AND status:In-Review",

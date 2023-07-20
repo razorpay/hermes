@@ -19,7 +19,7 @@ type Doc interface {
 
 	// Getters for fields common to all document types.
 	GetReviewedBy() []string
-	GetApprovers() []string
+	GetReviewers() []string
 	GetChangesRequestedBy() []string
 	GetContributors() []string
 	GetCreatedTime() int64
