@@ -411,16 +411,17 @@
               {{#if this.isReviewer}}
                 <div class="flex flex-col items-start px-3 gap-2">
                   <Hds::Button
-                    @text={{this.reviewButtonText}}
+                    {{!-- @text={{this.reviewButtonText}} --}}
+                    @text="Review"
                     @size="medium"
                     @color="primary"
                     class="w-full"
                     @icon={{if this.review.isRunning "loading"}}
-                    disabled={{(or
+                    {{!-- disabled={{(or
                       this.review.isRunning
                       this.requestChanges.isRunning
                       this.hasReviewed
-                    )}}
+                    )}} --}}
                     {{on "click" (perform this.review @profile.email)}}
                   />
                   {{#if (eq @document.docType "FRD")}}
