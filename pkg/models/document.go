@@ -1,7 +1,7 @@
 package models
 
 import (
-	"errors"
+	// "errors"
 	"fmt"
 	"time"
 
@@ -38,7 +38,7 @@ type Document struct {
 	// DocumentNumber is a document number unique to each product/area. It
 	// pairs with the product abbreviation to form a document identifier
 	// (e.g., "TF-123").
-	DocumentNumber int `gorm:"index:latest_product_number"`
+	// DocumentNumber int `gorm:"index:latest_product_number"`
 
 	// DocumentType is the document type.
 	DocumentType   DocumentType
@@ -194,51 +194,51 @@ func (d *Document) Get(db *gorm.DB) error {
 }
 
 // GetLatestProductNumber gets the latest document number for a product.
-func GetLatestProductNumber(db *gorm.DB,
-	documentTypeName, productName string) (int, error) {
-	// Validate required fields.
-	if err := validation.Validate(db, validation.Required); err != nil {
-		return 0, err
-	}
-	if err := validation.Validate(productName, validation.Required); err != nil {
-		return 0, err
-	}
+// func GetLatestProductNumber(db *gorm.DB,
+// 	documentTypeName, productName string) (int, error) {
+// 	// Validate required fields.
+// 	if err := validation.Validate(db, validation.Required); err != nil {
+// 		return 0, err
+// 	}
+// 	if err := validation.Validate(productName, validation.Required); err != nil {
+// 		return 0, err
+// 	}
 
-	// Get document type.
-	dt := DocumentType{
-		Name: documentTypeName,
-	}
-	if err := dt.Get(db); err != nil {
-		return 0, fmt.Errorf("error getting document type: %w", err)
-	}
+// 	// Get document type.
+// 	dt := DocumentType{
+// 		Name: documentTypeName,
+// 	}
+// 	if err := dt.Get(db); err != nil {
+// 		return 0, fmt.Errorf("error getting document type: %w", err)
+// 	}
 
-	// Get product.
-	p := Product{
-		Name: productName,
-	}
-	if err := p.Get(db); err != nil {
-		return 0, fmt.Errorf("error getting product: %w", err)
-	}
+// 	// Get product.
+// 	p := Product{
+// 		Name: productName,
+// 	}
+// 	if err := p.Get(db); err != nil {
+// 		return 0, fmt.Errorf("error getting product: %w", err)
+// 	}
 
-	// Get document with largest document number.
-	var d Document
-	if err := db.
-		Where(Document{
-			DocumentTypeID: dt.ID,
-			ProductID:      p.ID,
-		}).
-		Order("document_number desc").
-		First(&d).
-		Error; err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return 0, nil
-		} else {
-			return 0, err
-		}
-	}
+// 	// Get document with largest document number.
+// 	var d Document
+// 	if err := db.
+// 		Where(Document{
+// 			DocumentTypeID: dt.ID,
+// 			ProductID:      p.ID,
+// 		}).
+// 		Order("document_number desc").
+// 		First(&d).
+// 		Error; err != nil {
+// 		if errors.Is(err, gorm.ErrRecordNotFound) {
+// 			return 0, nil
+// 		} else {
+// 			return 0, err
+// 		}
+// 	}
 
-	return d.DocumentNumber, nil
-}
+// 	return d.DocumentNumber, nil
+// }
 
 // Upsert updates or inserts the receiver document into database db.
 func (d *Document) Upsert(db *gorm.DB) error {

@@ -24,62 +24,47 @@
         {{/if}}
       {{/let}}
 
-            <div class="sidebar-body-container">
-                <div class="flex flex-col items-start space-y-2">
-                    {{#if (is-empty @document.docNumber)}}
-                        <small
-                                class="hds-typography-body-100 hds-foreground-faint"
-                        >{{#unless
-                                (is-empty @document.docType)
-                        }}{{@document.docType}}{{/unless}}
-                        </small>
-                    {{else}}
-                        <small
-                                class="hds-typography-body-100 hds-foreground-faint"
-                        >{{#unless
-                                (is-empty @document.docType)
-                        }}{{@document.docType}}{{/unless}}
-                            &bullet;
-                            <span data-test-sidebar-doc-number>
-                                {{@document.docNumber}}
-                            </span>
-                        </small>
-                    {{/if}}
-                    {{#if this.editingIsDisabled}}
-                        <h1
-                                class="hds-typography-display-300 hds-font-weight-semibold hds-foreground-strong"
-                        >{{this.title}}</h1>
-                    {{else}}
-                        <EditableField
-                                @value={{this.title}}
-                                @onChange={{perform this.save "title"}}
-                                @loading={{this.save.isRunning}}
-                                @disabled={{this.editingIsDisabled}}
-                        >
-                            <:default>
-                                {{#unless (is-empty this.title)}}
-                                    <h1
-                                            class="hds-typography-display-300 hds-font-weight-semibold hds-foreground-strong"
-                                    >{{this.title}}</h1>
-                                {{else}}
-                                    <h1
-                                            class="hds-typography-display-300 hds-font-weight-semibold hds-foreground-faint"
-                                    >Enter a title here.</h1>
-                                {{/unless}}
-                            </:default>
-                            <:editing as |F|>
-                                <Hds::Form::Textarea::Field
-                                    {{auto-height-textarea}}
-                                        @value={{F.value}}
-                                        class="primary-textarea"
-                                        name="title"
-                                    {{on "blur" F.update}}
-                                        as |F|
-                                />
-                            </:editing>
-                        </EditableField>
-                    {{/if}}
-                </div>
+      <div class="sidebar-body-container">
+        <div class="flex flex-col items-start space-y-2">
+          <small class="hds-typography-body-100 hds-foreground-faint">{{#unless
+              (is-empty @document.docType)
+            }}{{@document.docType}}{{/unless}}
+          </small>
+          {{#if this.editingIsDisabled}}
+            <h1
+              class="hds-typography-display-300 hds-font-weight-semibold hds-foreground-strong"
+            >{{this.title}}</h1>
+          {{else}}
+            <EditableField
+              @value={{this.title}}
+              @onChange={{perform this.save "title"}}
+              @loading={{this.save.isRunning}}
+              @disabled={{this.editingIsDisabled}}
+            >
+              <:default>
+                {{#unless (is-empty this.title)}}
+                  <h1
+                    class="hds-typography-display-300 hds-font-weight-semibold hds-foreground-strong"
+                  >{{this.title}}</h1>
+                {{else}}
+                  <h1
+                    class="hds-typography-display-300 hds-font-weight-semibold hds-foreground-faint"
+                  >Enter a title here.</h1>
+                {{/unless}}
+              </:default>
+              <:editing as |F|>
+                <Hds::Form::Textarea::Field
+                  {{auto-height-textarea}}
+                  @value={{F.value}}
+                  class="primary-textarea"
+                  name="title"
+                  {{on "blur" F.update}}
+                  as |F|
+                />
+              </:editing>
+            </EditableField>
+          {{/if}}
+        </div>
 
         <hr class="border-0 border-b hds-border-faint" />
 
@@ -132,43 +117,47 @@
           <Doc::State @state={{@document.status}} @hideProgress={{true}} />
         </div>
 
-                <div class="flex flex-col items-start space-y-2">
-                    <small
-                            class="hds-typography-body-100 hds-foreground-faint"
-                    >Business Unit (BU)</small>
-                    {{#if this.isDraft}}
-                        <div class="w-full relative">
-                            <Inputs::ProductSelect
-                                    @selected={{this.product}}
-                                    @onChange={{this.updateProduct.perform}}
-                                    @isSaving={{this.save.isRunning}}
-                                    @formatIsBadge={{true}}
-                                    @renderOut={{true}}
-                            />
-                        </div>
+        <div class="flex flex-col items-start space-y-2">
+          <small class="hds-typography-body-100 hds-foreground-faint">Business
+            Unit (BU)</small>
+          {{#if this.isDraft}}
+            <div class="w-full relative">
+              <Inputs::ProductSelect
+                @selected={{this.product}}
+                @onChange={{this.updateProduct.perform}}
+                @isSaving={{this.save.isRunning}}
+                @formatIsBadge={{true}}
+                @renderOut={{true}}
+              />
+            </div>
+          {{else}}
+            <Hds::Badge
+              @text={{@document.product}}
+              @icon={{get-product-id @document.product}}
+            />
+          {{/if}}
+          <small
+            class="hds-typography-body-100 hds-foreground-faint"
+          >Team/Pod</small>
+          {{#if this.isDraft}}
+            <div class="w-full relative">
+              <Inputs::TeamSelect
+                @onChange={{this.updateTeam.perform}}
+                @isSaving={{this.save.isRunning}}
+                @formatIsBadge={{true}}
+                @renderOut={{true}}
+                @selectedBU={{this.product}}
+                @selected={{this.team}}
+              />
+            </div>
+          {{else}}
+            <Hds::Badge
+              @text={{@document.team}}
+              @icon={{get-product-id @document.product}}
+            />
+          {{/if}}
 
-                    {{#if this.product}}
-                <small
-                        class="hds-typography-body-100 hds-foreground-faint"
-                >Team/Pod</small>
-                        <div class="w-full relative">
-                            <Inputs::TeamSelect
-                                    @onChange={{this.updateTeam.perform}}
-                                    @isSaving={{this.save.isRunning}}
-                                    @formatIsBadge={{true}}
-                                    @renderOut={{true}}
-                                    @selectedBU={{this.product}}
-                                    @selected={{this.team}}
-                            />
-                    </div>
-                    {{/if}}
-                    {{else}}
-                        <Hds::Badge
-                                @text={{@document.product}}
-                                @icon={{get-product-id @document.product}}
-                        />
-                    {{/if}}
-                </div>
+        </div>
 
         <div class="flex flex-col items-start space-y-2">
           <small
