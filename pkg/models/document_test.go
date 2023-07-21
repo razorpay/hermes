@@ -49,8 +49,7 @@ func TestDocumentModel(t *testing.T) {
 
 		// Create a product.
 		p := Product{
-			Name:         "Product1",
-			Abbreviation: "P1",
+			Name: "Product1",
 		}
 		err = p.FirstOrCreate(db)
 		require.NoError(err)
@@ -156,7 +155,6 @@ func TestDocumentModel(t *testing.T) {
 			// Product.
 			assert.NotEmpty(d.Product.ID)
 			assert.Equal("Product1", d.Product.Name)
-			assert.Equal("P1", d.Product.Abbreviation)
 
 			// Status.
 			assert.Equal(InReviewDocumentStatus, d.Status)
@@ -235,8 +233,7 @@ func TestDocumentModel(t *testing.T) {
 			t.Run("Create a product", func(t *testing.T) {
 				_, require := assert.New(t), require.New(t)
 				p := Product{
-					Name:         "Product1",
-					Abbreviation: "P1",
+					Name: "Product1",
 				}
 				err := p.FirstOrCreate(db)
 				require.NoError(err)
@@ -261,7 +258,6 @@ func TestDocumentModel(t *testing.T) {
 				assert.Equal("DT1", d.DocumentType.Name)
 				assert.NotEmpty(d.Product.ID)
 				assert.Equal("Product1", d.Product.Name)
-				assert.Equal("P1", d.Product.Abbreviation)
 			})
 
 			t.Run("Create a second document by upserting", func(t *testing.T) {
@@ -283,7 +279,6 @@ func TestDocumentModel(t *testing.T) {
 				assert.Equal("DT1", d.DocumentType.Name)
 				assert.NotEmpty(d.Product.ID)
 				assert.Equal("Product1", d.Product.Name)
-				assert.Equal("P1", d.Product.Abbreviation)
 			})
 
 			t.Run("Verify first document with a Get", func(t *testing.T) {
@@ -299,7 +294,6 @@ func TestDocumentModel(t *testing.T) {
 				assert.Equal("DT1", d.DocumentType.Name)
 				assert.NotEmpty(d.Product.ID)
 				assert.Equal("Product1", d.Product.Name)
-				assert.Equal("P1", d.Product.Abbreviation)
 			})
 
 			t.Run("Verify second document with a Get", func(t *testing.T) {
@@ -315,7 +309,6 @@ func TestDocumentModel(t *testing.T) {
 				assert.Equal("DT1", d.DocumentType.Name)
 				assert.NotEmpty(d.Product.ID)
 				assert.Equal("Product1", d.Product.Name)
-				assert.Equal("P1", d.Product.Abbreviation)
 			})
 		})
 
@@ -335,8 +328,7 @@ func TestDocumentModel(t *testing.T) {
 		t.Run("Create a product", func(t *testing.T) {
 			_, require := assert.New(t), require.New(t)
 			p := Product{
-				Name:         "Product1",
-				Abbreviation: "P1",
+				Name: "Product1",
 			}
 			err := p.FirstOrCreate(db)
 			require.NoError(err)
@@ -351,8 +343,7 @@ func TestDocumentModel(t *testing.T) {
 						Name:     "DT1",
 					},
 					Product: Product{
-						Name:         "Product1",
-						Abbreviation: "P1",
+						Name: "Product1",
 					},
 				}
 				err := d.Upsert(db)
@@ -553,8 +544,7 @@ func TestDocumentModel(t *testing.T) {
 		t.Run("Create a product", func(t *testing.T) {
 			_, require := assert.New(t), require.New(t)
 			p := Product{
-				Name:         "Product1",
-				Abbreviation: "P1",
+				Name: "Product1",
 			}
 			err := p.FirstOrCreate(db)
 			require.NoError(err)
@@ -576,8 +566,7 @@ func TestDocumentModel(t *testing.T) {
 					Name:     "DT1",
 				},
 				Product: Product{
-					Name:         "Product1",
-					Abbreviation: "P1",
+					Name: "Product1",
 				},
 				Summary: "summary1",
 			}
@@ -630,8 +619,7 @@ func TestDocumentModel(t *testing.T) {
 		t.Run("Create a product", func(t *testing.T) {
 			_, require := assert.New(t), require.New(t)
 			p := Product{
-				Name:         "Product1",
-				Abbreviation: "P1",
+				Name: "Product1",
 			}
 			err := p.FirstOrCreate(db)
 			require.NoError(err)
@@ -653,7 +641,6 @@ func TestDocumentModel(t *testing.T) {
 			assert.EqualValues(1, d.ID)
 			assert.Equal("fileID1", d.GoogleFileID)
 			assert.Equal("Product1", d.Product.Name)
-			assert.Equal("P1", d.Product.Abbreviation)
 			assert.EqualValues(1, d.Product.ID)
 		})
 
@@ -667,15 +654,13 @@ func TestDocumentModel(t *testing.T) {
 			assert.EqualValues(1, d.ID)
 			assert.Equal("fileID1", d.GoogleFileID)
 			assert.Equal("Product1", d.Product.Name)
-			assert.Equal("P1", d.Product.Abbreviation)
 			assert.EqualValues(1, d.Product.ID)
 		})
 
 		t.Run("Create a second product", func(t *testing.T) {
 			_, require := assert.New(t), require.New(t)
 			p := Product{
-				Name:         "Product2",
-				Abbreviation: "P2",
+				Name: "Product2",
 			}
 			err := p.FirstOrCreate(db)
 			require.NoError(err)
@@ -694,7 +679,6 @@ func TestDocumentModel(t *testing.T) {
 			assert.EqualValues(1, d.ID)
 			assert.Equal("fileID1", d.GoogleFileID)
 			assert.Equal("Product2", d.Product.Name)
-			assert.Equal("P2", d.Product.Abbreviation)
 			assert.EqualValues(2, d.Product.ID)
 		})
 	})
@@ -754,8 +738,7 @@ func TestDocumentModel(t *testing.T) {
 		t.Run("Create a product", func(t *testing.T) {
 			_, require := assert.New(t), require.New(t)
 			p := Product{
-				Name:         "Product1",
-				Abbreviation: "P1",
+				Name: "Product1",
 			}
 			err := p.FirstOrCreate(db)
 			require.NoError(err)
@@ -842,8 +825,7 @@ func TestGetLatestProductNumber(t *testing.T) {
 		_, require := assert.New(t), require.New(t)
 
 		p := Product{
-			Name:         "Product1",
-			Abbreviation: "P1",
+			Name: "Product1",
 		}
 		err := p.FirstOrCreate(db)
 		require.NoError(err)

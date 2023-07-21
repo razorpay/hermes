@@ -26,16 +26,14 @@ import (
 )
 
 type DraftsRequest struct {
-	Reviewers           []string `json:"reviewers,omitempty"`
-	Contributors        []string `json:"contributors,omitempty"`
-	DocType             string   `json:"docType,omitempty"`
-	Product             string   `json:"product,omitempty"`
-	ProductAbbreviation string   `json:"productAbbreviation,omitempty"`
-	Team                string   `json:"team,omitempty"`
-	TeamAbbreviation    string   `json:"teamAbbreviation,omitempty"`
-	Summary             string   `json:"summary,omitempty"`
-	Tags                []string `json:"tags,omitempty"`
-	Title               string   `json:"title"`
+	Reviewers    []string `json:"approvers,omitempty"`
+	Contributors []string `json:"contributors,omitempty"`
+	DocType      string   `json:"docType,omitempty"`
+	Product      string   `json:"product,omitempty"`
+	Team         string   `json:"team,omitempty"`
+	Summary      string   `json:"summary,omitempty"`
+	Tags         []string `json:"tags,omitempty"`
+	Title        string   `json:"title"`
 }
 
 // DraftsPatchRequest contains a subset of drafts fields that are allowed to
@@ -135,12 +133,8 @@ func DraftsHandler(
 			}
 
 			// Build title.
-			if req.ProductAbbreviation == "" {
-				req.ProductAbbreviation = "TODO"
-			}
 
-			//title := fmt.Sprintf("[%s-???] %s", req.ProductAbbreviation, req.Title)
-			title := fmt.Sprintf("[%s-%s(%s)] %s", req.ProductAbbreviation, req.TeamAbbreviation, req.DocType, req.Title)
+			title := fmt.Sprintf("%s", req.Title)
 
 			// Copy template to new draft file.
 			f, err := s.CopyFile(templateName, title, cfg.GoogleWorkspace.DraftsFolder)
@@ -197,7 +191,6 @@ func DraftsHandler(
 				Contributors: req.Contributors,
 				Created:      cd,
 				CreatedTime:  ct.Unix(),
-				DocNumber:    fmt.Sprintf("%s-???", req.ProductAbbreviation),
 				DocType:      req.DocType,
 				MetaTags:     metaTags,
 				Owners:       []string{userEmail},
@@ -418,9 +411,9 @@ func DraftsHandler(
 								DocumentOwnerEmail: docObj.GetOwners()[0],
 								DocumentType:       docObj.GetDocType(),
 								DocumentTitle:      docObj.GetTitle(),
-								DocumentURL:        docURL,
-								DocumentProdAbbrev: docObj.GetProduct(),
-								DocumentTeamAbbrev: docObj.GetTeam(),
+								DocumentURL:        fmt.Sprintf("%s?draft=true", docURL),
+								DocumentProd:       docObj.GetProduct(),
+								DocumentTeam:       docObj.GetTeam(),
 							},
 							[]string{c},
 							cfg.Email.FromAddress,
@@ -457,16 +450,16 @@ func DraftsHandler(
 						DocumentOwnerEmail: docObj.GetOwners()[0],
 						DocumentType:       docObj.GetDocType(),
 						DocumentTitle:      docObj.GetTitle(),
-						DocumentURL:        docURL,
-						DocumentProdAbbrev: docObj.GetProduct(),
-						DocumentTeamAbbrev: docObj.GetTeam(),
+						DocumentURL:        fmt.Sprintf("%s?draft=true", docURL),
+						DocumentProd:       docObj.GetProduct(),
+						DocumentTeam:       docObj.GetTeam(),
 					}, emails,
 					)
 					//handle error gracefully
 					if err != nil {
 						fmt.Printf("Some error occured while sendind the message: %s", err)
 					} else {
-						fmt.Println("Succesfully! Delivered the message to all contributors")
+						fmt.Println("Succesfully! Delivered the EMAIL AND SLACK messageS to all contributors")
 					}
 				}
 			}
@@ -843,7 +836,6 @@ func DraftsDocumentHandler(
 			}
 
 			// Validate product if it is in the patch request.
-			var productAbbreviation string
 			if req.Product != "" {
 				p := models.Product{Name: req.Product}
 				if err := p.Get(db); err != nil {
@@ -858,12 +850,8 @@ func DraftsDocumentHandler(
 					return
 				}
 
-				// Set product abbreviation because we use this later to update the
-				// doc number in the Algolia object.
-				productAbbreviation = p.Abbreviation
 			}
 
-			var teamAbbreviation string
 			// Validate product if it is in the patch request.
 			if req.Team != "" {
 				p := models.Team{Name: req.Team}
@@ -878,7 +866,6 @@ func DraftsDocumentHandler(
 						http.StatusBadRequest)
 					return
 				}
-				teamAbbreviation = p.Abbreviation
 			}
 
 			// Check if document is locked.
@@ -1001,9 +988,6 @@ func DraftsDocumentHandler(
 						http.StatusInternalServerError)
 					return
 				}
-
-				// Update doc number in Algolia object.
-				docObj.SetDocNumber(fmt.Sprintf("[%s-%s]-???", productAbbreviation, teamAbbreviation))
 			}
 
 			// Update team (if it is in the patch request).
@@ -1025,8 +1009,6 @@ func DraftsDocumentHandler(
 					return
 				}
 
-				// Update doc number in Algolia object.
-				docObj.SetDocNumber(fmt.Sprintf("%s-???", productAbbreviation))
 			}
 
 			// Save new modified draft doc object in Algolia.
@@ -1060,7 +1042,7 @@ func DraftsDocumentHandler(
 
 			// Rename file with new title.
 			s.RenameFile(docId,
-				fmt.Sprintf("[%s-%s] %s", docObj.GetProduct(), docObj.GetTeam(), req.Title))
+				fmt.Sprintf(req.Title))
 
 			w.WriteHeader(http.StatusOK)
 			l.Info("patched draft document", "doc_id", docId)
