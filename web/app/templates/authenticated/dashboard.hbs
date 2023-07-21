@@ -8,8 +8,10 @@
         <Hds::Badge @text="Admin" @size="large" @type="inverted" @size="small" icon="user" @color="highlight"/>
       {{/if}}
     </h1>
-     <br>
-  <Hds::ButtonSet>
+     
+       {{#if (eq this.authenticatedUser.info.role "Admin")}}
+       <br>
+         <Hds::ButtonSet>
   <Hds::Button
           @text="Add BU"
           @icon="org"
@@ -33,8 +35,8 @@
 
   </Hds::ButtonSet>
   <br>
-
-
+      {{/if}}
+  
     <p>Here’s all the latest updates across the organization.</p>
   </div>
 
