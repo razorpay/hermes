@@ -15,14 +15,12 @@ import cleanString from "hermes/utils/clean-string";
 // custom-template-add
 interface DocFormErrors {
   templateName: string | null;
-  // longName: string | null;
   docId: string|null;
   description: string | null;
 }
 
 const FORM_ERRORS: DocFormErrors = {
   templateName: null,
-  // longName: null,
   docId: null,
   description: null,
 };
@@ -41,7 +39,6 @@ export default class NewDocFormComponent extends Component<NewTemplateFormCompon
   @service declare router: RouterService;
 
   @tracked protected templateName: string = "";
-  // @tracked protected longName: string = "";
   @tracked protected docId: string = "";
   @tracked protected description: string = "";
 
@@ -115,17 +112,6 @@ export default class NewDocFormComponent extends Component<NewTemplateFormCompon
   /**
    * Sets `formRequirementsMet` and conditionally validates the form.
    */
-  // private maybeValidate() {
-  //   this.docId=this.extractDocId(this.docId)
-  //   if (this.templateName && this.longName && this.docId.length==44) {
-  //     this.formRequirementsMet = true;
-  //   } else {
-  //     this.formRequirementsMet = false;
-  //   }
-  //   if (this.validateEagerly) {
-  //     this.validate();
-  //   }
-  // }
 
   private maybeValidate() {
     this.docId=this.extractDocId(this.docId)
@@ -170,7 +156,6 @@ export default class NewDocFormComponent extends Component<NewTemplateFormCompon
     assert("templateName is missing from formObject", "templateName" in formObject);
     assert("docId is missing from formObject", "docId" in formObject);
     this.templateName = formObject["templateName"] as string;
-    // this.longName = formObject["longName"] as string;
     this.docId = formObject["docId"] as string;
     this.description = formObject["description"] as string;
 
@@ -210,7 +195,6 @@ export default class NewDocFormComponent extends Component<NewTemplateFormCompon
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             templateName: cleanString(this.templateName),
-            // longName: cleanString(this.longName),
             docId: cleanString(this.docId),
             description: cleanString(this.description),
           }),
