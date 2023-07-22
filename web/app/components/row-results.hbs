@@ -22,6 +22,7 @@
               <H.Th class="product">Product/Area</H.Th>
               <H.Th class="owner">Owner</H.Th>
               <H.Th class="created">Created</H.Th>
+              <H.Th class="created">Due Date</H.Th>
             </H.Tr>
           </:head>
           <:body>
@@ -37,6 +38,7 @@
                 @status="{{lowercase doc.status}}"
                 @title="{{doc.title}}"
                 @isDraft={{@isDraft}}
+                @dueDate="{{doc.dueDate}}"
               />
             {{/each}}
           </:body>
