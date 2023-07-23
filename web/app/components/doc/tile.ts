@@ -16,6 +16,7 @@ interface DocTileComponentSignature {
     thumbnail?: string;
     title?: string;
     dueDate?:string;
+    showColorBadge:boolean;
   };
 }
 

@@ -278,6 +278,7 @@
               @status="{{lowercase doc.status}}"
               @title="{{doc.title}}"
               @dueDate="{{doc.dueDate}}"
+              @showColorBadge={{true}}
             />
           {{/if}}
         {{/each}}
@@ -308,6 +309,7 @@
             @status={{lowercase r.doc.status}}
             @title={{r.doc.title}}
             @dueDate={{r.doc.dueDate}}
+            @showColorBadge={{false}}
           />
         {{/each}}
       </div>
