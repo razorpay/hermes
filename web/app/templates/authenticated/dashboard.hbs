@@ -9,40 +9,48 @@
       {{/if}}
     </h1>
      
-       {{#if (eq this.authenticatedUser.info.role "Admin")}}
-       <br>
-         <Hds::ButtonSet>
-  <Hds::Button
-          @text="Add BU"
-          @icon="org"
-          @color="secondary"
-          {{on "click"  (fn this.toggleModal1)}}
-  />
+    {{#if (eq this.authenticatedUser.info.role "Admin")}}
+    <br>
+      <Hds::ButtonSet>
+            <Hds::Button
+                    @text="Add BU"
+                    @icon="org"
+                    @color="secondary"
+                    {{on "click"  (fn this.toggleModal1)}}
+            />
 
-  <Hds::Button
-          @text="Team/Pod"
-          @icon="user-plus"
-          @color="secondary"
-          {{on "click"  (fn this.toggleModal2)}}
-  />
+            <Hds::Button
+                    @text="Team/Pod"
+                    @icon="user-plus"
+                    @color="secondary"
+                    {{on "click"  (fn this.toggleModal2)}}
+            />
 
-   <Hds::Button
-          @text="Admin"
-          @icon="identity-user"
-          @color="critical"
-          {{on "click"  (fn this.toggleModal3)}}
-  />
+            <Hds::Button
+                    @text="Admin"
+                    @icon="identity-user"
+                    @color="critical"
+                    {{on "click"  (fn this.toggleModal3)}}
+            />
 
-  <Hds::Button
-          @text="Project"
-          @icon="collections"
-          @color="secondary"
-          {{on "click"  (fn this.toggleModal4)}}
-  />
-
-  </Hds::ButtonSet>
+              <Hds::Button
+                    @text="Add Project"
+                    @icon="collections"
+                    @color="secondary"
+                    {{on "click"  (fn this.toggleModal4)}}
+            />
+      </Hds::ButtonSet>
   <br>
-      {{/if}}
+  {{else}}
+  <Hds::ButtonSet>
+              <Hds::Button
+                    @text="Add Project"
+                    @icon="collections"
+                    @color="secondary"
+                    {{on "click"  (fn this.toggleModal4)}}
+            />
+    </Hds::ButtonSet>
+  {{/if}}
   
     <p>Here’s all the latest updates across the organization.</p>
   </div>

@@ -62,7 +62,7 @@ export default class InputsTeamSelectComponent extends Component<InputsTeamSelec
   @computed('args.selectedBU', 'teams')
   get filteredOptions() {
     if (!this.args.selectedBU) {
-      return this.teams;
+      return {};
     }
 
     // Filter the teams based on the selected business unit
