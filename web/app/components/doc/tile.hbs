@@ -40,16 +40,16 @@
           @color="critical"
           @text="Due Date : {{dateformat @dueDate}}"
         />
-      {{else if this.isDueDateToday}}
+      {{else}}
         <Hds::Badge
           @color="warning"
           @text="Due Date : {{dateformat @dueDate}}"
         />
-      {{else}}
+      {{!-- {{else}}
         <Hds::Badge
           @color="success"
           @text="Due Date : {{dateformat @dueDate}}"
-        />
+        /> --}}
       {{/if}}
     {{else}}
       <Hds::Badge @text="Due Date : {{dateformat @dueDate}}" />

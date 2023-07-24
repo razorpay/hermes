@@ -6,9 +6,9 @@
       @query={{hash draft=@isDraft}}
       class="flex space-x-4 items-start"
     >
-      <Doc::Thumbnail 
-        @status={{@status}} 
-        @product={{@productArea}} 
+      <Doc::Thumbnail
+        @status={{@status}}
+        @product={{@productArea}}
         @docID={{@docID}}
       />
       <div>
@@ -39,9 +39,24 @@
   <Hds::Table::Td class="created">{{@createdDate}}</Hds::Table::Td>
   <Hds::Table::Td class="created">
     {{#if (not (is-empty @dueDate))}}
-    {{dateformat @dueDate}}
+      {{#if @showColorBadge}}
+        {{#if @isReviewed}}
+          <Hds::Badge @color="success" @text="{{dateformat @dueDate}}" />
+        {{else if this.isDueDateOverdue}}
+          <Hds::Badge @color="critical" @text="{{dateformat @dueDate}}" />
+        {{else}}
+          <Hds::Badge @color="warning" @text="{{dateformat @dueDate}}" />
+        {{/if}}
+      {{else}}
+        <Hds::Badge @text="{{dateformat @dueDate}}" />
+      {{/if}}
     {{else}}
-    No Due Date
+      {{#if @isReviewed}}
+        <Hds::Badge @color="success" @text="No Due Date" />
+      {{else}}
+        <Hds::Badge @text="No Due Date" />
+      {{/if}}
+
     {{/if}}
-    </Hds::Table::Td>
+  </Hds::Table::Td>
 </Hds::Table::Tr>
