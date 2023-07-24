@@ -53,6 +53,7 @@ export default class NewDocFormComponent extends Component<NewDocFormComponentSi
   @tracked protected productAbbreviation: string | null = null;
   @tracked protected teamArea: string | null = null;
   @tracked protected teamAbbreviation: string | null = null;
+  @tracked protected projectArea: string| null = null;
   @tracked protected contributors: HermesUser[] = [];
 
   @tracked selectedBU: string | null = null;
@@ -109,7 +110,7 @@ export default class NewDocFormComponent extends Component<NewDocFormComponentSi
    * Sets `formRequirementsMet` and conditionally validates the form.
    */
   private maybeValidate() {
-    if (this.title && this.productArea && this.teamArea) {
+    if (this.title && this.productArea && this.teamArea && this.projectArea)  {
       this.formRequirementsMet = true;
     } else {
       this.formRequirementsMet = false;
@@ -184,16 +185,20 @@ export default class NewDocFormComponent extends Component<NewDocFormComponentSi
   ) {
     this.productArea = productName;
     this.selectedBU = productName;
-    this.productAbbreviation = attributes.abbreviation;
     this.maybeValidate();
   }
 
   @action protected onTeamSelect(
       teamName: string,
-      attributes: TeamArea
   ) {
     this.teamArea = teamName;
-    this.teamAbbreviation = attributes.abbreviation;
+    this.maybeValidate();
+  }
+
+  @action protected onProjectSelect(
+    projectName: string,
+  ) {
+    this.projectArea = projectName;
     this.maybeValidate();
   }
 
@@ -234,6 +239,7 @@ export default class NewDocFormComponent extends Component<NewDocFormComponentSi
             docType: this.args.docType,
             product: this.productArea,
             team: this.teamArea,
+            project: this.projectArea,
             productAbbreviation: this.productAbbreviation,
             teamAbbreviation: this.teamAbbreviation,
             summary: cleanString(this.summary),
