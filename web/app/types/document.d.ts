@@ -21,6 +21,7 @@ export interface HermesDocument {
   appCreated?: boolean;
   contributors?: HermesUser[];
   reviewers: HermesUser[];
+  dueDate: string;
   changesRequestedBy?: string[];
   reviewedBy: string[];
   summary?: string;
