@@ -18,7 +18,6 @@ import {TeamArea} from "hermes/components/inputs/team-select";
 interface DocFormErrors {
   title: string | null;
   summary: string | null;
-  productAbbreviation: string | null;
   tags: string | null;
   contributors: string | null;
 }
@@ -26,7 +25,6 @@ interface DocFormErrors {
 const FORM_ERRORS: DocFormErrors = {
   title: null,
   summary: null,
-  productAbbreviation: null,
   tags: null,
   contributors: null,
 };
@@ -50,9 +48,7 @@ export default class NewDocFormComponent extends Component<NewDocFormComponentSi
   @tracked protected title: string = "";
   @tracked protected summary: string = "";
   @tracked protected productArea: string | null = null;
-  @tracked protected productAbbreviation: string | null = null;
   @tracked protected teamArea: string | null = null;
-  @tracked protected teamAbbreviation: string | null = null;
   @tracked protected projectArea: string| null = null;
   @tracked protected contributors: HermesUser[] = [];
 
@@ -125,12 +121,6 @@ export default class NewDocFormComponent extends Component<NewDocFormComponentSi
    */
   private validate() {
     const errors = { ...FORM_ERRORS };
-    if (this.productAbbreviation) {
-      if (/\d/.test(this.productAbbreviation)) {
-        errors.productAbbreviation =
-          "Product abbreviation can't include a number";
-      }
-    }
     this.formErrors = errors;
   }
 
@@ -240,8 +230,6 @@ export default class NewDocFormComponent extends Component<NewDocFormComponentSi
             product: this.productArea,
             team: this.teamArea,
             project: this.projectArea,
-            productAbbreviation: this.productAbbreviation,
-            teamAbbreviation: this.teamAbbreviation,
             summary: cleanString(this.summary),
             title: cleanString(this.title),
           }),

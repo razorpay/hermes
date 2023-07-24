@@ -62,6 +62,10 @@ type Document struct {
 	Team   Team
 	TeamID uuid.UUID `gorm:"index"` // Foreign key column referencing the teams table
 
+	// Project is the project inside specific team
+	Project   Project
+	ProjectID uuid.UUID `gorm:"index"` // Foreign key column referencing the projects table
+
 	// Status is the status of the document.
 	Status DocumentStatus
 
@@ -334,6 +338,23 @@ func (d *Document) createAssocations(db *gorm.DB) error {
 		d.TeamID = d.Team.ID
 	}
 
+	// Get project if project id is not set.
+	if d.ProjectID == uuid.Nil && d.Project.Name != "" {
+		// Search for the project by its ID in the project table.
+		project := d.Project
+		if err := db.
+			Where(project).
+			Preload(clause.Associations).
+			First(&project).
+			Error; err != nil {
+			return fmt.Errorf("error getting project: %w", err)
+		}
+
+		// Assign the found project to the document's Project field.
+		d.Project = project
+		d.ProjectID = project.ID
+	}
+
 	return nil
 }
 
@@ -411,11 +432,29 @@ func (d *Document) getAssociations(db *gorm.DB) error {
 		d.ProductID = d.Product.ID
 	}
 
+	// get team
 	if d.Team.Name != "" {
 		if err := d.Team.Get(db); err != nil {
 			return fmt.Errorf("error getting product: %w", err)
 		}
 		d.TeamID = d.Team.ID
+	}
+
+	// Get project if project id is not set.
+	if d.Project.Name != "" {
+		// Search for the project by its ID in the project table.
+		project := d.Project
+		if err := db.
+			Where(project).
+			Preload(clause.Associations).
+			First(&project).
+			Error; err != nil {
+			return fmt.Errorf("error getting project: %w", err)
+		}
+
+		// Assign the found project to the document's Project field.
+		d.Project = project
+		d.ProjectID = project.ID
 	}
 
 	return nil

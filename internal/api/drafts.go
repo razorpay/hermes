@@ -31,6 +31,7 @@ type DraftsRequest struct {
 	DocType      string   `json:"docType,omitempty"`
 	Product      string   `json:"product,omitempty"`
 	Team         string   `json:"team,omitempty"`
+	Project      string   `json:"project,omitempty"`
 	Summary      string   `json:"summary,omitempty"`
 	Tags         []string `json:"tags,omitempty"`
 	Title        string   `json:"title"`
@@ -43,6 +44,7 @@ type DraftsPatchRequest struct {
 	Contributors []string `json:"contributors,omitempty"`
 	Product      string   `json:"product,omitempty"`
 	Team         string   `json:"team,omitempty"`
+	Project      string   `json:"project,omitempty"`
 	Summary      string   `json:"summary,omitempty"`
 	// Tags                []string `json:"tags,omitempty"`
 	Title string `json:"title,omitempty"`
@@ -197,6 +199,7 @@ func DraftsHandler(
 				OwnerPhotos:  op,
 				Product:      req.Product,
 				Team:         req.Team,
+				Project:      req.Project,
 				Status:       "Draft",
 				Summary:      req.Summary,
 				Tags:         req.Tags,
@@ -292,6 +295,9 @@ func DraftsHandler(
 				},
 				Team: models.Team{
 					Name: req.Team,
+				},
+				Project: models.Project{
+					Name: req.Project,
 				},
 				Status:  models.DraftDocumentStatus,
 				Summary: req.Summary,
