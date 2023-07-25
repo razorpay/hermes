@@ -343,6 +343,13 @@ func DocumentHandler(
 				})
 			}
 
+			var reviewedBy []*models.User
+			for _, c := range docObj.GetReviewedBy() {
+				reviewedBy = append(reviewedBy, &models.User{
+					EmailAddress: c,
+				})
+			}
+
 			statusMap := map[string]models.DocumentStatus{
 				"Draft":     models.DraftDocumentStatus,
 				"In-Review": models.InReviewDocumentStatus,
@@ -355,6 +362,7 @@ func DocumentHandler(
 				Reviewers:    reviewers,
 				DueDate:      docObj.GetDueDate(),
 				Contributors: contributors,
+				ReviewedBy:   reviewedBy,
 				DocumentType: models.DocumentType{
 					Name: docObj.GetDocType(),
 				},
