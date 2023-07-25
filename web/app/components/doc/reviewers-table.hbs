@@ -1,0 +1,16 @@
+<Hds::Table @isStriped={{false}} class="row-results__table">
+  <:head as |H|>
+    <H.Tr>
+      <H.Th class="name">Reviewers</H.Th>
+      <H.Th class="status">Status</H.Th>
+    </H.Tr>
+  </:head>
+  <:body>
+    {{#each @reviewers as |reviewer index|}}
+      <Doc::ReviewersRow
+        @reviewerMailId="{{reviewer}}"
+        @reviewedBy={{@reviewedBy}}
+      />
+    {{/each}}
+  </:body>
+</Hds::Table>
