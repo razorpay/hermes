@@ -8,7 +8,6 @@ export default class WaitingForMeRoute extends Route {
   @service algolia;
   @service("config") configSvc;
   @service("fetch") fetchSvc;
-  @service("recently-viewed-docs") recentDocs;
   @service session;
   @service authenticatedUser;
 
@@ -98,17 +97,7 @@ export default class WaitingForMeRoute extends Route {
         return result.hits;
       });
 
-    await this.recentDocs.fetchAll.perform();
-    if (this.recentDocs.all === null) {
-      try {
-        await this.recentDocs.fetchAll.perform();
-      } catch {
-        /**
-         * This tells our template to show the error state.
-         */
-        this.recentDocs.all = null;
-      }
-    }
+
     return RSVP.hash({
       docsWaitingForReview: docsWaitingForReview,
       docsReviewed: docsReviewed,
