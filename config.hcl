@@ -1,6 +1,6 @@
 // base_url is the base URL used for building links. This should be the public
 // URL of the application.
-base_url = "http://localhost:8000"
+base_url = "https://doc-vault.dev.razorpay.in"
 
 // algolia configures Hermes to work with Algolia.
 algolia {
@@ -190,7 +190,7 @@ products {
 // server contains the configuration for the server.
 server {
   // addr is the address to bind to for listening.
-  addr = "127.0.0.1:8000"
+  // addr = "127.0.0.1:8000"
   // uncomment this if usign docker compose or deploying
-  // addr = "0.0.0.0:8000"
+  addr = "0.0.0.0:8000"
 }
