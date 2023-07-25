@@ -113,6 +113,7 @@ export default class WaitingForMeRoute extends Route {
     }
 
     docsWaitingForReview._result = docsWaitingForReview._result.sort((a, b) => {
+
       // Use optional chaining to access the 'dueDate' property safely
       const dueDateA = a.dueDate?.toString()||"";
       const dueDateB = b.dueDate?.toString()||"";

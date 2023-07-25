@@ -81,6 +81,7 @@ export default class DashboardRoute extends Route {
     }
 
 
+
     docsWaitingForReview._result = docsWaitingForReview._result.sort((a, b) => {
       // Use optional chaining to access the 'dueDate' property safely
       const dueDateA = a.dueDate?.toString()||"";
@@ -93,6 +94,7 @@ export default class DashboardRoute extends Route {
         // If 'dueDate' exists in 'a' but not in 'b', consider 'a' to come before 'b'
         return -1;
       } else if (dueDateB) {
+
         // If 'dueDate' exists in 'b' but not in 'a', consider 'b' to come before 'a'
         return 1;
       } else {
@@ -100,7 +102,6 @@ export default class DashboardRoute extends Route {
         return 0;
       }
     });
-
 
     return RSVP.hash({
       docsWaitingForReview: docsWaitingForReview,
