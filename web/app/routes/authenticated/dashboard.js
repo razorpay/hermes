@@ -80,7 +80,6 @@ export default class DashboardRoute extends Route {
       }
     }
 
-
     return RSVP.hash({
       docsWaitingForReview: docsWaitingForReview,
     });
