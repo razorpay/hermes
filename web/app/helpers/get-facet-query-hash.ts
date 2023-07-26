@@ -32,7 +32,7 @@ export default class GetFacetQueryHashHelper extends Helper<GetFacetQueryHashHel
       case "Status":
         translatedFacetName = FacetName.Status;
         break;
-      case "Product/Area":
+      case "BU":
         translatedFacetName = FacetName.Product;
         break;
       case "Owner":
