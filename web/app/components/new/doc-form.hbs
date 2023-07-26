@@ -196,6 +196,7 @@
           @status="draft"
           @title={{this.title}}
           @owner={{this.authenticatedUser.info.email}}
+          @hideDueDate={{true}}
         />
         <Hds::Button
           @text="Create {{@docType}} in Google Drive"
