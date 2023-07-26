@@ -34,6 +34,7 @@
     @icon={{or (get-product-id this.this.args.productArea) "folder"}}
   />
 
+{{#if (not @hideDueDate)}}
   {{#if (not (is-empty @dueDate))}}
     {{#if @showColorBadge}}
       {{#if this.isDueDateOverdue}}
@@ -53,7 +54,7 @@
   {{else}}
     <Hds::Badge @text="No Due Date" />
   {{/if}}
-
+{{/if}}
   {{#if (and @isResult @snippet)}}
     <Doc::Snippet @snippet={{@snippet}} class="pt-2" />
   {{/if}}
