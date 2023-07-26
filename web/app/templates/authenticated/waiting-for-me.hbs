@@ -12,30 +12,13 @@
         >Documents waiting for your review</h2>
       </div>
       <div class="y-2 gap-2"></div>
-      {{!-- <div class="tile-list">
-        {{#each this.docsWaitingForReview as |doc index|}}
-          {{#if (lt index 1000)}}
-            <Doc::Tile
-              @avatar="{{get doc.ownerPhotos 0}}"
-              @docID="{{doc.objectID}}"
-              @modifiedAgo="{{doc.modifiedAgo}}"
-              @owner="{{get doc.owners 0}}"
-              @productArea="{{doc.product}}"
-              @status="{{lowercase doc.status}}"
-              @title="{{doc.title}}"
-              @dueDate="{{doc.dueDate}}"
-              @showColorBadge={{true}}
-            />
-          {{/if}}
-        {{/each}}
-      </div> --}}
       <Hds::Table @isStriped={{false}} class="row-results__table">
         <:head as |H|>
           <H.Tr>
             <H.Th class="name">Name</H.Th>
             <H.Th class="type">Type</H.Th>
-            <H.Th class="status">Status</H.Th>
-            <H.Th class="product">Product/Area</H.Th>
+            {{!-- <H.Th class="status">Status</H.Th> --}}
+            <H.Th class="product">BU</H.Th>
             <H.Th class="owner">Owner</H.Th>
             <H.Th class="created">Created</H.Th>
             <H.Th class="created">Due Date</H.Th>
@@ -57,6 +40,7 @@
               @isDraft={{@isDraft}}
               @dueDate="{{doc.dueDate}}"
               @showColorBadge={{true}}
+              @hideStatus={{true}}
             />
           {{/each}}
         </:body>
@@ -71,30 +55,13 @@
       >Documents you have reviewed</h2>
     </div>
     <div class="y-2 gap-2"></div>
-    {{!-- <div class="tile-list">
-        {{#each this.docsWaitingForReview as |doc index|}}
-          {{#if (lt index 1000)}}
-            <Doc::Tile
-              @avatar="{{get doc.ownerPhotos 0}}"
-              @docID="{{doc.objectID}}"
-              @modifiedAgo="{{doc.modifiedAgo}}"
-              @owner="{{get doc.owners 0}}"
-              @productArea="{{doc.product}}"
-              @status="{{lowercase doc.status}}"
-              @title="{{doc.title}}"
-              @dueDate="{{doc.dueDate}}"
-              @showColorBadge={{true}}
-            />
-          {{/if}}
-        {{/each}}
-      </div> --}}
     <Hds::Table @isStriped={{false}} class="row-results__table">
       <:head as |H|>
         <H.Tr>
           <H.Th class="name">Name</H.Th>
           <H.Th class="type">Type</H.Th>
-          <H.Th class="status">Status</H.Th>
-          <H.Th class="product">Product/Area</H.Th>
+          {{!-- <H.Th class="status">Status</H.Th> --}}
+          <H.Th class="product">BU</H.Th>
           <H.Th class="owner">Owner</H.Th>
           <H.Th class="created">Created</H.Th>
           <H.Th class="created">Due Date</H.Th>
@@ -117,6 +84,7 @@
             @dueDate="{{doc.dueDate}}"
             @showColorBadge={{true}}
             @isReviewed={{true}}
+            @hideStatus={{true}}
           />
         {{/each}}
       </:body>
