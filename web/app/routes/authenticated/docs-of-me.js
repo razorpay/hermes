@@ -10,22 +10,9 @@ export default class DocsOfMeRoute extends Route {
   @service session;
   @service authenticatedUser;
 
-  queryParams = {
-    latestUpdates: {
-      refreshModel: true,
-      replace: true,
-    },
-  };
-
-  resetController(controller, isExiting, transition) {
-    if (isExiting) {
-      controller.set("latestUpdates", "newDocs");
-    }
-  }
-
   async model(params) {
     const userInfo = this.authenticatedUser.info;
-    
+
     const searchIndex =
       this.configSvc.config.algolia_docs_index_name + "_dueDate_asc";
 
@@ -93,25 +80,5 @@ export default class DocsOfMeRoute extends Route {
       docsOfMeWaitingForReview: docsOfMeWaitingForReview,
       docsReviewed: docsReviewed,
     });
-  }
-
-  /**
-   * Builds a parent query string for searching for Google files. The folders
-   * parameter is an array of all folder ID strings to search.
-   */
-  buildParentsQuery(folders) {
-    let parentsQuery = "";
-    if (folders.length > 0) {
-      parentsQuery += " and (";
-      folders.forEach((folder, index) => {
-        if (index == 0) {
-          parentsQuery += `'${folder}' in parents`;
-        } else {
-          parentsQuery += ` or '${folder}' in parents`;
-        }
-      });
-      parentsQuery += ")";
-    }
-    return parentsQuery;
   }
 }

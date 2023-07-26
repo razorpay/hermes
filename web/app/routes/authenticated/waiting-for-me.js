@@ -2,7 +2,6 @@ import Route from "@ember/routing/route";
 import RSVP from "rsvp";
 import { inject as service } from "@ember/service";
 import timeAgo from "hermes/utils/time-ago";
-import { action } from "@ember/object";
 
 export default class WaitingForMeRoute extends Route {
   @service algolia;
@@ -11,28 +10,8 @@ export default class WaitingForMeRoute extends Route {
   @service session;
   @service authenticatedUser;
 
-  queryParams = {
-    latestUpdates: {
-      refreshModel: true,
-      replace: true,
-    },
-  };
-
-  resetController(controller, isExiting, transition) {
-    if (isExiting) {
-      controller.set("latestUpdates", "newDocs");
-    }
-  }
 
   async model(params) {
-    // Create facet filter for recently updated docs depending on the selected
-    // "Latest updates" tab.
-    let facetFilter = "";
-    if (params.latestUpdates == "reviewed") {
-      facetFilter = "status:reviewed";
-    } else if (params.latestUpdates == "inReview") {
-      facetFilter = "status:In-Review";
-    }
 
     const userInfo = this.authenticatedUser.info;
     const searchIndex=this.configSvc.config.algolia_docs_index_name + "_dueDate_asc";
@@ -102,25 +81,5 @@ export default class WaitingForMeRoute extends Route {
       docsWaitingForReview: docsWaitingForReview,
       docsReviewed: docsReviewed,
     });
-  }
-
-  /**
-   * Builds a parent query string for searching for Google files. The folders
-   * parameter is an array of all folder ID strings to search.
-   */
-  buildParentsQuery(folders) {
-    let parentsQuery = "";
-    if (folders.length > 0) {
-      parentsQuery += " and (";
-      folders.forEach((folder, index) => {
-        if (index == 0) {
-          parentsQuery += `'${folder}' in parents`;
-        } else {
-          parentsQuery += ` or '${folder}' in parents`;
-        }
-      });
-      parentsQuery += ")";
-    }
-    return parentsQuery;
   }
 }

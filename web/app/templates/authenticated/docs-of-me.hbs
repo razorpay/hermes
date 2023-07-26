@@ -18,9 +18,9 @@
             <H.Tr>
               <H.Th class="name">Name</H.Th>
               <H.Th class="type">Type</H.Th>
-              <H.Th class="status">Doc Status</H.Th>
-              <H.Th class="product">Product/Area</H.Th>
-              <H.Th class="owner">Owner</H.Th>
+              <H.Th class="status">Overall Doc Status</H.Th>
+              <H.Th class="product">BU</H.Th>
+              {{!-- <H.Th class="owner">Owner</H.Th> --}}
               <H.Th class="created">Created</H.Th>
               <H.Th class="created">Due Date</H.Th>
             </H.Tr>
@@ -40,6 +40,7 @@
               @isDraft={{@isDraft}}
               @dueDate="{{doc.dueDate}}"
               @showColorBadge={{true}}
+              @hideOwner={{true}}
             />
           </:body>
         </Hds::Table>
@@ -47,7 +48,7 @@
           @reviewers={{doc.reviewers}}
           @reviewedBy={{doc.reviewedBy}}
         />
-        <div class="mb-8"></div>
+        <div class="mb-16"></div>
       {{/each}}
 
     </div>
