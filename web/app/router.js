@@ -35,6 +35,10 @@ Router.map(function () {
     this.route('project', {
       path: '/business-units/:business_unit_id/teams/:team_id/projects/:project_id/project'
     });
+
+    this.route('files', {
+      path: '/business-units/:business_unit_id/teams/:team_id/projects/:project_id/files/:doctype'
+    });
   });
   this.route("authenticate");
   this.route('404', { path: '/*path' })

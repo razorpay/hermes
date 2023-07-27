@@ -5,32 +5,30 @@
       <FlightIcon @name="git-branch" @size="24" />
       <h2
         class="hds-typography-display-300 hds-font-weight-semibold hds-foreground-strong"
-      >{{this.model.businessUnitId}} / {{this.model.teamId}} / {{this.model.projectId}} / Templates </h2>
+      >{{this.model.businessUnitId}} / {{this.model.teamId}} / {{this.model.projectId}} / {{this.model.docType}} / files </h2>
     </div>
   <div class="wrapper">
     <div class="folder-list">
-      {{#each this.model.templates as |temp index|}}
-          <LinkTo
-            @route="authenticated.files"
-            @models={{array this.model.businessUnitId this.model.teamId this.model.projectId temp.templateName}}
+        {{#each this.model.files as |doc index|}}
+            <LinkTo
+            @route="authenticated.document" 
+            @model={{doc.objectID}}
             class="flex flex-col items-start space-y-2 p-4 -m-4 rounded-md hover:bg-color-palette-neutral-50 active:bg-color-palette-neutral-100 overflow-hidden"
           >
             <div class="centered-container">
               <div class="space-y-2">
-                <Hds::IconTile @icon="folder" @color="vault" />
+                <Hds::IconTile @icon="newspaper"/>
               </div>
 
               <div class="flex flex-col items-start space-y-1">
                 <p>
-                  {{temp.templateName}}
+                   {{doc.title}}
                 </p>
               </div>
             </div>
           </LinkTo>
-      {{/each}}
+        {{/each}}
     </div>
   </div>
 </section>
 {{outlet}}
-
-

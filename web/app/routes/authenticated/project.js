@@ -1,7 +1,6 @@
 import Route from "@ember/routing/route";
 import RSVP from "rsvp";
 import { inject as service } from "@ember/service";
-import timeAgo from "hermes/utils/time-ago";
 
 export default class AuthenticatedProjectRoute extends Route {
     @service algolia;
@@ -15,40 +14,15 @@ export default class AuthenticatedProjectRoute extends Route {
       const teamId = params.team_id;
       const businessUnitId = params.business_unit_id;
 
-      const userInfo = this.authenticatedUser.info;
-      const searchIndex = this.configSvc.config.algolia_docs_index_name + "_createdTime_desc";
-      const files = this.algolia.searchIndex
-      .perform(searchIndex, "", {
-        filters: 'project:"' + projectId + '" AND product:"' + businessUnitId + '" AND team:"' + teamId + '"',
-        hitsPerPage: 1000,
-      })           
-      .then((result) => {
-        // Add modifiedAgo for each doc.
-        for (const hit of result.hits) {
-          this.fetchSvc
-            .fetch("/api/v1/documents/" + hit.objectID)
-            .then((resp) => resp.json())
-            .then((doc) => {
-              if (doc.modifiedTime) {
-                const modifiedDate = new Date(doc.modifiedTime * 1000);
-                hit.modifiedAgo = `Modified ${timeAgo(modifiedDate)}`;
-              }
-            })
-            .catch((err) => {
-              console.log(
-                `Error getting document waiting for review (${hit.objectID}):`,
-                err
-              );
-            });
-        }
-        return result.hits;
-      });
-      console.log(files);
+      const templates = await this.fetchSvc
+      .fetch("/api/v1/document-types")
+      .then((r) => r.json());
+      console.log(templates);
       return RSVP.hash({
         teamId: teamId,
         businessUnitId: businessUnitId,
         projectId: projectId,
-        files: files,
+        templates: templates,
       });
     }
   }
