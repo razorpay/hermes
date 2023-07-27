@@ -314,8 +314,8 @@ func configureDocsReplicaIndexes(
 			"owners",
 			"product",
 			"status",
-			"team",
-			"project",
+			"searchable(team)",
+			"searchable(project)",
 		),
 
 		Ranking: opt.Ranking(
@@ -336,8 +336,8 @@ func configureDocsReplicaIndexes(
 			"owners",
 			"product",
 			"status",
-			"team",
-			"project",
+			"searchable(team)",
+			"searchable(project)",
 		),
 
 		Ranking: opt.Ranking(
@@ -375,9 +375,10 @@ func configureDocsReplicaIndexes(
 			"status",
 			"owners",
 			"product",
-			"team",
-			"project",
+			"searchable(team)",
+			"searchable(project)",
 		),
+
 		Ranking: opt.Ranking(
 			"asc(dueDate)",
 		),
