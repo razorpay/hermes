@@ -40,11 +40,11 @@ export default class HeaderFacetDropdownComponent extends Component<HeaderFacetD
   protected fetchteams = task(async () => {
     try {
       this.teams = await this.fetchSvc
-          .fetch("/api/v1/teams")
-          .then((resp) => resp?.json());
-      } catch (err) {
-        throw err;
-      }
+        .fetch("/api/v1/teams")
+        .then((resp) => resp?.json());
+    } catch (err) {
+      throw err;
+    }
   });
 }
 
