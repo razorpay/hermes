@@ -1,0 +1,16 @@
+{{page-title "BusinessUnits"}}
+<Header />
+
+<section class="x-container">
+<h2>Business Units</h2>
+<ul>
+  {{#each-in this.model as |buKey buValue|}}
+    <li>
+      <LinkTo @route="authenticated.teams" @models={{array buKey}}>
+        {{buKey}}
+      </LinkTo>
+    </li>
+{{/each-in}}
+</ul>
+</section>
+{{outlet}}

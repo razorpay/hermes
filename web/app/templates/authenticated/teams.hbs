@@ -1,0 +1,16 @@
+{{page-title "Teams"}}
+<Header />
+<section class="x-container">
+  <h1>The bu injected unit: {{this.model.businessUnit}}</h1>
+<h2>Teams</h2>
+<ul>
+   {{#each-in this.model.teams as |teamKey teamValue|}}
+    <li>
+      <LinkTo @route="authenticated.projects" @models={{array this.model.businessUnit teamKey}} >
+        {{teamKey}}
+      </LinkTo>
+    </li>
+  {{/each-in}}
+</ul>
+</section>
+{{outlet}}

@@ -98,7 +98,7 @@ export default class HeaderNavComponent extends Component<HeaderNavComponentSign
         }
         temp[productKey] = product;
       }
-      this.products = temp;;
+      this.products = temp;
     }
 
     });

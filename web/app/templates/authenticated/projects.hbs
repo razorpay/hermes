@@ -1,0 +1,16 @@
+{{page-title "Projects"}}
+<Header />
+<section class="x-container">
+<h2>Projects</h2>
+<ul>
+   {{#each-in this.model.projects as |projKey projValue|}}
+    <li>
+      <LinkTo @route="authenticated.project" @models={{array this.model.businessUnit this.model.teamId projKey}}>
+        {{projKey}}
+      </LinkTo>
+    </li>
+  {{/each-in}}
+</ul>
+</section>
+
+{{outlet}}
