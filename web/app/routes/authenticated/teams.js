@@ -5,6 +5,7 @@ import RSVP from "rsvp";
 export default class AuthenticatedTeamsRoute extends Route {
   @service("fetch") fetchSvc;
   async model(params) {
+    console.log(params);
     const businessUnit = params.business_unit_id;
     try {
       // Fetch the teams from the API

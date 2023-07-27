@@ -1,17 +1,36 @@
 {{page-title "Projects"}}
 <Header />
-<h1>Injected {{this.model.businessUnitId}} {{this.model.teamId}}</h1>
+
 <section class="x-container">
-<h2>Projects</h2>
-<ul>
-   {{#each-in this.model.projects as |projKey projValue|}}
-    <li>
-      <LinkTo @route="authenticated.project" @models={{array this.model.businessUnitId this.model.teamId projKey}}>
-        {{projKey}}
-      </LinkTo>
-    </li>
-  {{/each-in}}
-</ul>
+  <div class="flex items-center space-x-2 mb-8">
+      <FlightIcon @name="git-branch" @size="24" />
+      <h2
+        class="hds-typography-display-300 hds-font-weight-semibold hds-foreground-strong"
+      >{{this.model.businessUnitId}} / {{this.model.teamId}} / Projects</h2>
+    </div>
+  <div class="wrapper">
+    <div class="folder-list">
+      {{#each-in this.model.projects as |projKey projValue|}}
+          <LinkTo
+            @route="authenticated.project"
+            @models={{array this.model.businessUnitId this.model.teamId projKey}}
+            class="flex flex-col items-start space-y-2 p-4 -m-4 rounded-md hover:bg-color-palette-neutral-50 active:bg-color-palette-neutral-100 overflow-hidden"
+          >
+            <div class="centered-container">
+              <div class="space-y-2">
+                <Hds::IconTile @icon="folder" @color="vault" />
+              </div>
+
+              <div class="flex flex-col items-start space-y-1">
+                <p>
+                  {{projKey}}
+                </p>
+              </div>
+            </div>
+          </LinkTo>
+      {{/each-in}}
+    </div>
+  </div>
 </section>
 
 {{outlet}}

@@ -14,20 +14,14 @@ export default class AuthenticatedProjectRoute extends Route {
       const projectId = params.project_id;
       const teamId = params.team_id;
       const businessUnitId = params.business_unit_id;
-      console.log(projectId);
-      console.log(teamId);
-      console.log(businessUnitId);
 
       const userInfo = this.authenticatedUser.info;
       const searchIndex = this.configSvc.config.algolia_docs_index_name + "_createdTime_desc";
       const files = this.algolia.searchIndex
       .perform(searchIndex, "", {
-        filters:
-        `project:${projectId}` ,
-        // `AND product:'${docid}'` +
-        // `AND team:'${teamid}'` ,
+        filters: 'project:"' + projectId + '" AND product:"' + businessUnitId + '" AND team:"' + teamId + '"',
         hitsPerPage: 1000,
-      })
+      })           
       .then((result) => {
         // Add modifiedAgo for each doc.
         for (const hit of result.hits) {
@@ -51,6 +45,9 @@ export default class AuthenticatedProjectRoute extends Route {
       });
       console.log(files);
       return RSVP.hash({
+        teamId: teamId,
+        businessUnitId: businessUnitId,
+        projectId: projectId,
         files: files,
       });
     }
