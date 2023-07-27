@@ -10,17 +10,6 @@
           </div>
           <div class="facets flex items-center space-x-1.5">
             <Header::FacetDropdown
-              @label="Type"
-              @facets={{@facets.docType}}
-              @disabled={{not @facets.docType}}
-            />
-            <Header::FacetDropdown
-              @label="Status"
-              @facets={{this.statuses}}
-              @disabled={{not this.statuses}}
-              class="medium"
-            />
-            <Header::FacetDropdown
               @label="BU"
               @facets={{@facets.product}}
               @disabled={{not @facets.product}}
@@ -36,9 +25,21 @@
               @disabled={{not @facets.project}}
             />
             <Header::FacetDropdown
+              @label="Type"
+              @facets={{@facets.docType}}
+              @disabled={{not @facets.docType}}
+            />
+
+            <Header::FacetDropdown
               @label="Owner"
               @facets={{@facets.owners}}
               @disabled={{this.ownerFacetIsDisabled}}
+            />
+            <Header::FacetDropdown
+              @label="Status"
+              @facets={{this.statuses}}
+              @disabled={{not this.statuses}}
+              class="medium"
             />
           </div>
         </div>
