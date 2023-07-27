@@ -1,11 +1,12 @@
 {{page-title "Projects"}}
 <Header />
+<h1>Injected {{this.model.businessUnitId}} {{this.model.teamId}}</h1>
 <section class="x-container">
 <h2>Projects</h2>
 <ul>
    {{#each-in this.model.projects as |projKey projValue|}}
     <li>
-      <LinkTo @route="authenticated.project" @models={{array this.model.businessUnit this.model.teamId projKey}}>
+      <LinkTo @route="authenticated.project" @models={{array this.model.businessUnitId this.model.teamId projKey}}>
         {{projKey}}
       </LinkTo>
     </li>
