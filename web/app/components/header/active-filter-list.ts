@@ -25,6 +25,8 @@ export default class HeaderActiveFilterListComponent extends Component<HeaderAct
     docType: [],
     owners: [],
     product: [],
+    team: [],
+    project: [],
     status: [],
     page: 1,
   };

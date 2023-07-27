@@ -1,6 +1,6 @@
 {{#if @facets}}
   <div class="toolbar mb-7">
-    <div class="x-container">
+    <div class="x-container-navbar">
       <div class="flex justify-between w-full">
         <div class="flex items-center">
           <div
@@ -24,6 +24,16 @@
               @label="BU"
               @facets={{@facets.product}}
               @disabled={{not @facets.product}}
+            />
+            <Header::FacetDropdown
+              @label="Team"
+              @facets={{@facets.team}}
+              @disabled={{not @facets.team}}
+            />
+            <Header::FacetDropdown
+              @label="Project"
+              @facets={{@facets.project}}
+              @disabled={{not @facets.project}}
             />
             <Header::FacetDropdown
               @label="Owner"

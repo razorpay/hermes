@@ -128,6 +128,8 @@ func New(cfg *Config) (*Client, error) {
 			"docType",
 			"owners",
 			"searchable(product)",
+			"searchable(team)",
+			"searchable(project)",
 			"status",
 			"searchable(tags)",
 		),
@@ -179,6 +181,8 @@ func New(cfg *Config) (*Client, error) {
 			"product",
 			"status",
 			"tags",
+			"team",
+			"project",
 		),
 
 		// Ranking
@@ -240,6 +244,8 @@ func configureReplicaIndexes(
 			"owners",
 			"product",
 			"status",
+			"team",
+			"project",
 		),
 
 		Ranking: opt.Ranking(
@@ -260,6 +266,8 @@ func configureReplicaIndexes(
 			"owners",
 			"product",
 			"status",
+			"team",
+			"project",
 		),
 
 		Ranking: opt.Ranking(
@@ -306,6 +314,8 @@ func configureDocsReplicaIndexes(
 			"owners",
 			"product",
 			"status",
+			"team",
+			"project",
 		),
 
 		Ranking: opt.Ranking(
@@ -326,6 +336,8 @@ func configureDocsReplicaIndexes(
 			"owners",
 			"product",
 			"status",
+			"team",
+			"project",
 		),
 
 		Ranking: opt.Ranking(
@@ -362,6 +374,9 @@ func configureDocsReplicaIndexes(
 			"appCreated",
 			"status",
 			"owners",
+			"product",
+			"team",
+			"project",
 		),
 		Ranking: opt.Ranking(
 			"asc(dueDate)",

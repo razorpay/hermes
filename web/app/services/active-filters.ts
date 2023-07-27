@@ -11,6 +11,8 @@ export default class ActiveFiltersService extends Service {
     docType: [],
     status: [],
     product: [],
+    team: [],
+    project: [],
     owners: [],
   };
 
@@ -19,6 +21,8 @@ export default class ActiveFiltersService extends Service {
       docType: params.docType || [],
       status: params.status || [],
       product: params.product || [],
+      team: params.team || [],
+      project: params.project || [],
       owners: params.owners || [],
     };
   }

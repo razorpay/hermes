@@ -16,6 +16,8 @@ module("Integration | Helper | get-facet-query-hash", function (hooks) {
       docType: ["bar"],
       owners: [],
       product: [],
+      team: [],
+      project: [],
       status: [],
     };
 

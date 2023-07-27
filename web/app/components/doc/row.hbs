@@ -38,6 +38,18 @@
       title={{this.productAreaName}}
     />
   </Hds::Table::Td>
+  <Hds::Table::Td class="product">
+    <Hds::Badge
+      @text={{@team}}
+      title={{@team}}
+    />
+  </Hds::Table::Td>
+  <Hds::Table::Td class="product">
+    <Hds::Badge
+      @text={{@project}}
+      title={{@project}}
+    />
+  </Hds::Table::Td>
   {{#if (not @hideOwner)}}
     <Hds::Table::Td class="owner">
       <Person @ignoreUnknown={{true}} @imgURL={{@avatar}} @email={{@owner}} />
