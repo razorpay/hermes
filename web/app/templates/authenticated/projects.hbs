@@ -4,9 +4,20 @@
 <section class="x-container">
   <div class="flex items-center space-x-2 mb-8">
       <FlightIcon @name="git-branch" @size="24" />
-      <h2
-        class="hds-typography-display-300 hds-font-weight-semibold hds-foreground-strong"
-      >{{this.model.businessUnitId}} / {{this.model.teamId}} / Projects</h2>
+      <p
+      ><LinkTo
+          @route="authenticated.business-units"
+           >
+           {{this.model.businessUnitId}}
+          </LinkTo> 
+        - 
+        <LinkTo
+          @route="authenticated.teams"
+          @models={{array this.model.businessUnitId}}
+           >
+          {{this.model.teamId}}
+          </LinkTo> 
+          - projects</p>
     </div>
   <div class="wrapper">
     <div class="folder-list">
@@ -34,3 +45,6 @@
 </section>
 
 {{outlet}}
+
+
+

@@ -3,9 +3,34 @@
 <section class="x-container">
   <div class="flex items-center space-x-2 mb-8">
       <FlightIcon @name="git-branch" @size="24" />
-      <h2
-        class="hds-typography-display-300 hds-font-weight-semibold hds-foreground-strong"
-      >{{this.model.businessUnitId}} / {{this.model.teamId}} / {{this.model.projectId}} / {{this.model.docType}} / files </h2>
+    <p><LinkTo
+          @route="authenticated.business-units"
+           >
+           {{this.model.businessUnitId}}
+          </LinkTo> 
+        - 
+        <LinkTo
+          @route="authenticated.teams"
+          @models={{array this.model.businessUnitId}}
+           >
+          {{this.model.teamId}}
+          </LinkTo> 
+         - 
+        <LinkTo
+          @route="authenticated.projects"
+          @models={{array this.model.businessUnitId this.model.teamId}}
+           >
+          {{this.model.projectId}}
+          </LinkTo> 
+         - 
+        <LinkTo
+          @route="authenticated.project"
+          @models={{array this.model.businessUnitId this.model.teamId this.model.projectId}}
+           >
+          {{this.model.docType}}
+          </LinkTo>       
+          - files
+      </p>  
     </div>
   <div class="wrapper">
     <div class="folder-list">
