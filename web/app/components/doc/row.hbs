@@ -6,11 +6,13 @@
       @query={{hash draft=@isDraft}}
       class="flex space-x-4 items-start"
     >
-      <Doc::Thumbnail
-        @status={{@status}}
-        @product={{@productArea}}
-        @docID={{@docID}}
-      />
+      {{#if (not @hideThumbnail)}}
+        <Doc::Thumbnail
+          @status={{@status}}
+          @product={{@productArea}}
+          @docID={{@docID}}
+        />
+      {{/if}}
       <div>
         <h4
           class="hds-typography-body-200 hds-font-weight-semibold hds-foreground-strong"
@@ -39,16 +41,10 @@
     />
   </Hds::Table::Td>
   <Hds::Table::Td class="product">
-    <Hds::Badge
-      @text={{@team}}
-      title={{@team}}
-    />
+    <Hds::Badge @text={{@team}} title={{@team}} />
   </Hds::Table::Td>
   <Hds::Table::Td class="product">
-    <Hds::Badge
-      @text={{@project}}
-      title={{@project}}
-    />
+    <Hds::Badge @text={{@project}} title={{@project}} />
   </Hds::Table::Td>
   {{#if (not @hideOwner)}}
     <Hds::Table::Td class="owner">

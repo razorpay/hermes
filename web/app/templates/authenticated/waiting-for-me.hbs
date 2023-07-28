@@ -11,13 +11,16 @@
           class="hds-typography-display-300 hds-font-weight-semibold hds-foreground-strong"
         >Documents waiting for your review</h2>
       </div>
+      {{!-- <div>
+        <h2><Hds::Badge @color="highlight" @text="In review" @size="large" @type="inverted"/></h2>
+      </div> --}}
       <div class="y-2 gap-2"></div>
       <Hds::Table @isStriped={{false}} class="row-results__table">
         <:head as |H|>
           <H.Tr>
             <H.Th class="name">Name</H.Th>
             <H.Th class="type">Type</H.Th>
-            {{! <H.Th class="status">Status</H.Th> }}
+            <H.Th class="status">Status</H.Th>
             <H.Th class="product">BU</H.Th>
             <H.Th class="product">Team</H.Th>
             <H.Th class="product">Project</H.Th>
@@ -44,7 +47,8 @@
               @isDraft={{@isDraft}}
               @dueDate="{{doc.dueDate}}"
               @showColorBadge={{true}}
-              @hideStatus={{true}}
+              {{!-- @hideStatus={{true}} --}}
+              @hideThumbnail={{true}}
             />
           {{/each}}
         </:body>
@@ -93,6 +97,7 @@
             @showColorBadge={{true}}
             @isReviewed={{true}}
             @hideStatus={{true}}
+            @hideThumbnail={{true}}
           />
         {{/each}}
       </:body>

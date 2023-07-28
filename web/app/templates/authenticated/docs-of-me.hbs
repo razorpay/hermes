@@ -45,6 +45,8 @@
               @dueDate="{{doc.dueDate}}"
               @showColorBadge={{true}}
               @hideOwner={{true}}
+              {{!-- @hideStatus={{true}} --}}
+              @hideThumbnail={{true}}
             />
           </:body>
         </Hds::Table>
@@ -52,7 +54,7 @@
           @reviewers={{doc.reviewers}}
           @reviewedBy={{doc.reviewedBy}}
         />
-        <div class="mb-16"></div>
+        <div class="mb-8"></div>
       {{/each}}
 
     </div>
@@ -73,9 +75,11 @@
           <H.Tr>
             <H.Th class="name">Name</H.Th>
             <H.Th class="type">Type</H.Th>
-            <H.Th class="status">Status</H.Th>
+            {{!-- <H.Th class="status">Status</H.Th> --}}
             <H.Th class="product">BU</H.Th>
-            <H.Th class="owner">Owner</H.Th>
+            <H.Th class="product">Team</H.Th>
+            <H.Th class="product">Project</H.Th>
+            {{!-- <H.Th class="owner">Owner</H.Th> --}}
             <H.Th class="created">Created</H.Th>
             <H.Th class="created">Due Date</H.Th>
           </H.Tr>
@@ -99,6 +103,9 @@
               @dueDate="{{doc.dueDate}}"
               @showColorBadge={{true}}
               @isReviewed={{true}}
+              @hideStatus={{true}}
+              @hideOwner={{true}}
+              @hideThumbnail={{true}}
             />
           {{/each}}
         </:body>
