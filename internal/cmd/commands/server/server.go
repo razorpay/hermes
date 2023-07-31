@@ -7,20 +7,25 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"net/url"
 	"os"
+	"path"
 	"strings"
 	"time"
 
 	"github.com/hashicorp/go-hclog"
 
+	"github.com/algolia/algoliasearch-client-go/algoliasearch"
 	"github.com/algolia/algoliasearch-client-go/v3/algolia/search"
 	"github.com/hashicorp-forge/hermes/internal/api"
 	"github.com/hashicorp-forge/hermes/internal/auth"
 	"github.com/hashicorp-forge/hermes/internal/cmd/base"
 	"github.com/hashicorp-forge/hermes/internal/config"
 	"github.com/hashicorp-forge/hermes/internal/db"
+	"github.com/hashicorp-forge/hermes/internal/email"
 	"github.com/hashicorp-forge/hermes/internal/pkg/doctypes"
 	"github.com/hashicorp-forge/hermes/internal/pub"
+	slackbot "github.com/hashicorp-forge/hermes/internal/slack-bot"
 	"github.com/hashicorp-forge/hermes/internal/structs"
 	"github.com/hashicorp-forge/hermes/pkg/algolia"
 	gw "github.com/hashicorp-forge/hermes/pkg/googleworkspace"
@@ -500,7 +505,238 @@ func (c *Command) Run(args []string) int {
 		}
 	}()
 
+	go func() {
+		sendDailyReviewReminderNotificationToAllRunsDaily(cfg, c.Log, algoSearch, algoWrite, goog, db)
+		// reviewReminderNotifiactionToAllDocs(cfg, c.Log, algoSearch, algoWrite, goog, db)
+	}()
+
 	return c.WaitForInterrupt(c.ShutdownServer(server))
+}
+
+func sendDailyReviewReminderNotificationToAllRunsDaily(cfg *config.Config, l hclog.Logger, ar *algolia.Client, aw *algolia.Client, s *gw.Service, db *gorm.DB) {
+	// Desired time to run the function (change this to your desired time)
+	desiredTime := "10:00"
+
+	// Calculate the duration until the desired time for the first execution
+	calculateDurationUntilDesiredTime := func(desiredTime string) time.Duration {
+		// Parse the desired time string to obtain the hour and minute values
+		parseDesiredTime := func(desiredTime string) (hour, minute int, err error) {
+			parsedTime, err := time.Parse("15:04", desiredTime)
+			if err != nil {
+				return 0, 0, err
+			}
+			return parsedTime.Hour(), parsedTime.Minute(), nil
+		}
+
+		hour, minute, err := parseDesiredTime(desiredTime)
+		if err != nil {
+			fmt.Println("Error parsing desired time:", err)
+			return 0
+		}
+
+		// Get the current time
+		now := time.Now()
+
+		// Set the desired time for today
+		desired := time.Date(now.Year(), now.Month(), now.Day(), hour, minute, 0, 0, now.Location())
+
+		// If the desired time has already passed for today, set it for tomorrow
+		if desired.Before(now) {
+			desired = desired.Add(24 * time.Hour)
+		}
+
+		// Calculate the duration until the desired time
+		durationUntilDesiredTime := desired.Sub(now)
+
+		return durationUntilDesiredTime
+	}
+
+	// Wait until the first execution time
+	time.Sleep(calculateDurationUntilDesiredTime(desiredTime))
+
+	// Create a ticker with a 24-hour interval
+	ticker := time.NewTicker(24 * time.Hour)
+
+	// Start a goroutine to execute the function periodically
+	for {
+
+		// Call your function here (replace the print statement with your actual function call)
+		fmt.Println("Function executed at", time.Now())
+		reviewReminderNotifiactionToAllDocs(cfg, l, ar, aw, s, db)
+		// Wait for the next tick
+		<-ticker.C
+	}
+}
+
+func reviewReminderNotifiactionToAllDocs(cfg *config.Config, l hclog.Logger, ar *algolia.Client, aw *algolia.Client, s *gw.Service, db *gorm.DB) {
+	fmt.Println("sending reminder to all the reviewers who have not reviewed yet")
+	params := algoliasearch.Map{
+		"filters": "status:In-Review",
+	}
+
+	// Perform the search
+	res, err := ar.Docs.Search("", params)
+	if err != nil {
+		fmt.Println("Error:", err)
+		return
+	}
+	// Access the search results
+	fmt.Println("Total hits:", res.NbHits)
+	fmt.Println("Hits:")
+	// Access the search results and print reviewers
+	for _, hit := range res.Hits {
+		sendReviewReminderPerDoc(cfg, l, ar, aw, s, db, hit)
+	}
+}
+
+func sendReviewReminderPerDoc(
+	cfg *config.Config,
+	l hclog.Logger,
+	ar *algolia.Client,
+	aw *algolia.Client,
+	s *gw.Service,
+	db *gorm.DB,
+	hit map[string]interface{},
+) {
+	title, ok := hit["title"].(string)
+	if !ok {
+		fmt.Println("Title not found in hit")
+	}
+	fmt.Println("title :")
+	fmt.Println(title)
+	// Access the "reviewers" field from the hit
+	reviewers, _ := hit["reviewers"].([]interface{})
+
+	reviewedBy, ok := hit["reviewedBy"].([]interface{})
+	if !ok {
+		reviewedBy = []interface{}{}
+	}
+
+	// Create a new array to store the result
+	var result []interface{}
+
+	// Loop through array a and check each element against array b
+	for _, reviewer := range reviewers {
+		found := false
+
+		for _, reviewedReviewer := range reviewedBy {
+			if reviewer == reviewedReviewer {
+				found = true
+				break
+			}
+		}
+
+		// If the element from a is not found in b, add it to the result array
+		if !found {
+			result = append(result, reviewer)
+		}
+	}
+
+	// Convert the []interface{} to an array of strings
+	// and these are the reviewers who have not reviewed yet
+	reviewersToEmail := make([]string, len(result))
+	for i, val := range result {
+		if str, ok := val.(string); ok {
+			reviewersToEmail[i] = str
+		} else {
+			// Handle the case if the element is not a string
+			fmt.Println("Element at index", i, "is not a string:", val)
+		}
+	}
+
+	// Convert the "hit" map to JSON data (a []byte slice)
+	jsonData, err := json.Marshal(hit)
+	if err != nil {
+		fmt.Println("Error marshaling JSON:", err)
+		return
+	}
+	// Create an instance of the Document struct
+	var docObj hcd.BaseDoc
+
+	// Unmarshal the JSON data into the Document struct
+	err = json.Unmarshal(jsonData, &docObj)
+	if err != nil {
+		fmt.Println("Error unmarshaling JSON:", err)
+		return
+	}
+	docURL, err := getDocumentURL(cfg.BaseURL, docObj.GetObjectID())
+	if err != nil {
+		l.Error("error getting the base doc url!", "error", err)
+	}
+	// Send emails to reviewers.
+	if cfg.Email != nil && cfg.Email.Enabled && len(reviewersToEmail) > 0 {
+		var err error
+		for _, reviewerEmail := range reviewersToEmail {
+			err := email.SendReviewReminderEmail(
+				email.ReviewRequestedEmailData{
+					BaseURL:            cfg.BaseURL,
+					DocumentOwner:      docObj.Owners[0],
+					DocumentType:       docObj.GetDocType(),
+					DocumentShortName:  docObj.GetDocNumber(),
+					DocumentTitle:      docObj.GetTitle(),
+					DocumentURL:        docURL,
+					DocumentProd:       docObj.GetProduct(),
+					DocumentTeam:       docObj.GetTeam(),
+					DocumentOwnerEmail: docObj.GetOwners()[0],
+				},
+				[]string{reviewerEmail},
+				cfg.Email.FromAddress,
+				s,
+			)
+			if err != nil {
+				l.Error("error sending reviewer email",
+					"error", err,
+				)
+				return
+			}
+			l.Info("doc reviewer email sent")
+		}
+		if err != nil {
+			fmt.Printf("Some error occured while sendind the message: %s", err)
+		} else {
+			fmt.Println("Succesfully! Delivered the message to all new reviewers")
+		}
+
+		// Also send the slack message tagginhg all the reviewers in the
+		// dedicated channel
+		// tagging all reviewers emails
+		emails := make([]string, len(reviewersToEmail))
+		for i, c := range reviewersToEmail {
+			emails[i] = c
+		}
+		err = slackbot.SendSlackMessage_ReminderReviewer(slackbot.ReviewerRequestedSlackData{
+			BaseURL:            cfg.BaseURL,
+			DocumentOwner:      docObj.Owners[0],
+			DocumentType:       docObj.GetDocType(),
+			DocumentShortName:  docObj.GetDocNumber(),
+			DocumentTitle:      docObj.GetTitle(),
+			DocumentURL:        docURL,
+			DocumentProd:       docObj.GetProduct(),
+			DocumentTeam:       docObj.GetTeam(),
+			DocumentOwnerEmail: docObj.GetOwners()[0],
+		}, emails,
+		)
+		//handle error gracefully
+		if err != nil {
+			fmt.Printf("Some error occured while sendind the message: %s", err)
+		} else {
+			fmt.Println("Succesfully! Delivered the message to all new reviewers")
+		}
+	}
+}
+
+// getDocumentURL returns a Hermes document URL.
+func getDocumentURL(baseURL, docID string) (string, error) {
+	docURL, err := url.Parse(baseURL)
+	if err != nil {
+		return "", fmt.Errorf("error parsing base URL: %w", err)
+	}
+
+	docURL.Path = path.Join(docURL.Path, "document", docID)
+	docURLString := docURL.String()
+	docURLString = strings.TrimRight(docURLString, "/")
+
+	return docURLString, nil
 }
 
 // healthHandler responds with the health of the service.

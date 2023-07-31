@@ -90,6 +90,44 @@ func SendReviewRequestedEmail(
 	return err
 }
 
+func SendReviewReminderEmail(
+	d ReviewRequestedEmailData,
+	to []string,
+	from string,
+	s *gw.Service,
+) error {
+	// Validate data.
+	if err := validation.ValidateStruct(&d,
+		validation.Field(&d.BaseURL, validation.Required),
+		validation.Field(&d.DocumentOwner, validation.Required),
+		validation.Field(&d.DocumentTitle, validation.Required),
+		validation.Field(&d.DocumentURL, validation.Required),
+	); err != nil {
+		return fmt.Errorf("error validating email data: %w", err)
+	}
+
+	var body bytes.Buffer
+	tmpl, err := template.ParseFS(tmplFS, "templates/review-reminder.html")
+	if err != nil {
+		return fmt.Errorf("error parsing template: %w", err)
+	}
+
+	// Set current year.
+	d.CurrentYear = time.Now().Year()
+
+	if err := tmpl.Execute(&body, d); err != nil {
+		return fmt.Errorf("error executing template: %w", err)
+	}
+
+	_, err = s.SendEmail(
+		to,
+		from,
+		fmt.Sprintf("%s | Document Review Reminder from %s [%s]", d.DocumentTitle, d.DocumentOwner, d.DocumentOwnerEmail),
+		body.String(),
+	)
+	return err
+}
+
 func SendContributorRequestedEmail(
 	d ContributorRequestedEmailData,
 	to []string,
