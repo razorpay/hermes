@@ -694,7 +694,7 @@ func sendReviewReminderPerDoc(
 		if err != nil {
 			fmt.Printf("Some error occured while sendind the message: %s", err)
 		} else {
-			fmt.Println("Succesfully! Delivered the message to all new reviewers")
+			fmt.Println("Succesfully! Delivered the message to all reviewers who have not reviewed")
 		}
 
 		// Also send the slack message tagginhg all the reviewers in the
@@ -720,7 +720,7 @@ func sendReviewReminderPerDoc(
 		if err != nil {
 			fmt.Printf("Some error occured while sendind the message: %s", err)
 		} else {
-			fmt.Println("Succesfully! Delivered the message to all new reviewers")
+			fmt.Println("Succesfully! Delivered the message to all reviewers who have not reviewed")
 		}
 	}
 }
