@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/hashicorp-forge/hermes/internal/auth/oktaalb"
+	"github.com/hashicorp-forge/hermes/internal/event"
 	"github.com/hashicorp-forge/hermes/pkg/algolia"
 	gw "github.com/hashicorp-forge/hermes/pkg/googleworkspace"
 	"github.com/hashicorp/hcl/v2/hclsimple"
@@ -49,6 +50,34 @@ type Config struct {
 
 	// ShortenerBaseURL is the base URL for building short links.
 	ShortenerBaseURL string `hcl:"shortener_base_url,optional"`
+
+	// for kafka integration
+	Kafka  KafkaConfig
+	Events event.Config
+
+	Core Core
+}
+
+// Core contains service specific values
+type Core struct {
+	AppEnv          string
+	ServiceName     string
+	Hostname        string
+	Port            string
+	ShutdownTimeout int
+	ShutdownDelay   int
+	GitCommitHash   string
+	DevstackLabel   string
+}
+
+// KafkaConfig contains common kafka configuration values
+type KafkaConfig struct {
+	Brokers         []string
+	EnableTLS       bool
+	UserCertificate string
+	UserKey         string
+	CACertificate   string
+	DebugEnabled    bool
 }
 
 // DocumentTypes contain available document types.

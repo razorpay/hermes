@@ -14,11 +14,13 @@ import (
 	"github.com/hashicorp/go-hclog"
 
 	"github.com/algolia/algoliasearch-client-go/v3/algolia/search"
+	shelper "github.com/fatih/structs"
 	"github.com/hashicorp-forge/hermes/internal/api"
 	"github.com/hashicorp-forge/hermes/internal/auth"
 	"github.com/hashicorp-forge/hermes/internal/cmd/base"
 	"github.com/hashicorp-forge/hermes/internal/config"
 	"github.com/hashicorp-forge/hermes/internal/db"
+	"github.com/hashicorp-forge/hermes/internal/event"
 	"github.com/hashicorp-forge/hermes/internal/pkg/doctypes"
 	"github.com/hashicorp-forge/hermes/internal/pub"
 	"github.com/hashicorp-forge/hermes/internal/structs"
@@ -396,6 +398,36 @@ func (c *Command) Run(args []string) int {
 		}
 	}
 
+	// setting the kafka config
+	cfg.Kafka.Brokers = []string{"stage-kafka.razorpay.in:9090"}
+	cfg.Kafka.EnableTLS = false
+	cfg.Kafka.UserCertificate = "change_me"
+	cfg.Kafka.CACertificate = "change_me"
+	cfg.Kafka.UserKey = "change_me"
+	cfg.Kafka.DebugEnabled = true
+
+	cfg.Events.Disabled = false
+	cfg.Events.Kafka.RetryBackoff = 2
+	cfg.Events.Kafka.MaxRetry = 10
+	cfg.Events.Kafka.MaxMessages = 100
+	cfg.Events.Kafka.Brokers = []string{"stage-kafka.razorpay.in:9090"}
+	cfg.Events.Kafka.EnableTLS = false
+	cfg.Events.Kafka.UserCertificate = "change_me"
+	cfg.Events.Kafka.CACertificate = "change_me"
+	cfg.Events.Kafka.UserKey = "change_me"
+	cfg.Events.Kafka.DebugEnabled = true
+
+	cfg.Core.AppEnv = "docvault"
+	cfg.Core.Hostname = "https://localhost:8000"
+
+	// make the connection with the kafka kafdrop
+	ctx := NewContext(nil, cfg)
+	err = event.Init(ctx, &cfg.Events, c.Log)
+	if err != nil {
+		c.UI.Error(fmt.Sprintf("error connecting kafka: %v", err))
+		return 1
+	}
+
 	mux := http.NewServeMux()
 
 	// Define handlers for authenticated endpoints.
@@ -672,4 +704,17 @@ func containsPattern(patterns []string, target string) bool {
 		}
 	}
 	return false
+}
+
+// NewContext adds core key-value e.g. service name, git hash etc to
+// existing context or to a new background context and returns.
+func NewContext(ctx context.Context, cfg *config.Config) context.Context {
+	if ctx == nil {
+		ctx = context.Background()
+	}
+	for k, v := range shelper.Map(cfg.Core) {
+		key := strings.ToLower(k)
+		ctx = context.WithValue(ctx, key, v)
+	}
+	return ctx
 }
