@@ -612,8 +612,8 @@ func sendReviewReminderPerDoc(
 		reviewedBy = []interface{}{}
 	}
 
-	// Create a new array to store the result
-	var result []interface{}
+	// Create a new array to store the reviewersWhoHaveNotReviewed
+	var reviewersWhoHaveNotReviewed []interface{}
 
 	// Loop through array a and check each element against array b
 	for _, reviewer := range reviewers {
@@ -626,16 +626,16 @@ func sendReviewReminderPerDoc(
 			}
 		}
 
-		// If the element from a is not found in b, add it to the result array
+		// If the element from a is not found in b, add it to the reviewersWhoHaveNotReviewed array
 		if !found {
-			result = append(result, reviewer)
+			reviewersWhoHaveNotReviewed = append(reviewersWhoHaveNotReviewed, reviewer)
 		}
 	}
 
 	// Convert the []interface{} to an array of strings
 	// and these are the reviewers who have not reviewed yet
-	reviewersToEmail := make([]string, len(result))
-	for i, val := range result {
+	reviewersToEmail := make([]string, len(reviewersWhoHaveNotReviewed))
+	for i, val := range reviewersWhoHaveNotReviewed {
 		if str, ok := val.(string); ok {
 			reviewersToEmail[i] = str
 		} else {
