@@ -399,7 +399,7 @@ func (c *Command) Run(args []string) int {
 	}
 
 	// setting the kafka config
-	cfg.Kafka.Brokers = []string{"stage-kafka.razorpay.in:9090"}
+	cfg.Kafka.Brokers = []string{"stage-kafka.razorpay.in:9092"}
 	cfg.Kafka.EnableTLS = false
 	cfg.Kafka.UserCertificate = "change_me"
 	cfg.Kafka.CACertificate = "change_me"
@@ -410,7 +410,7 @@ func (c *Command) Run(args []string) int {
 	cfg.Events.Kafka.RetryBackoff = 2
 	cfg.Events.Kafka.MaxRetry = 10
 	cfg.Events.Kafka.MaxMessages = 100
-	cfg.Events.Kafka.Brokers = []string{"stage-kafka.razorpay.in:9090"}
+	cfg.Events.Kafka.Brokers = []string{"stage-kafka.razorpay.in:9092"}
 	cfg.Events.Kafka.EnableTLS = false
 	cfg.Events.Kafka.UserCertificate = "change_me"
 	cfg.Events.Kafka.CACertificate = "change_me"
