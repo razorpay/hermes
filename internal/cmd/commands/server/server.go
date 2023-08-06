@@ -239,6 +239,24 @@ func (c *Command) Run(args []string) int {
 		c.UI.Error("EMAIL_FROM_ADDRESS must be provided as an env variable!")
 		return 1
 	}
+	if val, ok := os.LookupEnv("PRODUCER_USER_CERTIFICATE"); ok {
+		cfg.Kafka.UserCertificate = val
+		cfg.Events.Kafka.UserCertificate = val
+	} else {
+		c.UI.Error("Producer User Certificate must be provided as an env variable!")
+	}
+	if val, ok := os.LookupEnv("PRODUCER_CA_CERTIFICATE"); ok {
+		cfg.Kafka.CACertificate = val
+		cfg.Events.Kafka.CACertificate = val
+	} else {
+		c.UI.Error("Producer CA certificate must be provided as an env variable!")
+	}
+	if val, ok := os.LookupEnv("PRODUCER_USER_KEY"); ok {
+		cfg.Kafka.UserKey = val
+		cfg.Events.Kafka.UserKey = val
+	} else {
+		c.UI.Error("Producer UserKey msut be provided must be provided as an env variable!")
+	}
 
 	/* Scanned all env variables succesfully */
 
@@ -400,10 +418,7 @@ func (c *Command) Run(args []string) int {
 
 	// setting the kafka config
 	cfg.Kafka.Brokers = []string{"stage-kafka.razorpay.in:9092"}
-	cfg.Kafka.EnableTLS = false
-	cfg.Kafka.UserCertificate = "change_me"
-	cfg.Kafka.CACertificate = "change_me"
-	cfg.Kafka.UserKey = "change_me"
+	cfg.Kafka.EnableTLS = true
 	cfg.Kafka.DebugEnabled = true
 
 	cfg.Events.Disabled = false
@@ -411,10 +426,7 @@ func (c *Command) Run(args []string) int {
 	cfg.Events.Kafka.MaxRetry = 10
 	cfg.Events.Kafka.MaxMessages = 100
 	cfg.Events.Kafka.Brokers = []string{"stage-kafka.razorpay.in:9092"}
-	cfg.Events.Kafka.EnableTLS = false
-	cfg.Events.Kafka.UserCertificate = "change_me"
-	cfg.Events.Kafka.CACertificate = "change_me"
-	cfg.Events.Kafka.UserKey = "change_me"
+	cfg.Events.Kafka.EnableTLS = true
 	cfg.Events.Kafka.DebugEnabled = true
 
 	cfg.Core.AppEnv = "docvault"
