@@ -79,12 +79,12 @@ func GenerateUIRichBlocks_Reviewer(data ReviewerRequestedSlackData, username str
 
 func GenerateUIRichBlocks_ReminderReviewer(data ReviewerRequestedSlackData, username string) (*slack.Message, error) {
 	// header
-	headerText := slack.NewTextBlockObject("mrkdwn", fmt.Sprintf("*%s* *|* *Document Review Reminder* from *%s [%s] *", data.DocumentTitle, data.DocumentOwner, data.DocumentOwnerEmail), false, false)
+	headerText := slack.NewTextBlockObject("mrkdwn", fmt.Sprintf("*Document Review Reminder from DocVault*"), false, false)
 
 	headerSection := slack.NewSectionBlock(headerText, nil, nil)
 
 	// Invitation Text Section
-	invitationText := slack.NewTextBlockObject("mrkdwn", fmt.Sprintf("*Hi %s,* \nYou have not yet reviewed a document in DocVault.", username), false, false)
+	invitationText := slack.NewTextBlockObject("mrkdwn", fmt.Sprintf("*Hi %s,* \nYou have not yet reviewed documents in DocVault.", username), false, false)
 	invitationSection := slack.NewSectionBlock(invitationText, nil, nil)
 
 	// // Document Owner Section
@@ -95,14 +95,14 @@ func GenerateUIRichBlocks_ReminderReviewer(data ReviewerRequestedSlackData, user
 	dividerSection1 := slack.NewDividerBlock()
 
 	// Document Details Section
-	documentDetailsText := slack.NewTextBlockObject("mrkdwn", "*Access the Document:*", false, false)
+	documentDetailsText := slack.NewTextBlockObject("mrkdwn", "*Access the Reviewer DashBoard*", false, false)
 	documentDetailsSection := slack.NewSectionBlock(documentDetailsText, nil, nil)
 
 	// Document Details Link Button
 	documentDetailsButton := slack.NewButtonBlockElement("", "", nil)
-	documentDetailsLinkText := slack.NewTextBlockObject("plain_text", fmt.Sprintf("[%s] %s", data.DocumentType, data.DocumentTitle), false, false)
+	documentDetailsLinkText := slack.NewTextBlockObject("plain_text", fmt.Sprintf("Documents Waiting In Review"), false, false)
 	documentDetailsButton.Text = documentDetailsLinkText
-	documentDetailsButton.URL = data.DocumentURL
+	documentDetailsButton.URL = data.BaseURL+"/doc-reviewer-dashboard"
 	documentDetailsButton.Style = slack.StylePrimary
 
 	documentDetailsSection.Accessory = slack.NewAccessory(documentDetailsButton)

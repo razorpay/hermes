@@ -122,7 +122,7 @@ func SendReviewReminderEmail(
 	_, err = s.SendEmail(
 		to,
 		from,
-		fmt.Sprintf("%s | Document Review Reminder from %s [%s]", d.DocumentTitle, d.DocumentOwner, d.DocumentOwnerEmail),
+		fmt.Sprintf("Document Review Reminder from DocVault"),
 		body.String(),
 	)
 	return err

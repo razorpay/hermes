@@ -97,15 +97,10 @@
   <h1>Document Review Reminder</h1>
   <div class="container-line"></div>
   <p>Hi Razor,</p>
-  <p>You have not yet reviewed a document in DocVault, the Document Management System at Razorpay.</p>
-  <div class="document-details">
-    <p><strong>Document Details:</strong></p>
-    <p><a href="{{.DocumentURL}}" id="button"><button>[{{.DocumentProd}}-{{.DocumentTeam}}] {{.DocumentTitle}}</button></a>
-      <br> by [{{.DocumentOwnerEmail}}]</p>
-  </div>
+  <p>You have not yet reviewed documents in DocVault, the Document Management System at Razorpay.</p>
+  <a href="{{.BaseURL}}/doc-reviewer-dashboard" class="web-app-link">View Documents Waiting for your Review</a>
   <p>Please click on the link above to access the document and provide your valuable feedback. Your insights and suggestions are highly appreciated.</p>
   <p>Thank you for your time and contribution.</p>
-  <a href="{{.BaseURL}}" class="web-app-link">Access the DocVault Web Application</a>
   <p class="signature">Best Regards,<br>DocVault Team</p>
 </div>
 </body>

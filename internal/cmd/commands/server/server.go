@@ -584,26 +584,23 @@ func reviewReminderNotifiactionToAllDocs(cfg *config.Config, l hclog.Logger, ar 
 	fmt.Println("Total hits:", res.NbHits)
 	fmt.Println("Hits:")
 	// Access the search results and print reviewers
+
+	var ReviewerSet map[string]struct{}
+	ReviewerSet = make(map[string]struct{})
+
 	for _, hit := range res.Hits {
-		sendReviewReminderPerDoc(cfg, l, ar, aw, s, db, hit)
+		sendReviewReminderPerDoc(cfg, l, ar, aw, s, db, hit, ReviewerSet)
 	}
+	// fmt.Println("ReviewerSet : ", ReviewerSet)
 }
 
-func sendReviewReminderPerDoc(
-	cfg *config.Config,
-	l hclog.Logger,
-	ar *algolia.Client,
-	aw *algolia.Client,
-	s *gw.Service,
-	db *gorm.DB,
-	hit map[string]interface{},
-) {
-	title, ok := hit["title"].(string)
-	if !ok {
-		fmt.Println("Title not found in hit")
-	}
-	fmt.Println("title :")
-	fmt.Println(title)
+func sendReviewReminderPerDoc(cfg *config.Config, l hclog.Logger, ar *algolia.Client, aw *algolia.Client, s *gw.Service, db *gorm.DB, hit map[string]interface{}, ReviewerSet map[string]struct{}) {
+	// title, ok := hit["title"].(string)
+	// if !ok {
+	// 	fmt.Println("Title not found in hit")
+	// }
+	// fmt.Println("title :")
+	// fmt.Println(title)
 	// Access the "reviewers" field from the hit
 	reviewers, _ := hit["reviewers"].([]interface{})
 
@@ -643,6 +640,20 @@ func sendReviewReminderPerDoc(
 			fmt.Println("Element at index", i, "is not a string:", val)
 		}
 	}
+
+	var reviewersWhoDidNotGetNotification []string
+	for _, reviewerEmail := range reviewersToEmail {
+		// Find an element in the set
+		if _, exists := ReviewerSet[reviewerEmail]; exists {
+			// fmt.Println("Already sent")
+		} else {
+			reviewersWhoDidNotGetNotification = append(reviewersWhoDidNotGetNotification, reviewerEmail)
+			ReviewerSet[reviewerEmail] = struct{}{}
+		}
+	}
+
+	// update reviewerEmail such that only the email remains in reviewersToEmail who havenot recieved email
+	reviewersToEmail=reviewersWhoDidNotGetNotification;
 
 	// Convert the "hit" map to JSON data (a []byte slice)
 	jsonData, err := json.Marshal(hit)
@@ -694,7 +705,7 @@ func sendReviewReminderPerDoc(
 		if err != nil {
 			fmt.Printf("Some error occured while sendind the message: %s", err)
 		} else {
-			fmt.Println("Succesfully! Delivered the message to all reviewers who have not reviewed")
+			fmt.Println("Succesfully! Delivered the email to all reviewers who have not reviewed")
 		}
 
 		// Also send the slack message tagginhg all the reviewers in the
@@ -720,7 +731,7 @@ func sendReviewReminderPerDoc(
 		if err != nil {
 			fmt.Printf("Some error occured while sendind the message: %s", err)
 		} else {
-			fmt.Println("Succesfully! Delivered the message to all reviewers who have not reviewed")
+			fmt.Println("Succesfully! Delivered the slack message to all reviewers who have not reviewed")
 		}
 	}
 }

@@ -95,9 +95,9 @@ func SendSlackMessage_ReminderReviewer(d ReviewerRequestedSlackData, Reviewers [
 	// Iterate over the list of user emails and get user IDs
 	for _, email := range Reviewers {
 		userID, username, err := GetUserIDByEmail(email, api)
-		fmt.Println("email : "+email)
-		fmt.Println("userID : "+userID)
-		fmt.Println("username : "+username)
+		// fmt.Println("email : "+email)
+		// fmt.Println("userID : "+userID)
+		// fmt.Println("username : "+username)
 
 		if err != nil {
 			return fmt.Errorf("failed to retrieve Slack user ID: %w", err)
