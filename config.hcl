@@ -7,10 +7,10 @@ algolia {
   application_id            = "dummy"
   docs_index_name           = "docvault_docs"
   drafts_index_name         = "docvault_drafts"
-  internal_index_name       = "internal"
+  internal_index_name       = "docvault_internal"
   template_index_name       = "docvault_template"
-  links_index_name          = "links"
-  missing_fields_index_name = "missing_fields"
+  links_index_name          = "docvault_links"
+  missing_fields_index_name = "docvault_missing_fields"
   search_api_key            = "dummy"
   write_api_key             = "dummy"
 }
