@@ -14,11 +14,13 @@ import (
 	"github.com/hashicorp/go-hclog"
 
 	"github.com/algolia/algoliasearch-client-go/v3/algolia/search"
+	shelper "github.com/fatih/structs"
 	"github.com/hashicorp-forge/hermes/internal/api"
 	"github.com/hashicorp-forge/hermes/internal/auth"
 	"github.com/hashicorp-forge/hermes/internal/cmd/base"
 	"github.com/hashicorp-forge/hermes/internal/config"
 	"github.com/hashicorp-forge/hermes/internal/db"
+	"github.com/hashicorp-forge/hermes/internal/event"
 	"github.com/hashicorp-forge/hermes/internal/pkg/doctypes"
 	"github.com/hashicorp-forge/hermes/internal/pub"
 	"github.com/hashicorp-forge/hermes/internal/structs"
@@ -237,6 +239,24 @@ func (c *Command) Run(args []string) int {
 		c.UI.Error("EMAIL_FROM_ADDRESS must be provided as an env variable!")
 		return 1
 	}
+	if val, ok := os.LookupEnv("PRODUCER_USER_CERTIFICATE"); ok {
+		cfg.Kafka.UserCertificate = val
+		cfg.Events.Kafka.UserCertificate = val
+	} else {
+		c.UI.Error("Producer User Certificate must be provided as an env variable!")
+	}
+	if val, ok := os.LookupEnv("PRODUCER_CA_CERTIFICATE"); ok {
+		cfg.Kafka.CACertificate = val
+		cfg.Events.Kafka.CACertificate = val
+	} else {
+		c.UI.Error("Producer CA certificate must be provided as an env variable!")
+	}
+	if val, ok := os.LookupEnv("PRODUCER_USER_KEY"); ok {
+		cfg.Kafka.UserKey = val
+		cfg.Events.Kafka.UserKey = val
+	} else {
+		c.UI.Error("Producer UserKey msut be provided must be provided as an env variable!")
+	}
 
 	/* Scanned all env variables succesfully */
 
@@ -394,6 +414,30 @@ func (c *Command) Run(args []string) int {
 			c.UI.Error(fmt.Sprintf("error registering %q doc type: %v", name, err))
 			return 1
 		}
+	}
+
+	// setting the kafka config
+	cfg.Kafka.Brokers = []string{"stage-kafka.razorpay.in:9092"}
+	cfg.Kafka.EnableTLS = true
+	cfg.Kafka.DebugEnabled = true
+
+	cfg.Events.Disabled = false
+	cfg.Events.Kafka.RetryBackoff = 2
+	cfg.Events.Kafka.MaxRetry = 10
+	cfg.Events.Kafka.MaxMessages = 100
+	cfg.Events.Kafka.Brokers = []string{"stage-kafka.razorpay.in:9092"}
+	cfg.Events.Kafka.EnableTLS = true
+	cfg.Events.Kafka.DebugEnabled = true
+
+	cfg.Core.AppEnv = "docvault"
+	cfg.Core.Hostname = "https://localhost:8000"
+
+	// make the connection with the kafka kafdrop
+	ctx := NewContext(nil, cfg)
+	err = event.Init(ctx, &cfg.Events, c.Log)
+	if err != nil {
+		c.UI.Error(fmt.Sprintf("error connecting kafka: %v", err))
+		return 1
 	}
 
 	mux := http.NewServeMux()
@@ -672,4 +716,17 @@ func containsPattern(patterns []string, target string) bool {
 		}
 	}
 	return false
+}
+
+// NewContext adds core key-value e.g. service name, git hash etc to
+// existing context or to a new background context and returns.
+func NewContext(ctx context.Context, cfg *config.Config) context.Context {
+	if ctx == nil {
+		ctx = context.Background()
+	}
+	for k, v := range shelper.Map(cfg.Core) {
+		key := strings.ToLower(k)
+		ctx = context.WithValue(ctx, key, v)
+	}
+	return ctx
 }
